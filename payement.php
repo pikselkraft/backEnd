@@ -1,30 +1,25 @@
 <?php
 
-
 require('includes/header.php');
 ob_start(); // tamporisation de sortie -> fonctionnement du header (empêche envoie données cleint avant ob_end)
 
 // INFORMATION PAYEMENT -> AVANT LE TUNNEL OU INFORMATION CHÈQUE
-//
-//VERSION: 1.0
-//
-//TEMPLATE NAME: PAYEMENT
-//
-/**
- * SESSION
- * GESTION SESSION ET PAGE PRECEDENTE
- * STOCKAGE DES VARIABLES DE SESSION
- * GESTION CODE PROMO
- * GESTION RESERVATION
- * CALCUL DU COÛT DES OPTIONS
- * INSERTION DES INFORMATIONS DANS LA TABLE RESERVATION --> STATUT IMPAYÉ
- * INSERTION DES INFORMATIONS DANS LA TABLE COMMANDE --> STATUT IMPAYÉ
- * DIFFÉRENCIATION MODE DE PAYEMENT CB ET CHÈQUE // FIN DEV --> FAIRE LE PROCESSUS ET DIFFÉRENCIER CB/CHÈQUE (OPTIMISATION)
- * INSERTION DES INFORMATIONS DANS LA TABLE COMMANDERESERVER --> SELON CAS ET CHANGEMENT STATUT RESA
- * RÉCAPITULATIF DE LA RÉSERVATION
- * SI CB -> TUNNEL DE PAYEMENT / SI CHÈQUE --> HOME
 
- * CREATION: 06/11/2013 
+/**
+	 * SESSION
+	 * GESTION SESSION ET PAGE PRECEDENTE
+	 * STOCKAGE DES VARIABLES DE SESSION
+	 * GESTION CODE PROMO
+	 * GESTION RESERVATION
+	 * CALCUL DU COÛT DES OPTIONS
+	 * INSERTION DES INFORMATIONS DANS LA TABLE RESERVATION --> STATUT IMPAYÉ
+	 * INSERTION DES INFORMATIONS DANS LA TABLE COMMANDE --> STATUT IMPAYÉ
+	 * DIFFÉRENCIATION MODE DE PAYEMENT CB ET CHÈQUE // FIN DEV --> FAIRE LE PROCESSUS ET DIFFÉRENCIER CB/CHÈQUE (OPTIMISATION)
+	 * INSERTION DES INFORMATIONS DANS LA TABLE COMMANDERESERVER --> SELON CAS ET CHANGEMENT STATUT RESA
+	 * RÉCAPITULATIF DE LA RÉSERVATION
+	 * SI CB -> TUNNEL DE PAYEMENT / SI CHÈQUE --> HOME
+
+	 * CREATION: 06/11/2013 
 */
 
 /**************************************************/
@@ -147,7 +142,7 @@ if(isset($_POST['nb_adulte']) and isset($_POST['nb_enfant']))
 		$monTab[$resaEncours]['nb_enfant'] = $nb_enfant;
 		$monTab[$resaEncours]['nb_enfantTotal'] = $nb_enfantTotal;
 		$_SESSION['Mesresa'] = $monTab;	
-		testVar($monTab);
+		//testVar($monTab);
 	}	
 }
 
@@ -427,7 +422,7 @@ if(isset($_POST['nb_adulte']))
 
 
 <h2>Récapitulatif de votre Réservation</h2>
-	<div class="fiche_recap">
+	<div class="row">
 		
 		<ul> <!-- récupération des éléments de session, stockés en début de page -->
 			<li><?php echo "Vous avez sélectionné le ".$idgite; ?></li>
@@ -442,15 +437,7 @@ if(isset($_POST['nb_adulte']))
 	</div>
 	
 		<?php 
-		/********************
-			PHASE DE TEST
-		********************/
-//			$taxe		= 2;  	
-//			$tarif			= 2;
-//			$accompte	= 2; 
-		/********************
-			PHASE DE TEST
-		********************/
+
 			if(isset($payementCbComplet))
 			{
 		?>

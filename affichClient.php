@@ -1,10 +1,6 @@
 <?php
 
-//GEstion d un client dans la BD
-
-//version: 1.0
-//
-//creation: 23/01/2014
+//Gestion d un client dans la BD
 
 
 	require('includes/header.php');
@@ -237,5 +233,5 @@ $affichage_info_client.='<li><label for="nom">Nom : </label><input id="nom" name
 </body>
 
 <?php
-	include('includes/footer.php');
+	require('includes/footer.php');
 ?>

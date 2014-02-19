@@ -2,12 +2,7 @@
 
 //recherche de clients des gites 
 
-//version: 1.0
-//
-//creation: 27/01/2014
-
-
-	include('includes/header.php');
+	require('includes/header.php');
 
 	
 $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur lors d'une action sur la BD
@@ -17,7 +12,7 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 		
     // differentes valeurs de la variable actionClient passee en argument 
 	// vide : on affiche un formulaire de recherche de clients
-	// R : on affiche les résultat
+	// R : on affiche les rï¿½sultat
 	
 	
 	if (!empty($_GET["actionClient"]))
@@ -70,14 +65,14 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 				$result_reqClient=$mysqli->query($reqClient);
 				if(!$mysqli)
 				{
-					$MessageAction ="ERREUR : Pas de résultat pour cette recherche" ;  
+					$MessageAction ="ERREUR : Pas de rï¿½sultat pour cette recherche" ;  
 				} 
 				else
 				{
 					$MessageAction="Resultat de la recherche : ";
 				}
 							
-				//Boucle qui parcourt les clients dans la base de données
+				//Boucle qui parcourt les clients dans la base de donnï¿½es
 				
 			
 				break;
@@ -128,9 +123,9 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 		
 		// Creation du tableau pour afficher les clients
 				$affichage_client_ligne='<table border="2"  rules="groups" id="tableauClient" class="rechClient" width="600"><thead>
-								<tr><td ><a href="rechercheClient?actionClient=TE">Email</a></td><td><a href="rechercheClient?actionClient=TN">Nom</a></td><td><a href="rechercheClient?actionClient=TP">Prénom</a></td><td><a href="rechercheClient?actionClient=TT">Portable</A></td><th colspan="4">Action</th></tr>
+								<tr><td ><a href="rechercheClient?actionClient=TE">Email</a></td><td><a href="rechercheClient?actionClient=TN">Nom</a></td><td><a href="rechercheClient?actionClient=TP">Prï¿½nom</a></td><td><a href="rechercheClient?actionClient=TT">Portable</A></td><th colspan="4">Action</th></tr>
 								</thead>';
-			//boucle qui parcourt le résultats des requetes demandées dans la BD
+			//boucle qui parcourt le rï¿½sultats des requetes demandï¿½es dans la BD
 			while ($row = $result_reqClient->fetch_assoc())
 			{
 				$affichage_client_ligne.= '<tr>
@@ -141,7 +136,7 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 										<td><a href="affichTous.php?idClient='.$row["idclient"].'"><img src="images/cal.gif" title="Agenda"></a></td>
 										<td><a href="affichClient.php?idclient='.$row["idclient"].'" alt="Afficher Info Client"><img src="images/edit.gif"></a></td>
 										<td><a href="rechercheClient.php?actionClient=EM&email='.$row["email"].'" alt="envoie email"><img src="images/email.gif"></a></td>
-										<td><a href="rechercheClient.php?actionClient=MDP&email='.$row["email"].'" alt="Nouveau Mot de passe" onclick="return confirm(\'Etes vous sure de vouloir regénérer un mot de passe?\');"><img src="images/pwd.gif"></a></td>
+										<td><a href="rechercheClient.php?actionClient=MDP&email='.$row["email"].'" alt="Nouveau Mot de passe" onclick="return confirm(\'Etes vous sure de vouloir regï¿½nï¿½rer un mot de passe?\');"><img src="images/pwd.gif"></a></td>
 										</tr>';
 			}		
 			
@@ -155,43 +150,36 @@ if (!empty($MessageAction))
 }
 /*************************************************
 *												 *
-*	affichages des clients stockées dans la base *
+*	affichages des clients stockï¿½es dans la base *
 *												 *	
 **************************************************/
 
 
-$affichage_recherche='Vous pouvez remplacer des carctères inconnus par % pour effectuer la recherche';
+$affichage_recherche='Vous pouvez remplacer des carctï¿½res inconnus par % pour effectuer la recherche';
 $affichage_recherche.='<form action="rechercheClient.php?actionClient=R" method="post">';
 $affichage_recherche.='<label for="email">Email : </label><input id="email" name="email" type="text">
 			<label for="nom">Nom : </label><input id="nom" name="nom" type="text">
-			<label for="port">Numéro de portable: </label><input id="port" name="port" type="int">';
+			<label for="port">Numï¿½ro de portable: </label><input id="port" name="port" type="int">';
 $affichage_recherche.='<input type="submit" value="Rechercher"></form>';
 
 
 
 ?>
-<link rel="stylesheet" href="includes/onglet.css">
+
 <body>
-	<div id="menu" style="position:relative; float:left;">
-		<?php
 
-			include('menu.php');
-		?>
-	</div>
-
-	<div id="content" style="position:relative; float:left;">
-
+	<div class="row">
+		<div class="small-11 small-centered columns">
 		<?php
 			echo $affichage_recherche;
 			echo $MessageAction;
 			echo $affichage_client_ligne;
 		?>
-		
-				
+		</div>		
 	</div>
 
 </body>
 
 <?php
-	include('includes/footer.php');
+	require('includes/footer.php');
 ?>

@@ -3,11 +3,7 @@
 	require('includes/header.php');
 
 //FORMULAIRE D'ENREGISTREMENT GÎTE LE METZVAL
-//
-//VERSION: 1.0
-//
-//TEMPLATE NAME: FORMULAIRE
-//
+
 //********************************************
 // RECUPERATION DES VARIABLES DE SESSIONS
 // TEST PRESENCE RESERVATION EN COURS

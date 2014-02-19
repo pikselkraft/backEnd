@@ -6,7 +6,6 @@
 Affiche tous les calendriers des gites du Site *
 ***********************************************/
 	
-	
 	?>
 
 <body>
@@ -159,5 +158,5 @@ function correction_debut_semaine ($jour,$cle) {
 </body>
 
 <?php
-	include('includes/footer.php');
+	require('includes/footer.php');
 ?>

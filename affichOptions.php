@@ -1,9 +1,6 @@
 <?php
 
-//GEstion des options des gites 
-//version: 1.0
-//
-//creation: 23/01/2014
+//Gestion des options des gites 
 
 
 	require('includes/header.php');
@@ -161,5 +158,5 @@ $affichage_option_ligne.='</table>';
 </body>
 
 <?php
-	include('includes/footer.php');
+	require('includes/footer.php');
 ?>

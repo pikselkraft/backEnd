@@ -1,10 +1,6 @@
 <?php
 
-//GEstion des taxes des gites 
-//version: 1.0
-//
-//creation: 23/01/2014
-
+//Gestion des taxes des gites 
 
 	require('includes/header.php');
 
@@ -143,7 +139,6 @@ $affichage_taxe_ligne.='</table>';
 
 <body>
 
-
 	<div class="row">
 		<div class="small-11 small-centered columns">
 		<?php
@@ -156,5 +151,5 @@ $affichage_taxe_ligne.='</table>';
 </body>
 
 <?php
-	include('includes/footer.php');
+	require('includes/footer.php');
 ?>

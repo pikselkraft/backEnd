@@ -1,7 +1,7 @@
 <?php
 session_start(); 
-include('/var/www/resa/dev/config.php'); 
-include('fonctions.php'); 
+require('/var/www/resa/dev/config.php'); 
+require('fonctions.php'); 
 ?> 
 <html dir="ltr" lang="fr-FR">
 
@@ -12,10 +12,9 @@ include('fonctions.php');
 	
 	<link rel="stylesheet" href="includes/css/foundation.css">
 	<link rel="stylesheet" href="includes/css/calendrier.css">
-<!--	<link rel="stylesheet" href="includes/onglet.css">-->
-	<!--<link rel="stylesheet" href="style.css">-->
+	<link rel="stylesheet" href="includes/css/datePicker.css">
+	
 	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
-
 	<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 	<script src="scripts/jquery.ui.datepicker-fr.js"></script>
@@ -68,7 +67,7 @@ include('fonctions.php');
 		<!-- Right Nav Section -->
 		<ul class="right">
 		  <li class="has-dropdown">
-			<a href="#">Statistiques</a>
+			<a href="statistique.php">Statistiques</a>
 			<ul class="dropdown">
 			  <li><a href="#">Reservation</a></li>
 			  <li><a href="#">CA</a></li>
@@ -79,9 +78,9 @@ include('fonctions.php');
 		  <li class="has-dropdown">
 			<a href="#">Marketing</a>
 			<ul class="dropdown">
-			  <li><a href="#">Facturation</a></li>
-			  <li><a href="#">Mailing</a></li>
-			  <li><a href="#">Réseaux Sociaux</a></li>
+			  <li><a href="facturation.php">Facturation</a></li>
+			  <li><a href="mailing.php">Mailing</a></li>
+			  <li><a href="reseauxSociaux.php">Réseaux Sociaux</a></li>
 			</ul>
 		  </li>
 		</ul>

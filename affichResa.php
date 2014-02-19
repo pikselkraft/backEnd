@@ -189,5 +189,5 @@ if ($etatR=='S')
 <?php
 
 			
-	include('includes/footer.php');
+	require('includes/footer.php');
 ?>

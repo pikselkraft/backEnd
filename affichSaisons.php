@@ -1,10 +1,6 @@
 <?php
 
-//GEstion des saisons des gites 
-
-//version: 1.0
-//
-//creation: 23/01/2014
+//Gestion des saisons des gites 
 
 
 	require('includes/header.php');
@@ -232,5 +228,5 @@ $affichage_saison_ligne.='</table>';
 </body>
 
 <?php
-	include('includes/footer.php');
+	require('includes/footer.php');
 ?>

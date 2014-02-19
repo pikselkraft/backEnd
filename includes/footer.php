@@ -1,4 +1,18 @@
-	<script>
+		<footer class="row">
+			<div class="large-12 columns">
+				<hr />
+					<div class="row">
+						<div class="large-6 columns">
+							<p>Gîte le Metzval</p>
+						</div>
+					<div class="large-6 columns">
+						<a href="#top-page">Aller en haut de la page</a>
+					</div>
+					</div>
+			</div>
+		</footer>
+
+		<script>
 		 
 		$(document).foundation({
 			reveal : {
@@ -31,7 +45,6 @@
 		}
 		
 	</script>
- 
 
  </html>
  <?php

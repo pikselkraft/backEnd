@@ -1,10 +1,6 @@
 <?php
 
-//GEstion des codepromos des codes promo
-
-//version: 1.0
-//
-//creation: 23/01/2014
+//Gestion des codepromos des codes promo
 
 
 	require('includes/header.php');
@@ -194,5 +190,5 @@ $affichage_codepromo_ligne.='</table>';
 </body>
 
 <?php
-	include('includes/footer.php');
+	require('includes/footer.php');
 ?>

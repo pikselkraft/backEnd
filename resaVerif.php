@@ -1,13 +1,11 @@
 <?php
 
-	include('includes/header.php');
+	require('includes/header.php');
 /*********************************************************************************
 -> Ce fichier permet de v�rifier la possibilit� d'une r�servation selon 2 dates
 -> Si ok il affiche un formulaire de recherche de client 
 -> possibilit� de cr�ation de client �galement
 **********************************************************************************/
-
-	
 ?>
 
 <body>
@@ -383,11 +381,6 @@ if($etat==1)
 	} // fin if
 } // fin if		
 	
-	
-	
 
-
-
-
-	include('includes/footer.php');
+	require('includes/footer.php');
 ?>

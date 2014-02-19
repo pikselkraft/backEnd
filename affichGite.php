@@ -17,8 +17,6 @@
 ********************************************/
 
 	
-
-
 /*********************************************
 *		Traitement des tarifs  des gites     *
 **********************************************/
@@ -826,5 +824,5 @@ if (($_GET["etatTarif"]=='AD') && (!empty($_GET["idgite"]))) // mise � jour de
 </body>
 
 <?php
-	include('includes/footer.php');
+	require('includes/footer.php');
 ?>

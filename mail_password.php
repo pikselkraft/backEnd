@@ -4,10 +4,6 @@
 	
 //Gestion Mot de Passe
 //
-//VERSION: 1.0
-//
-//TEMPLATE NAME: mail_password
-//
 //********************************************
 // TEST MAIL
 // MAIL AVEC NOUVEAU MOT DE PASSE
@@ -45,6 +41,7 @@
 		}else{echo"Vous n'avez pas de saisi de mail";}
 
 ?>
+		<body>
 				<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
 					<fieldset>
 						<legend>Votre email</legend>
@@ -55,5 +52,7 @@
 						<button type=submit>Se connecter</button>
 					</fieldset>
 				</form>
+		</body>
 
-<?php	require('footer.php'); ?>
+
+<?php	require('includes/footer.php'); ?>

@@ -489,7 +489,8 @@ echo '</td>';
 echo '</tr>';
 echo '</table>';
 ?>
-
+	<div class="row">
+		<div class="small-11 small-centered columns">
 		<form action="resaVerifBefore.php?idgite=<?php echo $idgite;?>" method="post"> 
 			
 			<fieldset style="position:relative;float:left;height:25px;">
@@ -504,3 +505,5 @@ echo '</table>';
 				<button type=submit>Reserver !</button> <!-- test dans le header et redirection-->
 		  	</fieldset>
 		</form>
+		</div>
+	</div>

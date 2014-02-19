@@ -1,8 +1,6 @@
 
 <?php
 //fonction sie gîte le Metzval
-//
-//version: 1.0
 
 /********************************************
  **FONCTIONS
@@ -42,7 +40,7 @@ $script_tz = date_default_timezone_get();
 
 if (strcmp($script_tz, ini_get('date.timezone')))
 {
-    echo 'Le décalage horaire du script diffère du décalage horaire défini dans le fichier ini. <br />';
+    //echo 'Le décalage horaire du script diffère du décalage horaire défini dans le fichier ini. <br />';
 } 
 
 
