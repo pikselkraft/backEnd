@@ -1,12 +1,7 @@
-<?php
-session_start();	
-require('config.php');
-require('fonctions.php');
-?>
-
-<?php require('header.php'); ?>
-
 <?php 
+
+	require('includes/header.php');
+	
 //Gestion Mot de Passe
 //
 //VERSION: 1.0

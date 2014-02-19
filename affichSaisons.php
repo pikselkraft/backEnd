@@ -7,7 +7,7 @@
 //creation: 23/01/2014
 
 
-	include('includes/header.php');
+	require('includes/header.php');
 
 	
 $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur lors d'une action sur la BD
@@ -21,7 +21,7 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 	// S : on enregistre les modifications sur la saison modifiee
 	// D : on efface la saison
 	// AD: on ajoute une nouvelle saison dans la base
-	// SAM : on ajoute tous les samedis d'une année
+	// SAM : on ajoute tous les samedis d'une annï¿½e
 	if (!empty($_GET["actionSaison"]))
 	{
 		$actionSaison=$_GET["actionSaison"];
@@ -85,18 +85,18 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 				$MessageAction= "insertion nouvelle saison ok";
 			}
 			break;
-		case "SAM": // ajout de tous les samedis pour une année
+		case "SAM": // ajout de tous les samedis pour une annï¿½e
 			if(!empty($_POST["annee"]))
 			{
 				$date_debut = $_POST["annee"].'-01-01';
-				//on regarde la date de fin d'année demandée
+				//on regarde la date de fin d'annï¿½e demandï¿½e
 				$date_final=date('Y-m-d', strtotime($date_debut.' +364 days'));
 				//on calcule la date +1 jour
 				$date_test = date('Y-m-d', strtotime($date_debut.' +1 days'));
 				
-				while ($date_test<$date_final) // tant que l'on parcourt les dates de l'année en cours
+				while ($date_test<$date_final) // tant que l'on parcourt les dates de l'annï¿½e en cours
 				{
-					if (typeSaison(strtotime($date_test))) // on teste si la date n'est pas déjà inclue dans une saison déjà présente
+					if (typeSaison(strtotime($date_test))) // on teste si la date n'est pas dï¿½jï¿½ inclue dans une saison dï¿½jï¿½ prï¿½sente
 					{
 						//echo "<br>".$date_test .":". typeSaison(strtotime($date_test));
 					}
@@ -110,7 +110,7 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 						}
 					
 					}
-					//on incrémente pour parcourir l'annéee
+					//on incrï¿½mente pour parcourir l'annï¿½ee
 					$date_test = date('Y-m-d', strtotime($date_test.' +1 days'));
 				}
 				
@@ -140,7 +140,7 @@ if (!empty($MessageAction))
 }
 /*************************************************
 *												 *
-*	affichages des saisons stockées dans la base *
+*	affichages des saisons stockï¿½es dans la base *
 *												 *	
 **************************************************/
 $reqSaison="select idsaison, date_debut,date_fin,statut from SAISON";
@@ -152,7 +152,7 @@ $result_reqSaison=$mysqli->query($reqSaison);
 $affichage_saison_ligne='<table border="2"  rules="groups" id="tableauClient" class="rechClient" width="600"><thead>
 				<tr><td >idsaison</td><td>Date Debut</td><td>Date fin</td><td>Statut</td><th colspan="2">Action</th></tr>
 				</thead>';
-//Boucle qui parcourt les saisons dans la base de données
+//Boucle qui parcourt les saisons dans la base de donnï¿½es
 while ($row = $result_reqSaison->fetch_assoc())
 {
 
@@ -208,24 +208,25 @@ $affichage_saison_ligne.='</table>';
 ?>
 
 <body>
-	<div id="menu" style="position:relative; float:left;">
-		<?php
 
-			include('menu.php');
-		?>
-	</div>
 
-	<div id="content" style="position:relative; float:left;">
-
+	<div class="row">
+		<div class="small-11 small-centered columns">
 		<?php
 			echo $MessageAction;
 			echo $affichage_saison_ligne;
 		?>
-		<p> Pour insérer tous les samedi de l'année en Saison Type Haute Saison, hors période déjà existante</p>
-		<form action="affichSaisons.php?actionSaison=SAM" method="POST" onsubmit="return verif_action()">	
-			<label for="annee">Merci de renseigner l'année : </label><input id="annee" name="annee" type="text">
-			<input type="submit" value="Insérer">
-		</form>
+		</div>
+	</div>
+		
+	<div class="row">
+		<div class="small-11 small-centered columns">
+			<p> Pour insï¿½rer tous les samedi de l'annï¿½e en Saison Type Haute Saison, hors pï¿½riode dï¿½jï¿½ existante</p>
+			<form action="affichSaisons.php?actionSaison=SAM" method="POST" onsubmit="return verif_action()">	
+				<label for="annee">Merci de renseigner l'annï¿½e : </label><input id="annee" name="annee" type="text">
+				<input type="submit" value="Insï¿½rer">
+			</form>
+		</div>
 	</div>
 
 </body>

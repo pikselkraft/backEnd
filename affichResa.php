@@ -1,9 +1,10 @@
 <?php
-	include('includes/header.php');
+
+require('includes/header.php');
 
 /*************************************
 
-Affiche les infos d'une réservation
+Affiche les infos d'une rï¿½servation
 
 
 **************************************/	
@@ -27,19 +28,10 @@ if ($etatR=='S')
 }
 
 	?>
-
-
-<body>
-	<div id="menu" style="position:relative; float:left;">
-		<?php
-
-		include('menu.php');
-		?>
-	</div>
-
-	<div id="ContentGite"  style="float:left;width=800px;" >
 	
-		<div id="commande" style="width:20%;display:inline-block;">
+<body>
+	<div class="row">
+		<div class="small-11 small-centered columns">	
 			<?php
 			if (!empty($id_resa))
 			{
@@ -110,7 +102,7 @@ if ($etatR=='S')
 								<input id=accompte name=accompte type=text  value="'.$row_result_commande["accompte"].'">
 							</li>
 							<li>
-								<label for=accompte_paye >Accompte payé ?</label>
+								<label for=accompte_paye >Accompte payï¿½ ?</label>
 								<input id=accompte_paye name=accompte_paye type=text  value="'.$row_result_commande["accompte_paye"].'">
 							</li>
 							<li>
@@ -118,7 +110,7 @@ if ($etatR=='S')
 								<input id=total name=total type=text  value="'.$row_result_commande["total"].'">
 							</li>
 								<li>
-								<label for=total_paye >Total payé</label>
+								<label for=total_paye >Total payï¿½</label>
 								<input id=total_paye name=total_paye type=text  value="'.$row_result_commande["total_paye"].'">
 							</li>
 							<button type=submit>enregistrer</button>	
@@ -145,10 +137,13 @@ if ($etatR=='S')
 				}
 			}			
 		?>
-		</div> <!-- fin div Commande-->
-		<div id="reservation" style="width:600px;display:inline-block;"> 
+		</div>
+	</div> <!-- fin div Commande-->
+	
+	<div class="row">
+		<div class="small-11 small-centered columns"> 
 		<?php
-		// affichage de la liste des réservation pour une commande
+		// affichage de la liste des rï¿½servation pour une commande
 			$reqlisteCommande="select r.idreservation, r.idgite,r.nb_adulte, r.nb_enfant,r.date_debut,r.date_fin, r.statut 
 			from RESERVATION r, COMMANDERESERVER c where
 			 c.idcommande=".$id_commande." and c.idreservation=r.idreservation";
@@ -158,7 +153,7 @@ if ($etatR=='S')
 			
 		echo '<table border="2"  rules="groups" id="tableauClient" class="rechClient"  >'; 
 				echo '<thead >';
-				echo '<tr><td width="50px">idResa</td><td width="64px">gite</td><td width="60px">Nb Adulte</td><td width="30px">Nb Enfant</td><td>Date Début</td><td>Date fin </td><td>Statut</td><th>action</th></tr>';
+				echo '<tr><td width="50px">idResa</td><td width="64px">gite</td><td width="60px">Nb Adulte</td><td width="30px">Nb Enfant</td><td>Date Dï¿½but</td><td>Date fin </td><td>Statut</td><th>action</th></tr>';
 				echo '</thead>';
 			
 			
@@ -189,8 +184,7 @@ if ($etatR=='S')
 			}
 		echo '</table>';	
 			?>
-		</div><!-- fin div Réservation-->
-
+		</div><!-- fin div Rï¿½servation-->
 	</div>
 <?php
 

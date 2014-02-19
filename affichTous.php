@@ -1,29 +1,18 @@
-
-
 <?php
-	include('includes/header.php');
+
+	require('includes/header.php');
+
 /***********************************************
 Affiche tous les calendriers des gites du Site *
 ***********************************************/
-	
-		
-	
 	
 	
 	?>
 
 <body>
-	<div id="menu" style="position:relative; float:left;">
-		<?php
 
-		include('menu.php');
-		?>
-	</div>
-
-	<div id="content"  style="position: relative; float:left;" >
-		<?php
-		
-/****************************************************
+<?php	
+/***************************************************
 Fonctions permettant de construire le calendrier
 *****************************************************/		
 		function jour_debut_semaine ($jour,$mois ,$annee) {
@@ -151,15 +140,22 @@ function correction_debut_semaine ($jour,$cle) {
 		while($gt<=8)
 		 {
 			$idgite=$gt;
+			?>
+			<div class="row">
+				<div class="small-11 small-centered columns">		
+					<?php
+						include('calendrierTous.php');
+					?>
 			
-			include('calendrierTous.php');
+
+			<?php
 			$gt++;
 			$AffichChoixDate=false;
 		 }
 							 
 		?>
-	</div>
-
+				</div>
+			</div>	
 </body>
 
 <?php

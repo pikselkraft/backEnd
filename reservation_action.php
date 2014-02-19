@@ -27,26 +27,6 @@ require('includes/header.php');
 $resaEncours = $_SESSION['resaEncours'];
 $monTab=$_SESSION['Mesresa'];
 $resaPrecedente = $resaEncours	- 1 ;
-testVar2($monTab['0'],"Recapitulatif des resas1","Recapitulatif des resas indice 0");
-testVar2($monTab['1'],"Recapitulatif des resas2","Recapitulatif des resas indice 1");
-
-/**************************************************/
-/****** GESTION SESSION ET PAGE PRECEDENTE ****
-/************************************************/
-/*if(substr($_SERVER["HTTP_REFERER"],0,37)!==substr("http://srvweb/resa/dev/formulaire.php",0,37)) // modifier nb caractère dans l'intégration
-{
-	$_SESSION['redirection']=true;
-	if(!isset($monTab[$resaEncours]['idgite']) and !isset($monTab[$resaEncours]['date_debut']) and !isset($monTab[$resaEncours]['date_fin']))
-	{
-	?>
-		<script type="text/javascript">
-			alert("Cette page n'est accesible qu'aux personnes enregistrées et en train d'effectuer une réservation");
-			document.location.href="affichage_gite.php";
-		</script>
-	<?php
-	}
-}*/
-
 
 /* récupération post formulaire.php */
 $login = strtolower(secInput($_POST['login'])); 

@@ -28,27 +28,6 @@ ob_start(); // tamporisation de sortie -> fonctionnement du header (empêche env
 */
 
 /**************************************************/
-/*******GESTION SESSION ET PAGE PRECEDENTE******
-/************************************************/
-///*if(substr($_SERVER["HTTP_REFERER"],0,45)==substr("http://srvweb/resa/dev/reservation_action.php",0,45) or substr($_SERVER["HTTP_REFERER"],0,45)==substr("http://srvweb/resa/dev/payement.php",0,45)) // modifier nb caractère dans l'intégration
-//{
-//	echo "test redirection false";
-//}
-//else 
-//{
-//	$_SESSION['redirection']=true;
-//	if(!isset($monTab[$resaEncours]['nb_adulte']) and !isset($monTab[$resaEncours]['nb_enfant']))
-//	{
-//	?>
-//		<script type="text/javascript">
-//			alert("Cette page n'est accesible qu'aux personnes enregistrées et en train d'effectuer une réservation");
-//			document.location.href="affichage_gite.php";
-//		</script>
-//	<?php
-//	}
-//}*/
-
-/**************************************************/
 /*******GESTION DES VARIABLES ******
 /************************************************/
 // variable session resaencours

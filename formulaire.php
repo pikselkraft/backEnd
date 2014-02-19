@@ -1,5 +1,6 @@
 <?php
-include('includes/header.php');
+
+	require('includes/header.php');
 
 //FORMULAIRE D'ENREGISTREMENT GÎTE LE METZVAL
 //
@@ -55,35 +56,10 @@ if(empty($_SESSION['Mesresa'])) // si pas de resa en cours
 }
 else
 {
-	
-	// if(substr($_SERVER["HTTP_REFERER"],0,30) !== substr("http://srvweb/resa/dev/affichage_gite.php",0,30)) 
-	// /* si la page précédente est différent d'affichage gîte (comparaison des 41 premières lettres) */
-	// {
-		// if (substr($_SERVER["HTTP_REFERER"],0,30) !== substr("http://srvweb/resa/dev/formulaire.php",0,30))
-		// {
-			// echo "Attention l'utilisation de la touche précédente risque d'annuler votre réservation";
-		?>
-		<!-- <script type="text/javascript">	
-			
-				if(confirm("Voulez continuer votre réservation (vous serez redirigé vers la page suivante) ou annuler vos données de réservation")) 
-				/* donne le choix entre continuer la resa ou se connecter/enregistrer */
-				{	
-					location.replace("reservation_action.php"); // touche precedente lors de la resa
-				}
-				else
-				{	
-					<?php //unset($monTab[$resaEncours]); ?>
-					location.replace("affichage_gite.php");
-					alert("Vous pouvez utiliser cette page pour recommencer votre commande");
-				}	
-		</script>-->
-	<?php
-		// } else { echo "<br /> processus de réservation normal";}
-	// }else { echo "<br /> processus de réservation normal";}
 	$MessageAction=""; // permet d'afficher un message de confirmation ou d erreur lors d'une action sur la BD
-/*********************************************
-*		REcherche des clients  des gites     *
-**********************************************/
+	/*********************************************
+	*		REcherche des clients  des gites     *
+	**********************************************/
 		
     // differentes valeurs de la variable actionClient passee en argument 
 	// vide : on affiche un formulaire de recherche de clients
@@ -94,10 +70,6 @@ else
 	{
 			$actionClient=$_GET["actionClient"];
 			
-		
-		
-		
-		
 		//on regarde si on a un idclient en parametre
 		if (!empty($_GET["idclient"]))
 		{
@@ -149,7 +121,6 @@ else
 							
 				//Boucle qui parcourt les clients dans la base de données
 				
-			
 				break;
 						
 			case "TE": //tri par email
@@ -213,7 +184,6 @@ else
 										</tr>';
 			}		
 			
-			
 		$affichage_client_ligne.='</table>';	
 		}
 	}
@@ -227,7 +197,6 @@ if (!empty($MessageAction))
 *												 *	
 **************************************************/
 
-
 $affichage_recherche='Vous pouvez remplacer des carctères inconnus par % pour effectuer la recherche';
 $affichage_recherche.='<form action="formulaire.php?actionClient=R" method="post">';
 $affichage_recherche.='<label for="email">Email : </label><input id="email" name="email" type="text">
@@ -239,56 +208,55 @@ $affichage_recherche.='<input type="submit" value="Rechercher"></form>';
 }
 ?>
 
-
-
 <h2>Récapitulatif de votre Réservation</h2>
 		
-	<div class="fiche_recap"> <!-- recapitulatif date, gite et prix -->
-		<ul>
-			<li><?php echo "Vous avez sélectionné le gîte ".$monTab[$resaEncours]['idgite']; ?></li>
-			<li><?php echo "Date de début le ".$monTab[$resaEncours]['date_debut']; ?></li>
-			<li><?php echo "Date de fin le ".$monTab[$resaEncours]['date_fin']; ?></li>
-			<li><?php echo "Pour un tarif maximum de ".$monTab[$resaEncours]['tarif'];?></li>
-		</ul>
+	<div class="row">
+		<div class="small-11 small-centered columns">		 <!-- recapitulatif date, gite et prix -->
+			<ul>
+				<li><?php echo "Vous avez sélectionné le gîte ".$monTab[$resaEncours]['idgite']; ?></li>
+				<li><?php echo "Date de début le ".$monTab[$resaEncours]['date_debut']; ?></li>
+				<li><?php echo "Date de fin le ".$monTab[$resaEncours]['date_fin']; ?></li>
+				<li><?php echo "Pour un tarif maximum de ".$monTab[$resaEncours]['tarif'];?></li>
+			</ul>
+		</div>
 	</div>
 		
 <h2>Recherche Client</h2>	
 		
-		<div class="connexion_content">
-		  
-			<div class="enregistrement"> <!-- enregistrement du client-->
-				
-				<? echo $affichage_recherche;
+	<div class="row">
+		<div class="small-11 small-centered columns">			
+			<? echo $affichage_recherche;
 			echo $MessageAction;
 			echo $affichage_client_ligne; ?>
-			</div>
-			
-			<div class="enregistrement"> <!-- enregistrement du client-->
-				
-				<form action="<?php $_SERVER['PHP_SELF']; ?>?etat=1" method="POST" id="register-form">
-					<fieldset>
-						<legend>Enregistrement</legend>
-						<li>
-							<label for=login>Votre Email</label>
-							<input id=login name=login type=email placeholder="exemple@domaine.com" required>
-						</li>
-						<li>
-							<label for=loginConfirm>Confirmation de votre Email</label>
-							<input id=loginConfirm name=loginConfirm type=email placeholder="exemple@domaine.com" required>
-						</li>
-						<li>
-							<label for=password>Mot de passe</label>
-							<input id=password name=password type=password pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$" required>
-						</li>	
-						<li>
-							<label for=passwordConfirm>Confirmation de mot de passe</label>
-							<input id=passwordConfirm name=passwordConfirm type=password  pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$" required>
-						</li>
-						<button type=submit>S'enregistrer</button>	
-					</fieldset>
-				</form>
-			</div>
 		</div>
+	</div>
+			
+	<div class="row">
+		<div class="small-11 small-centered columns">	
+			<form action="<?php $_SERVER['PHP_SELF']; ?>?etat=1" method="POST" id="register-form">
+				<fieldset>
+					<legend>Enregistrement</legend>
+					<li>
+						<label for=login>Votre Email</label>
+						<input id=login name=login type=email placeholder="exemple@domaine.com" required>
+					</li>
+					<li>
+						<label for=loginConfirm>Confirmation de votre Email</label>
+						<input id=loginConfirm name=loginConfirm type=email placeholder="exemple@domaine.com" required>
+					</li>
+					<li>
+						<label for=password>Mot de passe</label>
+						<input id=password name=password type=password pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$" required>
+					</li>	
+					<li>
+						<label for=passwordConfirm>Confirmation de mot de passe</label>
+						<input id=passwordConfirm name=passwordConfirm type=password  pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$" required>
+					</li>
+					<button type=submit>S'enregistrer</button>	
+				</fieldset>
+			</form>
+		</div>
+	</div>
 
 	<?php 
 if($etat==1)
@@ -315,7 +283,9 @@ if($etat==1)
 			 }
 			 else
 			 {
-	?>
+	?>	
+	<div class="row">
+		<div class="small-11 small-centered columns">	
 			<h2>Formulaire clients</h2>
 			<form action="reservation_action.php?etat=2" method="POST" >
 			  <fieldset>
@@ -400,15 +370,14 @@ if($etat==1)
 							<!-- CREATE A CAPTCHA WORDPRESS -->
 				  <button type=submit>S'enregistrer</button>
 
-			</fieldset>
-		</form>
+				</fieldset>
+			</form>
+		</div>
+	</div>
 	<?php
 				} // fin else
 	} // fin if test POST
 } // fin if etat == 1
 	?>
 <?php	
-			testVar2($resaEncours,"resaEncours","resaEncours");
-			testVar2($monTab[$resaPrecedente],"Recapitulatif des resas 0","Recapitulatif des resas 0");
-			testVar2($monTab[$resaEncours],"Recapitulatif des resas 1","Recapitulatif des resas 1");
 require('includes/footer.php'); ?>
