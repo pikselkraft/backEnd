@@ -10,7 +10,7 @@
 		?>
 	</div>
 
-	<div id="content" style="position:relative; float:left; >
+	<div id="content" style="position:relative; float:left;" >
 		<?php
 		include('content.php');
 		?>

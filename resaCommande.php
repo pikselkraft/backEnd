@@ -3,20 +3,14 @@
 ?>
 
 <body>
-	<div id="menu" style="position:relative; float:left;">
-		<?php
-
-		include('menu.php');
-		?>
-	</div>
 	<div id="content"  style="position: relative; float:left;" >
 <?php 
 ///////////////////// TEST en dev////////////////////////////
 
 ///////////////// fin test dev ////////////////////////////////
 
-// récupération POST formulaire.php
-$_SESSION['resa']['login'] = strtolower(htmlspecialchars($_POST['login'])); // sécurité : injection et majuscule
+// rï¿½cupï¿½ration POST formulaire.php
+$_SESSION['resa']['login'] = strtolower(htmlspecialchars($_POST['login'])); // sï¿½curitï¿½ : injection et majuscule
 //$_SESSION['resa']['cheminot'] = $_POST['cheminot'];
 
 
@@ -36,7 +30,7 @@ $tarif 		= $_SESSION['resa']['tarif'];
 $nb_resa= count($_SESSION['Mesresa'])-1;
 
 //	echo $nb_resa;
-	echo "test avant if de la deuxième RESA ".$nb_resa;
+	echo "test avant if de la deuxiï¿½me RESA ".$nb_resa;
 	if($_SESSION['test'])
 	{
 		$nb_resa++;
@@ -55,7 +49,7 @@ $_SESSION['Mesresa'][$nb_resa] = $_SESSION['resa']; // stockage commande 1
 ?>
 
 <?php
-//formulaire de réservation gîte le Metzval
+//formulaire de rï¿½servation gï¿½te le Metzval
 //
 //version: 1.0
 //
@@ -71,10 +65,10 @@ if($etat==2)
 {
 			if (isset($_POST['nom']) && isset($_POST['prenom']) && isset($_POST['naissance']) ) //verief presence argument -> lance la boucle, les arguments sont obligatoires et seront verif en js
 			{ 
-   				// on affiche nos résultats test
+   				// on affiche nos rï¿½sultats test
 				echo 'Votre nom est '.$_POST['nom'].' et votre prenom est '.$_POST['prenom'];
 				
-				// recuperation des données
+				// recuperation des donnï¿½es
 				$mail= strtolower(htmlspecialchars($_POST['login']));
 				$pass =$_POST['password'];
 				$nom= htmlspecialchars($_POST['nom']);
@@ -90,27 +84,27 @@ if($etat==2)
 				$port= htmlspecialchars($_POST['port']);
 				$datecrea=date("Y-m-d H:i:s"); 
 				$news= htmlspecialchars($_POST['news']);
-				$cheminotRegion = htmlspecialchars($_POST['nom']);   /*à definir*********************/
-				$cheminotCode = htmlspecialchars($_POST['nom']); /*à definir********************/
+				$cheminotRegion = htmlspecialchars($_POST['nom']);   /*ï¿½ definir*********************/
+				$cheminotCode = htmlspecialchars($_POST['nom']); /*ï¿½ definir********************/
 				
 				
 				//insertion dans la db
 		  		$sql = "INSERT INTO CLIENTS (email,mp,nom,prenom,date_naissance,cheminot,code_cheminot,region,entreprise,adresse,codepostal,ville,pays,tel,port,creation,newsletter) VALUES ('".$mail."','".$pass."','".$nom."','".$prenom."','".$naissance."','".$cheminot."','".$cheminotRegion."','".$cheminotCode."','".$entreprise."','".$adresse."','".$codepostal."','".$ville."','".$pays."','".$tel."','".$port."','".$datecrea."','".$news."')";
 		  		$mysqli->query($sql);
 		 		$enreTest=false;
-		  		//si la requête s'est bien passée, on affiche un message de succès
+		  		//si la requï¿½te s'est bien passï¿½e, on affiche un message de succï¿½s
 				  if($mysqli)
 				  {
-					echo "L'inscription s'est bien déroulée" ;   // redirection vers page récapitulative de la réservation et permet la connexion
+					echo "L'inscription s'est bien dï¿½roulï¿½e" ;   // redirection vers page rï¿½capitulative de la rï¿½servation et permet la connexion
 				  } 
 				  else 
 				  {
-					  echo '<br/> Merci de vous enregistrer à nouveau';
+					  echo '<br/> Merci de vous enregistrer ï¿½ nouveau';
 				  }
 			}
 			else
 			{
-				echo '<br/> Veuillez remplir le formulaire, merci<br/>';  	// si erreur // à enlever après dev
+				echo '<br/> Veuillez remplir le formulaire, merci<br/>';  	// si erreur // ï¿½ enlever aprï¿½s dev
 		 	}
 }
 		
@@ -134,7 +128,7 @@ if($etat==2)
 				
 							if  (utf8_decode($row['MP'])==$pass2)
 								{
-									echo "<p>mot de passe OK, formulaire de réservation</p>";
+									echo "<p>mot de passe OK, formulaire de rï¿½servation</p>";
 									$LoginOk=true;
 								
 							}
@@ -143,13 +137,13 @@ if($etat==2)
 								echo "<p>mot de passe KO Merci de recommencer</p>"; 
 								echo $login;
 								echo $pass2;
-								// ****************redirection à faire***************
+								// ****************redirection ï¿½ faire***************
 							}
 								
 						} // fin while
 //			  if(is_object($result) and $LoginOk) // inutile?????
 //			  {
-//				//début de la session
+//				//dï¿½but de la session
 //				echo "test condition stockage objet";
 ////				$_SESSION["login"] = $login ;
 ////				$_SESSION['connect']=true;
@@ -194,12 +188,12 @@ if($etat==2)
 		
 		
 
-<h2>Récapitulatif de votre Réservation</h2>
+<h2>Rï¿½capitulatif de votre Rï¿½servation</h2>
 	<div class="fiche_recap">
 		
-		<ul> <!-- récupération des éléments de session, stockés en début de page -->
-			<li><?php echo "Vous avez sélectionné le ".$idgite; ?></li>
-			<li><?php echo "Date de début le ".$date_debut; ?></li>
+		<ul> <!-- rï¿½cupï¿½ration des ï¿½lï¿½ments de session, stockï¿½s en dï¿½but de page -->
+			<li><?php echo "Vous avez sï¿½lectionnï¿½ le ".$idgite; ?></li>
+			<li><?php echo "Date de dï¿½but le ".$date_debut; ?></li>
 			<li><?php echo "Date de fin le ".$date_fin; ?></li>
 			<li><?php echo "Pour un tarif maximum de ".$tarif; ?></li>
 		</ul>
@@ -217,11 +211,11 @@ if($etat==2)
 				<input type="hidden" name="login" <?php echo 'value="'.$login.'"'; ?> required>
 
 				<li>
-					<label for=nom>Date Arrivée :</label>
+					<label for=nom>Date Arrivï¿½e :</label>
 					<input type="date" name="date_debut" <?php echo 'value="'.$date_debut.'"'; ?> required>
 				</li>
 				<li>
-					<label for=nom>Date Départ :</label>
+					<label for=nom>Date Dï¿½part :</label>
 					<input type="date" name="date_fin" <?php echo 'value="'.$date_fin.'"'; ?> required>
 				</li>
 				<li>
@@ -241,17 +235,17 @@ if($etat==2)
 					echo $reqCheminot;
 					$resultCheminot = $mysqli->query($reqCheminot);
 					print_r($resultCheminot);
-					while ($ressqlCheminot = $resultCheminot->fetch_assoc()) // parcours tableau récupératio statut, region
+					while ($ressqlCheminot = $resultCheminot->fetch_assoc()) // parcours tableau rï¿½cupï¿½ratio statut, region
 					{
 						$testCheminot=$ressqlCheminot['cheminot'];
 						$regionCheminot=$ressqlCheminot['region']; //***************** PB VARIABLE NULL///////////
 																	//********************************////////////
-																	// test processus complet idée1 ///
-																	// verief tab idée2///
+																	// test processus complet idï¿½e1 ///
+																	// verief tab idï¿½e2///
 						var_dump($testCheminot);
 						var_dump($regionCheminot);
 					}
-					/* !!!!!!!!!!! modification données base si problème verief correspondance nom des champs en premier !!!!!!!!!!!!!*/
+					/* !!!!!!!!!!! modification donnï¿½es base si problï¿½me verief correspondance nom des champs en premier !!!!!!!!!!!!!*/
 
 					if($testCheminot) // si statut cheminot = 1
 					{
@@ -277,7 +271,7 @@ if($etat==2)
 					} // fin else
 					echo $statutCheminot;
 					$tarif = calculTarif ($date_debut,$date_fin,$idgite,$statutCheminot); 
-					echo "<br> Le tarif après vérification ".$tarif; 
+					echo "<br> Le tarif aprï¿½s vï¿½rification ".$tarif; 
 				?>
 
 			<legend>Payement</legend>
@@ -285,12 +279,12 @@ if($etat==2)
 				<li>
 					  <label for=payement>Votre moyen de payement :</label>
 						<input type="radio" name="payement" value="1" /><label for="payementcb">Carte bancaire</label>
-						<input type="radio" name="payement" value="0" /><label for="payementpaypal">Chèque</label>
+						<input type="radio" name="payement" value="0" /><label for="payementpaypal">Chï¿½que</label>
 				</li>
 			
-				<li>Vous pouvez ajouter un autre gîte sur la page de réservation suivante</li>
+				<li>Vous pouvez ajouter un autre gï¿½te sur la page de rï¿½servation suivante</li>
 			
-			<button type=submit name="reservation">Réserver !</button> <!-- test mode payement sur la page payement.php en fonction du POST -->
+			<button type=submit name="reservation">Rï¿½server !</button> <!-- test mode payement sur la page payement.php en fonction du POST -->
 			
 			
 			

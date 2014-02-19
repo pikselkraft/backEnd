@@ -11,7 +11,8 @@ include('fonctions.php');
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	
 	<link rel="stylesheet" href="includes/css/foundation.css">
-	<link rel="stylesheet" href="includes/onglet.css">
+	<link rel="stylesheet" href="includes/css/calendrier.css">
+<!--	<link rel="stylesheet" href="includes/onglet.css">-->
 	<!--<link rel="stylesheet" href="style.css">-->
 	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
 
@@ -24,7 +25,7 @@ include('fonctions.php');
 	<script src="scripts/js/vendor/jquery.js"></script>
 	<script src="scripts/js/foundation/foundation.js"></script>
 	<script src="scripts/js/foundation/foundation.topbar.js"></script>
-
+	<script src="scripts/js/foundation/foundation.tab.js"></script>
 
 	<style>
 

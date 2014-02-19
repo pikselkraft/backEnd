@@ -6,8 +6,7 @@
 //
 //creation: 23/10/2013/
 
-
-	include('includes/header.php');
+	require('includes/header.php');
 
 ?>
 

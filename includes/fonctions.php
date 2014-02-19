@@ -27,6 +27,8 @@
 	*	envoiPwd
 	*	envoiMail
 	*	deco
+	*	breadcrumbs -> fil d'ariane
+	*	dateFr -> passage date anglais en français
 *********************************************
 	**	creation: 23/10/2013/
 
@@ -797,10 +799,50 @@ $message_html.=$message.'
 }
 
 
-
+/**************************************************************
+* déconnexion *				
+**************************************************************/
  function deco()
  {
 	global $mysqli;
 	$mysqli->close();
  }
+ 
+/**************************************************************
+* fil d'ariane par rapport à home *				
+**************************************************************/
+ function breadcrumbs($text = 'Vous êtes: ', $sep = ' &raquo; ', $home = 'Home') {
+//Use RDFa breadcrumb, can also be used for microformats etc.
+$bc     =   '<div xmlns:v="http://rdf.data-vocabulary.org/#" id="crums">'.$text;
+//Get the website:
+$site   =   'http://'.$_SERVER['HTTP_HOST'];
+//Get all vars en skip the empty ones
+$crumbs =   array_filter( explode("/",$_SERVER["REQUEST_URI"]) );
+//Create the home breadcrumb
+$bc    .=   '<span typeof="v:Breadcrumb"><a href="'.$site.'" rel="v:url" property="v:title">'.$home.'</a>'.$sep.'</span>'; 
+//Count all not empty breadcrumbs
+$nm     =   count($crumbs);
+$i      =   1;
+//Loop the crumbs
+foreach($crumbs as $crumb){
+    //Make the link look nice
+    $link    =  ucfirst( str_replace( array(".php","-","_"), array(""," "," ") ,$crumb) );
+    //Loose the last seperator
+    $sep     =  $i==$nm?'':$sep;
+    //Add crumbs to the root
+    $site   .=  '/'.$crumb;
+    //Make the next crumb
+    $bc     .=  '<span typeof="v:Breadcrumb"><a href="'.$site.'" rel="v:url" property="v:title">'.$link.'</a>'.$sep.'</span>';
+    $i++;
+}
+$bc .=  '</div>';
+//Return the result
+return $bc;}
+
+/**************************************************************
+* conversion date *				
+**************************************************************/
+function dateFr($date) {
+	return date('d/m/Y',strtotime($date));
+}
 ?>

@@ -6,7 +6,7 @@
 //creation: 23/01/2014
 
 
-	include('includes/header.php');
+	require('includes/header.php');
 
 	
 $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur lors d'une action sur la BD
@@ -92,7 +92,7 @@ if (!empty($MessageAction))
 }
 /*************************************************
 *												 *
-*	affichages des taxes stockées dans la base *
+*	affichages des taxes stockï¿½es dans la base *
 *												 *	
 **************************************************/
 $reqTaxes="select idtaxe, tarif, denomination from TAXE";
@@ -102,9 +102,9 @@ $result_reqTaxes=$mysqli->query($reqTaxes);
 
 // Creation du tableau pour afficher les taxes
 $affichage_taxe_ligne='<table border="2"  rules="groups" id="tableauClient" class="rechClient" width="400px"><thead>
-				<tr><td >idtaxe</td><td>Tarif</td><td>Dénomination</td><th colspan="2">Action</th></tr>
+				<tr><td >idtaxe</td><td>Tarif</td><td>Dï¿½nomination</td><th colspan="2">Action</th></tr>
 				</thead>';
-//Boucle qui parcourt les taxes dans la base de données
+//Boucle qui parcourt les taxes dans la base de donnï¿½es
 while ($row = $result_reqTaxes->fetch_assoc())
 {
 
@@ -142,19 +142,15 @@ $affichage_taxe_ligne.='</table>';
 ?>
 
 <body>
-	<div id="menu" style="position:relative; float:left;">
-		<?php
 
-			include('menu.php');
-		?>
-	</div>
 
-	<div id="content" style="position:relative; float:left;">
-
+	<div class="row">
+		<div class="small-11 small-centered columns">
 		<?php
 			echo $MessageAction;
 			echo $affichage_taxe_ligne;
 		?>
+		</div>
 	</div>
 
 </body>
