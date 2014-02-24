@@ -1,32 +1,60 @@
 <?php
 
-//recherche de clients des gites 
+//recherche des commandes
 
 //version: 1.0
 //
 //creation: 27/01/2014
 
 
-	include('includes/header.php');
+/* NOTE !!
+
+	****	
+	
+		* Faire le lien sur le main
+		* Ã©dition complete
+		* css tableau et form ?
+	
+	****
+	
+*/
+
+
+
+	require('includes/header.php');
 
 	
 $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur lors d'une action sur la BD
 /*********************************************
-*		REcherche des clients  des gites     *
+*		REcherche des commande  des gites     *
 **********************************************/
+// requete qui permet de charge la liste des status des commandes dans un tableau
+$reqStatutCommande="select idstatut, designation 
+					from STATUTCOMMANDE";
+$result_reqStatutCommande=$mysqli->query($reqStatutCommande);
+while ($row = $result_reqStatutCommande->fetch_assoc())
+{					
+		// $statut[(int)$row["idstatut"]]["designation"]=$row["designation"];
+		$statut[(int)$row["idstatut"]]["designation"]=$row["designation"];
 		
+}		
+// fin de la boucle pour les statuts
+
+
+/*************************************************************
+* Traitement des diffï¿½rentes actions possible sur cette page *
+* avec le parameï¿½tre actionCommande							 *
+**************************************************************/
+
     // differentes valeurs de la variable actionCommande passee en argument 
-	// vide : on affiche un formulaire de recherche de clients
-	// R : on affiche les résultat
+	// vide : on affiche un formulaire de recherche de commandes
+	// R : on affiche les rï¿½sultat
 	
 	
 	if (!empty($_GET["actionCommande"]))
 	{
 			$actionCommande=$_GET["actionCommande"];
-			
-		
-		
-		
+
 		
 		//on regarde si on a un idcommande en parametre
 		if (!empty($_GET["idcommande"]))
@@ -36,14 +64,23 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 
 		switch ($actionCommande) 
 		{
-			case "R": //rechercher de clients
-				$reqClient="select idcommande, nom, prenom, port, email	
-						from CLIENTS"
-						 ;
+			case "R": //rechercher de commande
+			
+			$reqCommandeResa="select distinct CO.idcommande,  CM.idclient, C.nom, CO.taxe, CO.caution, CO.montant_option, CO.remise, CO.code_promo, CO.date_creation, CO.statut_facture, CO.accompte, CO.accompte_paye, CO.total,CO.total_paye  
+					from COMMANDE CO, COMMANDERESERVER CM, CLIENTS C
+					where CM.idclient=C.idclient and CO.idcommande=CM.idcommande ";
+	
+			
+						
+						 if ((isset($_POST["statut_facture"])) and (($_POST["statut_facture"])<10) )
+						 {
+							$reqCommandeResa.=" and CO.statut_facture=".$_POST["statut_facture"];
+							$affichage_commande_ligne='<p> Affichage des commandes avec le statut ' . $statut[(int)$_POST["statut_facture"]]["designation"].'</p>';
+						 }
 						 
-						if (!empty($_POST["email"]) and (!empty($_POST["email"])))
+						if (!empty($_POST["email"]) and (!empty($_POST["nom"])))
 						{
-							$reqClient.=" where email like '".$_POST["email"]."' and nom like '%".$_POST["nom"]."%'";
+							$reqCommandeResa.=" and C.email like '".$_POST["email"]."' and C.nom like '%".$_POST["nom"]."%'";
 						 
 							 
 						}
@@ -51,102 +88,106 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 						{
 							if (!empty($_POST["nom"]) ) 					 
 							{
-								$reqClient.=" where nom like '".$_POST["nom"]."'";
+								$reqCommandeResa.=" and C.nom like '%".$_POST["nom"]."%'";
 							}
 							else
 							{
 								if (!empty($_POST["email"]))
 								{
-									$reqClient.=" where email like '".$_POST["email"]."'";
+									$reqCommandeResa.=" and C.email like '".$_POST["email"]."'";
 								}
 								else
 								{
-									if (!empty($_POST["port"]))  $reqClient.=" where port like '".$_POST["port"]."'";
+									if (!empty($_POST["idcommande"]))  $reqCommandeResa.=" and CO.idcommande like '".$_POST["idcommande"]."'";
 								}
 							}
 						}
-			
-								 
-				$result_reqClient=$mysqli->query($reqClient);
+			$reqCommandeResa.=" order by CO.statut_facture ";
+		
+				$result_reqCommandeResa=$mysqli->query($reqCommandeResa);
 				if(!$mysqli)
 				{
-					$MessageAction ="ERREUR : Pas de résultat pour cette recherche" ;  
+					$MessageAction ="ERREUR : Pas de rï¿½sultat pour cette recherche" ;  
 				} 
 				else
 				{
 					$MessageAction="Resultat de la recherche : ";
 				}
 							
-				//Boucle qui parcourt les clients dans la base de données
+				//Boucle qui parcourt les clients dans la base de donnï¿½es
 				
 			
 				break;
-						
-			case "TE": //tri par email
-				$reqClient="select idcommande, nom, prenom, port, email	
-						from CLIENTS order by email";
-											 
-				$result_reqClient=$mysqli->query($reqClient);
-				break;
-			case "TN": //tri par nom
-				$reqClient="select idcommande, nom, prenom, port, email	
-						from CLIENTS order by nom"
-						 ;
-											 
-				$result_reqClient=$mysqli->query($reqClient);		 
-				break;
-			case "TP": //tri par prenom
-				$reqClient="select idcommande, nom, prenom, port, email	
-						from CLIENTS order by prenom"
-						 ;
-											 
-				$result_reqClient=$mysqli->query($reqClient);		 
-				break;
-			case "TT": //tri par portable
-				$reqClient="select idcommande, nom, prenom, port, email	
-						from CLIENTS order by port"
-						 ;
-											 
-				$result_reqClient=$mysqli->query($reqClient);		 
-				break;
-			case "MDP": //generation d'un nouveau mot de passe
-				$newPass=envoiPwd($_GET["email"]);
-				$MessageAction='<div class="messageInfo">Le nouveau mot de passe est : '.$newPass.'</div>';
-				$reqClient="select idcommande, nom, prenom, port, email	
-						from CLIENTS where email='".$_GET["email"]."'";
-						$result_reqClient=$mysqli->query($reqClient);
-				break;
-			case "EM": //generation d'un nouveau mot de passe
-				if (envoiMail($_GET["email"],"mon objet","dfdf",true))
-				 { echo "envoi ok";}
-			
-				break;		
+			case "Z": //raffcihe les 20 derniï¿½res commandes
+			$reqCommandeResa="select distinct CO.idcommande,  CM.idclient, C.nom, CO.taxe, CO.caution, CO.montant_option, CO.remise, CO.code_promo, CO.date_creation, CO.statut_facture, CO.accompte, CO.accompte_paye, CO.total,CO.total_paye  
+					from COMMANDE CO, COMMANDERESERVER CM, CLIENTS C
+					where CM.idclient=C.idclient and CO.idcommande=CM.idcommande and CO.idcommande > ((select max(idcommande) from COMMANDE)-20)";
+				$result_reqCommandeResa=$mysqli->query($reqCommandeResa);
+				if(!$mysqli)
+				{
+					$MessageAction ="ERREUR : Pas de rï¿½sultat pour cette recherche" ;  
+				} 
+				else
+				{
+					$MessageAction="Affichage des 20 derniï¿½res commandes en cours : ";
+				}
+			break;			
+					
 		}
 		
-		if ((strcmp($actionCommande,'R')==0) or (strcmp($actionCommande,'TE')==0) or (strcmp($actionCommande,'TN')==0) or (strcmp($actionCommande,'TP')==0) or (strcmp($actionCommande,'TT')==0) or (strcmp($actionCommande,'MDP')==0))
-		{
 		
+		if ((strcmp($actionCommande,'R')==0) or (strcmp($actionCommande,'Z')==0) or (strcmp($actionCommande,'TN')==0) or (strcmp($actionCommande,'TP')==0) or (strcmp($actionCommande,'TT')==0) or (strcmp($actionCommande,'MDP')==0))
+		{
+					
 		// Creation du tableau pour afficher les clients
-				$affichage_client_ligne='<table border="2"  rules="groups" id="tableauClient" class="rechClient" width="600"><thead>
-								<tr><td ><a href="rechercheClient?actionCommande=TE">Email</a></td><td><a href="rechercheClient?actionCommande=TN">Nom</a></td><td><a href="rechercheClient?actionCommande=TP">Prénom</a></td><td><a href="rechercheClient?actionCommande=TT">Portable</A></td><th colspan="4">Action</th></tr>
+				$affichage_commande_ligne.='<table><thead>
+								<tr><td>IdCommande</a></td>
+								<td>Date de Commande</td>
+								<td>Nom</td>
+								
+								<td>Statut</td>
+								<td>Accompte</td>
+								<td>Accompte payï¿½</td>
+								<td>Total ï¿½ payer</td>
+								<th colspan="4">Action</th></tr>
 								</thead>';
-			//boucle qui parcourt le résultats des requetes demandées dans la BD
-			while ($row = $result_reqClient->fetch_assoc())
+								
+			//boucle qui parcourt le rï¿½sultats des requetes demandï¿½es dans la BD
+			while ($row = $result_reqCommandeResa->fetch_assoc())
 			{
-				$affichage_client_ligne.= '<tr>
-										<td><a href="mailto:'.$row["email"].'">'.$row["email"].'</td>
-										<td>'.$row["nom"].'</td>
-										<td>'.$row["prenom"].'</td>
-										<td>'.$row["port"].'</td>
-										<td><a href="affichTous.php?idcommande='.$row["idcommande"].'"><img src="images/cal.gif" title="Agenda"></a></td>
-										<td><a href="affichClient.php?idcommande='.$row["idcommande"].'" alt="Afficher Info Client"><img src="images/edit.gif"></a></td>
-										<td><a href="rechercheClient.php?actionCommande=EM&email='.$row["email"].'" alt="envoie email"><img src="images/email.gif"></a></td>
-										<td><a href="rechercheClient.php?actionCommande=MDP&email='.$row["email"].'" alt="Nouveau Mot de passe" onclick="return confirm(\'Etes vous sure de vouloir regénérer un mot de passe?\');"><img src="images/pwd.gif"></a></td>
+				switch ((int)$row["statut_facture"])
+				{
+					case 0 : $couleurStatut='#000000';
+					break;
+					case 1 : $couleurStatut='#fe0202';
+					break;
+					case 2 : $couleurStatut='#feb402';
+					break;
+					case 3 : $couleurStatut='#02fe1a';
+					break;
+					case 4 : $couleurStatut='#02fe1a';
+					break;
+				}
+				$couleurCommande='style=" border:2px solid '.$couleurStatut.';"';
+				$affichage_commande_ligne.= '<tr >
+										<td '.$couleurCommande.'>'.$row["idcommande"].'</td>
+											<td '.$couleurCommande.'>'.date('d/m/Y ï¿½  H:i:s ',strtotime($row["date_creation"])).'</td>
+										<td '.$couleurCommande.'>'.$row["nom"].'</td>
+										<td '.$couleurCommande.'>'.$statut[(int)$row["statut_facture"]]["designation"].'</td>
+										<td '.$couleurCommande.'>'.$row["accompte"].' ï¿½</td>
+										<td '.$couleurCommande.'>'.$row["accompte_paye"].' ï¿½</td>
+										<td '.$couleurCommande.'>'.$row["total"].' ï¿½</td>
+										<td '.$couleurCommande.'>'.$row["total_paye"].' ï¿½</td>
+									
+											<td '.$couleurCommande.'><a href="rechercheCommande.php?actionCommande=E&idcommande='.$row["idcommande"].'" title="Editer la commande"><img src="images/edit.gif" ></a></td>
+										<td '.$couleurCommande.'><a href="rechercheCommande.php?actionCommande=Z&idcommande='.$row["idcommande"].'" title="Annuler la commande" ><img src="images/delete.gif" ></a></td>
+									<td '.$couleurCommande.'><a href="rechercheCommande.php?actionCommande=Z&idcommande='.$row["idcommande"].'" title="Annuler la commande" ><img src="images/delete.gif" ></a></td>
+										<td '.$couleurCommande.'><a href="rechercheCommande.php?actionCommande=Z&idcommande='.$row["idcommande"].'" title="Annuler la commande" ><img src="images/delete.gif" ></a></td>
 										</tr>';
 			}		
 			
 			
-		$affichage_client_ligne.='</table>';	
+		$affichage_commande_ligne.='</table>';	
 		}
 	}
 if (!empty($MessageAction))
@@ -155,43 +196,48 @@ if (!empty($MessageAction))
 }
 /*************************************************
 *												 *
-*	affichages des clients stockées dans la base *
+*	affichages des Commandes stockï¿½es dans la base *
 *												 *	
 **************************************************/
 
+$result=count($statut);
 
-$affichage_recherche='Vous pouvez remplacer des caractères inconnus par % pour effectuer la recherche';
-$affichage_recherche.='<form action="rechercheClient.php?actionCommande=R" method="post">';
+
+$affichage_recherche.='<form action="rechercheCommande.php?actionCommande=R" method="post">';
 $affichage_recherche.='<label for="email">Email : </label><input id="email" name="email" type="text">
 			<label for="nom">Nom : </label><input id="nom" name="nom" type="text">
-			<label for="port">Numéro de commande: </label><input id="idcommande" name="idcommance" type="int">';
-$affichage_recherche.='<input type="submit" value="Rechercher"></form>';
-
-
+			<label for="port">Numï¿½ro de commande: </label><input id="idcommande" name="idcommande" type="int">
+			<label for="statut_facture">Statut de la facture: </label><select name="statut_facture">';
+$a=0; //compteur pour le parcourt du tableau
+	$affichage_recherche.='<option selected="selected" value="10">Tout statut</option>';
+while ($a<$result)
+{
+	$affichage_recherche.='<option value="'.(int)$a.'">'.$statut[(int)$a]["designation"].'</option>';
+	$a++;
+}
+$affichage_recherche.='</select><input type="submit" value="Rechercher"></form>';
 
 ?>
-<link rel="stylesheet" href="includes/onglet.css">
+
 <body>
-	<div id="menu" style="position:relative; float:left;">
-		<?php
 
-			include('menu.php');
-		?>
-	</div>
 
-	<div id="content" style="position:relative; float:left;">
-<h1> Recherche des commandes</h1>
+	
+	<div class="row">
+		<div class="small-11 small-centered columns">
+		<div class="panel">
+		<h1> Recherche des commandes</h1>
 		<?php
 			echo $affichage_recherche;
 			echo $MessageAction;
-			echo $affichage_client_ligne;
+			echo $affichage_commande_ligne;
 		?>
-		
-				
+		</div>
+		</div>		
 	</div>
 
 </body>
 
 <?php
-	include('includes/footer.php');
+	require('includes/footer.php');
 ?>

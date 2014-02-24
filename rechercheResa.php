@@ -4,7 +4,20 @@ require('includes/header.php');
 
 /*************************************
 Affiche les infos d'une r�servation
-**************************************/	
+**************************************/
+	
+/* NOTE !!
+
+	****	
+	
+		* Faire le lien sur le main
+		* édition complete
+		* css tableau et form ?
+	
+	****
+	
+*/
+	
 	
 $id_resa=$_GET["idresa"];
 extract($_POST);
@@ -135,7 +148,7 @@ if ($etatR=='S')
 			{
 				echo '<tr align="left">
 				<th colspan="8">
-				<form action="affichResa.php?etatR=S&idgite='.$rowlisteCommande["idgite"].'" method="post">';
+				<form action="rechercheResa.php?etatR=S&idgite='.$rowlisteCommande["idgite"].'" method="post">';
 				echo '<table>';
 				echo '<tbody>';
 				echo '<tr >';
@@ -152,8 +165,7 @@ if ($etatR=='S')
 				echo '</tr >';
 				echo '</tbody>';
 				echo '</table>';
-				echo '</form></th>';
-				
+				echo '</form></th>';		
 			}
 		echo '</table>';	
 			?>

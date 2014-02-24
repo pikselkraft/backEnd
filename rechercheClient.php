@@ -134,7 +134,7 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 										<td>'.$row["prenom"].'</td>
 										<td>'.$row["port"].'</td>
 										<td><a href="affichTous.php?idClient='.$row["idclient"].'"><img src="images/cal.gif" title="Agenda"></a></td>
-										<td><a href="affichClient.php?idclient='.$row["idclient"].'" alt="Afficher Info Client"><img src="images/edit.gif"></a></td>
+										<td><a href="main.php?idclient='.$row["idclient"].'" alt="Afficher Info Client"><img src="images/edit.gif"></a></td>
 										<td><a href="rechercheClient.php?actionClient=EM&email='.$row["email"].'" alt="envoie email"><img src="images/email.gif"></a></td>
 										<td><a href="rechercheClient.php?actionClient=MDP&email='.$row["email"].'" alt="Nouveau Mot de passe" onclick="return confirm(\'Etes vous sure de vouloir reg�n�rer un mot de passe?\');"><img src="images/pwd.gif"></a></td>
 										</tr>';

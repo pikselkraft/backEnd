@@ -208,8 +208,6 @@ if ( (isset($_SESSION['an'])) && (!(empty($_SESSION['an']))) )
    $annee_premier_mois = $_SESSION['an'] ;
 
 
-
-
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
 //----     Ne plus rein modifi�                                                                -----
@@ -217,9 +215,7 @@ if ( (isset($_SESSION['an'])) && (!(empty($_SESSION['an']))) )
 //--------------------------------------------------------------------------------------------------
 
 
-
 $largeur_div = $largeur_tableau * $nombre_mois_afficher_ligne ;
-
 
 
 //selection du mois et ann�e en cours***************************************************************
@@ -230,10 +226,10 @@ $annee_en_cours = $annee_premier_mois ;
 // affichage s�lection mois, ann�e, couleur et champs de r�servations ********************************
 if ($AffichChoixDate)
 {
-
+	echo '<div id="calendrier">';
 	echo '<Table border = 0 >
 		  <tr>
-		  <td width = "140">';
+		  <td width = "50">';
 	   // si n�cessaire affichage du s�lecteur d'ann�e **************************************************
 	   if ( $selection_an ) {
 			echo '<a href="affichTous.php?an=',$annee_en_cours - 1, '" class = selection><font style="font-size:',$taille_police_sel_mois_annee,'px" color="',$couleur_sel_mois_annee,'" face="',$police,'" >&nbsp;<< </a></font>';
@@ -243,7 +239,7 @@ if ($AffichChoixDate)
 	echo '</td>
 		  </tr>
 		  <tr>
-		  <td width = "140">';
+		  <td width = "50">';
 	   // si n�cessaire affichage du s�lecteur de mois **********************************************
 	   if ( $selection_mois ) {
 			echo '<form name="sel_mois" method="get" action="affichTous.php" id="Form1">';
@@ -260,16 +256,15 @@ if ($AffichChoixDate)
 	echo '</td>
 		  </tr>
 		  </table> ';
+	echo '</div>';
 // s�lection affichage avec lien vers page de gestion des locataires logements *********************
 }
-echo '<div id="Calendrier" style="">';
+echo '<div id="calendrier">';
 /* Affichage des infos de base du Gite
 */
 $req="SELECT idgite,nom,capacite,url,montant_caution,titre,description FROM GITE WHERE idgite=".$idgite;
 					
-					$result = $mysqli->query($req);
-					
-							
+					$result = $mysqli->query($req);							
 
 					while ($row = $result->fetch_assoc())
 					{
@@ -279,8 +274,7 @@ $req="SELECT idgite,nom,capacite,url,montant_caution,titre,description FROM GITE
 						$titre=$row['titre'];
 						//$surface=$row['surface'];
 					}
-					
-				
+						
 //initailisation compteur de mois par ligne*********************************************************
 $compteur_mois_ligne = 1 ;
 
@@ -316,7 +310,7 @@ for ($j=1; $j<9; $j++)
           $couleur_fond_nom_jour = $couleur_jour_semaine ;
        echo '<TD align = center bgColor=',$couleur_fond_nom_jour,'><font style="font-size:',$taille_police_nom_jour,'px" color="',$couleur_police_nom_jour,'" face="',$police,'" >',$jour_texte[correction_debut_semaine ($texte_jour_debut_semaine,$j)],'</font></td>';
      }
-echo '</TR>';
+echo '</tr>';
 
 //initialisation des calendriers*******************************************************************
 $fin_tableau              = false ;
@@ -337,7 +331,7 @@ $lundi_trouve = false;
 //creation du tableau avec numero des jours*********************************************************
 while ( !($fin_tableau) )
       {
-        echo '<TR>';
+        echo '<tr>';
         $compteur_ligne++;
         $au_moins_une_date_sur_la_ligne = false;
         //creation des cases par semaine************************************************************
@@ -450,7 +444,7 @@ while ( !($fin_tableau) )
                         }
                       }
                     $temp_semaine_en_cours = date("W",mktime ( 0,0,0,$memoire_numero_mois_premier_jour_sem_en_cours ,$memoire_numero_premier_jour_sem_en_cours ,$memoire_numero_annee_premier_jour_sem_en_cours ));
-                    echo '<TD bgColor=',$couleur_numero_semaine,' align=center><font style="font-size:',$taille_police_jour,'px" color="',$couleur_police_jour,'" face="',$police,'" >';
+                    echo '<td bgColor=',$couleur_numero_semaine,' align=center><font style="font-size:',$taille_police_jour,'px" color="',$couleur_police_jour,'" face="',$police,'" >';
                     $lundi_trouve = false;
                     echo $temp_semaine_en_cours;
                     echo '</td>';
@@ -460,15 +454,15 @@ while ( !($fin_tableau) )
                         $couleur_disponibilite = $couleur_jour_week_end ;
                     if ( $j == 8 && $avec_continuite_couleur )
                         $couleur_disponibilite = $couleur_numero_semaine ;
-                    echo '<TD bgColor=',$couleur_disponibilite,' height="',$hauteur_mini_cellule_date,'"></TD>';
+                    echo '<td bgColor=',$couleur_disponibilite,' height="',$hauteur_mini_cellule_date,'"></TD>';
                     }
              }
-        echo '</TR>';
+        echo '</tr>';
         if ( $compteur_jour > $numero_dernier_jour_mois && $compteur_ligne >= 6)
                         $fin_tableau = true ;
       }
 //fin de la table du mois
-echo '</TABLE>';
+echo '</table>';
 
 //incrementation du mois et annee en cours********************************************************
 $mois_en_cours = $mois_en_cours + 1;
@@ -493,15 +487,15 @@ echo '</table>';
 		<div class="small-11 small-centered columns">
 		<form action="resaVerifBefore.php?idgite=<?php echo $idgite;?>" method="post"> 
 			
-			<fieldset style="position:relative;float:left;height:25px;">
+			<fieldset>
 				
 				<label for=nom>Date Arriv�e</label>	<input type="date" name="date_debut">
 				
 				<label for=nom>Date D�part</label><input type="date" name="date_fin">
 				<input type="int" name="capacite" hidden>
-			</fieldset style="position:relative;float:left;">
+			</fieldse>
 			
-			<fieldset style="height:25px;">
+			<fieldset>
 				<button type=submit>Reserver !</button> <!-- test dans le header et redirection-->
 		  	</fieldset>
 		</form>

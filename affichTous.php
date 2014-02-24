@@ -145,8 +145,6 @@ function correction_debut_semaine ($jour,$cle) {
 					<?php
 						include('calendrierTous.php');
 					?>
-			
-
 			<?php
 			$gt++;
 			$AffichChoixDate=false;
