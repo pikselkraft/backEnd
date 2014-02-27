@@ -1,12 +1,9 @@
 <?php
 
-//GEstion des options des gites 
-//version: 1.0
-//
-//creation: 23/01/2014
+//Gestion des options des gites 
 
 
-	include('includes/header.php');
+	require('includes/header.php');
 
 	
 $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur lors d'une action sur la BD
@@ -100,7 +97,7 @@ if (!empty($MessageAction))
 }
 /*************************************************
 *												 *
-*	affichages des options stockées dans la base *
+*	affichages des options stockï¿½es dans la base *
 *												 *	
 **************************************************/
 $reqOptions="select idoption, option_tarif, denomination from OPTIONRESA";
@@ -110,9 +107,9 @@ $result_reqOptions=$mysqli->query($reqOptions);
 
 // Creation du tableau pour afficher les options
 $affichage_option_ligne='<table border="2"  rules="groups" id="tableauClient" class="rechClient" width="400px"><thead>
-				<tr><td >idoption</td><td>Tarif</td><td>Dénomination</td><th colspan="2">Action</th></tr>
+				<tr><td >idoption</td><td>Tarif</td><td>Dï¿½nomination</td><th colspan="2">Action</th></tr>
 				</thead>';
-//Boucle qui parcourt les options dans la base de données
+//Boucle qui parcourt les options dans la base de donnï¿½es
 while ($row = $result_reqOptions->fetch_assoc())
 {
 
@@ -149,24 +146,16 @@ while ($row = $result_reqOptions->fetch_assoc())
 $affichage_option_ligne.='</table>';
 ?>
 
-<body>
-	<div id="menu" style="position:relative; float:left;">
-		<?php
-
-			include('menu.php');
-		?>
-	</div>
-
-	<div id="content" style="position:relative; float:left;">
-
-		<?php
-			echo $MessageAction;
-			echo $affichage_option_ligne;
-		?>
-	</div>
-
+		<div class="row">
+			<div class="small-11 small-centered columns">		
+			<?php
+				echo $MessageAction;
+				echo $affichage_option_ligne;
+			?>
+			</div>
+		</div>
 </body>
 
 <?php
-	include('includes/footer.php');
+	require('includes/footer.php');
 ?>

@@ -6,22 +6,12 @@
 //
 //creation: 23/10/2013/
 
-
-	include('includes/header.php');
+	require('includes/header.php');
 
 ?>
 
-<body>
-	<div id="menu" style="position:relative; float:left;">
-		<?php
-
-		include('menu.php');
-		?>
-	</div>
-
-	<div id="content" style="position:relative; float:left;">
-
-
+	<div class="row">
+		<div class="small-11 small-centered columns">
 
 <?php
 //--------------------------------------------------------------------------------------------------
@@ -624,31 +614,34 @@ echo '</div>';
 echo '</td>';
 echo '</tr>';
 echo '</table>';
-?>
-<div class="row">
-  <div class="small-8 large-centered columns">
-		<form action="resaVerifBefore.php" method="post"> 
-			
-			<fieldset>
-				
-				<input id=idgite name=idgite type=hidden value="<?php echo $idgite;?>" required>
-				
-				<label for=nom>Date Arriv�e</label>
-				<input type="date" name="date_debut">
-				
-				<label for=nom>Date D�part</label>
-				<input type="date" name="date_fin"><input type="int" name="capacite" hidden>
-			</fieldset>
-			
-			<fieldset>
-				<button type=submit>Reserver !</button> <!-- test dans le header et redirection-->
-		  	</fieldset>
-		</form>
+?>		
+		</div>
 	</div>
-</div>
+
+	<div class="row">
+	  <div class="small-8 large-centered columns">
+			<form action="resaVerifBefore.php" method="post"> 
+
+				<fieldset>
+
+					<input id=idgite name=idgite type=hidden value="<?php echo $idgite;?>" required>
+
+					<label for=nom>Date Arriv�e</label>
+					<input type="date" name="date_debut">
+
+					<label for=nom>Date D�part</label>
+					<input type="date" name="date_fin"><input type="int" name="capacite" hidden>
+				</fieldset>
+
+				<fieldset>
+					<button type=submit>Reserver !</button> <!-- test dans le header et redirection-->
+				</fieldset>
+			</form>
+		</div>
+	</div>
 
 </body>
 
 <?php
-	include('includes/footer.php');
+	require('includes/footer.php');
 ?>

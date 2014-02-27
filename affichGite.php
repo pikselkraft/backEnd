@@ -1,5 +1,7 @@
 <?php
-	include('includes/header.php');
+	
+	require('includes/header.php');
+	
 /********************************************
 *											*
 *											*
@@ -15,8 +17,6 @@
 ********************************************/
 
 	
-
-
 /*********************************************
 *		Traitement des tarifs  des gites     *
 **********************************************/
@@ -317,22 +317,13 @@ if (($_GET["etatTarif"]=='AD') && (!empty($_GET["idgite"]))) // mise � jour de
 				
 }
 ?>
-<body>
-	<div id="menu" style="position:relative; float:left;">
-		<?php
 
-		include('menu.php');
-		?>
-	</div>
-
-	<div id="ContentGite"  style="" >
+	<div class="row">
+		<div class="small-11 small-centered columns">		
 		<?php 
 	
 		$idgite=$_GET["idgite"];
 
-			
-	
-		
 		/* on affiche la liste des gites et les informations les concernant*/
 		$reqGite="select * from GITE" ;
 		$resultReqGite=$mysqli->query($reqGite);
@@ -590,9 +581,7 @@ if (($_GET["etatTarif"]=='AD') && (!empty($_GET["idgite"]))) // mise � jour de
 													<td width="60px"><input type="hidden" name="denomination" value="'.$rowreqOption["denomination"].'" />'
 														.$rowreqOption["denomination"].'
 													</td>
-																																						
-													
-												
+
 													
 												<td width="10px"><a href="affichGite.php?idgite='.$row["idgite"].'&options=D&idoption='.$rowreqOption["idoption"].'" onclick="return confirm(\'Etes vous s�re de vouloir supprimer cette option ?\');"><img src="images/delete.gif" title="Supprimer"></a></td>
 												</tr>
@@ -645,8 +634,7 @@ if (($_GET["etatTarif"]=='AD') && (!empty($_GET["idgite"]))) // mise � jour de
 										
 											<table border="1" width="100%" rules="groups" class="rechClient">';
 									
-									
-										
+
 										// on affiche la liste d'option disponible et pas déjà attaché à ce gite	
 										$reqTteOption="select idoption, option_tarif, denomination from OPTIONRESA where idoption not in (" .$listeOption.")";
 										
@@ -677,8 +665,7 @@ if (($_GET["etatTarif"]=='AD') && (!empty($_GET["idgite"]))) // mise � jour de
 								echo '</th></tr>';
 							}
 						
-						
-						
+
 						/*************************************					
 						**************************************
 						     Gestion des images des gites
@@ -825,23 +812,17 @@ if (($_GET["etatTarif"]=='AD') && (!empty($_GET["idgite"]))) // mise � jour de
 										</form>';
 								echo '</th></tr>';
 							}
-						
-						
-						
+	
 					}
-					
-					
-			
-				
-			
-				
+
 			echo "</table>";
 		
 		?>
 		</div>
+	</div>
 
 </body>
 
 <?php
-	include('includes/footer.php');
+	require('includes/footer.php');
 ?>

@@ -1,8 +1,6 @@
 
 <?php
 //fonction sie gîte le Metzval
-//
-//version: 1.0
 
 /********************************************
  **FONCTIONS
@@ -27,6 +25,8 @@
 	*	envoiPwd
 	*	envoiMail
 	*	deco
+	*	breadcrumbs -> fil d'ariane
+	*	dateFr -> passage date anglais en français
 *********************************************
 	**	creation: 23/10/2013/
 
@@ -40,7 +40,7 @@ $script_tz = date_default_timezone_get();
 
 if (strcmp($script_tz, ini_get('date.timezone')))
 {
-    echo 'Le décalage horaire du script diffère du décalage horaire défini dans le fichier ini. <br />';
+    //echo 'Le décalage horaire du script diffère du décalage horaire défini dans le fichier ini. <br />';
 } 
 
 
@@ -797,10 +797,204 @@ $message_html.=$message.'
 }
 
 
-
+/**************************************************************
+* déconnexion *				
+**************************************************************/
  function deco()
  {
 	global $mysqli;
 	$mysqli->close();
  }
+ 
+/**************************************************************
+* fil d'ariane par rapport à home *				
+**************************************************************/
+ function breadcrumbs($text = 'Vous êtes: ', $sep = ' &raquo; ', $home = 'Home') {
+//Use RDFa breadcrumb, can also be used for microformats etc.
+$bc     =   '<div xmlns:v="http://rdf.data-vocabulary.org/#" id="crums">'.$text;
+//Get the website:
+$site   =   'http://'.$_SERVER['HTTP_HOST'];
+//Get all vars en skip the empty ones
+$crumbs =   array_filter( explode("/",$_SERVER["REQUEST_URI"]) );
+//Create the home breadcrumb
+$bc    .=   '<span typeof="v:Breadcrumb"><a href="'.$site.'" rel="v:url" property="v:title">'.$home.'</a>'.$sep.'</span>'; 
+//Count all not empty breadcrumbs
+$nm     =   count($crumbs);
+$i      =   1;
+//Loop the crumbs
+foreach($crumbs as $crumb){
+    //Make the link look nice
+    $link    =  ucfirst( str_replace( array(".php","-","_"), array(""," "," ") ,$crumb) );
+    //Loose the last seperator
+    $sep     =  $i==$nm?'':$sep;
+    //Add crumbs to the root
+    $site   .=  '/'.$crumb;
+    //Make the next crumb
+    $bc     .=  '<span typeof="v:Breadcrumb"><a href="'.$site.'" rel="v:url" property="v:title">'.$link.'</a>'.$sep.'</span>';
+    $i++;
+}
+$bc .=  '</div>';
+//Return the result
+return $bc;}
+
+/**************************************************************
+* conversion date *				
+**************************************************************/
+function dateFr($date) {
+	return date('d/m/Y',strtotime($date));
+}
+
+
+
+/**
+
+	* Test ink mail foundation
+*/
+
+
+//fonction d'envoi mail avec template
+
+	/**
+		*	intégrer des variable pour mp, information resa
+	*/
+function templateMail($action,$destinataire, $sujet,$message,$copy)
+{
+	
+	if (!preg_match("#^[a-z0-9._-]+@(hotmail|live|msn).[a-z]{2,4}$#", $destinataire)) // On filtre les serveurs qui rencontrent des bogues.
+	{
+		$passage_ligne = "\r\n";
+	}
+	else
+	{
+		$passage_ligne = "\n";
+	}
+	//=====Déclaration des messages au format texte et au format HTML.
+	$message_txt = $message;
+	$message_html = "<html><head></head><body><b>Salut à tous</b>, voici un e-mail envoyé par un <i>script PHP</i>.</body></html>";
+	
+	
+	
+	//template du messaeg mail : 
+	$message_html='';
+
+	//==========
+	 
+	//=====Création de la boundary
+	$boundary = "-----=".md5(rand());
+	//==========
+	 
+	
+	//=========
+	 
+	//=====Création du header de l'e-mail.
+	$header = "From: \"Gite le Metzval\"<contact@gite-lemetzval.fr>".$passage_ligne;
+	$header.= "Reply-to: \"Gite le Metzval\" <contact@gite-lemetzval.fr>".$passage_ligne;
+	$header.= "MIME-Version: 1.0".$passage_ligne;
+	$header.= "Content-Type: multipart/alternative;".$passage_ligne." boundary=\"$boundary\"".$passage_ligne;
+	//==========
+	 
+	//=====Création du message.
+	$message = $passage_ligne."--".$boundary.$passage_ligne;
+	//=====Ajout du message au format texte.
+	$message.= "Content-Type: text/plain; charset=\"ISO-8859-1\"".$passage_ligne;
+	$message.= "Content-Transfer-Encoding: 8bit".$passage_ligne;
+	$message.= $passage_ligne.$message_txt.$passage_ligne;
+	//==========
+	$message.= $passage_ligne."--".$boundary.$passage_ligne;
+	//=====Ajout du message au format HTML
+	$message.= "Content-Type: text/html; charset=\"ISO-8859-1\"".$passage_ligne;
+	$message.= "Content-Transfer-Encoding: 8bit".$passage_ligne;
+	$message.= $passage_ligne.$message_html.$passage_ligne;
+	//==========
+	$message.= $passage_ligne."--".$boundary."--".$passage_ligne;
+	$message.= $passage_ligne."--".$boundary."--".$passage_ligne;
+	//==========
+	 
+	//=====Envoi de l'e-mail.
+	mail($destinataire,$sujet,$message,$header);
+	//==========
+}
+
+
+/**
+
+	* fonction template Mail
+*/
+
+function envoiMail2($destinataire, $sujet,$message,$copy)
+{
+	
+	if (!preg_match("#^[a-z0-9._-]+@(hotmail|live|msn).[a-z]{2,4}$#", $destinataire)) // On filtre les serveurs qui rencontrent des bogues.
+	{
+		$passage_ligne = "\r\n";
+	}
+	else
+	{
+		$passage_ligne = "\n";
+	}
+	//=====Déclaration des messages au format texte et au format HTML.
+	$message_txt = $message;
+	
+	
+	//template du messaeg mail : 
+	$message_html=file_get_contents('http://srvweb/resa/dev-sdk-git/develop/includes/ink/template/mailTest.html');
+
+	//==========
+	 
+	//=====Création de la boundary
+	$boundary = "-----=".md5(rand());
+	//==========
+	 
+	
+	//=========
+	 
+	//=====Création du header de l'e-mail.
+	$header = "From: \"Gite le Metzval\"<contact@gite-lemetzval.fr>".$passage_ligne;
+	$header.= "Reply-to: \"Gite le Metzval\" <contact@gite-lemetzval.fr>".$passage_ligne;
+	$header.= "MIME-Version: 1.0".$passage_ligne;
+	$header.= "Content-Type: multipart/alternative;".$passage_ligne." boundary=\"$boundary\"".$passage_ligne;
+	//==========
+	 
+	//=====Création du message.
+	$message = $passage_ligne."--".$boundary.$passage_ligne;
+	//=====Ajout du message au format texte.
+	$message.= "Content-Type: text/plain; charset=\"ISO-8859-1\"".$passage_ligne;
+	$message.= "Content-Transfer-Encoding: 8bit".$passage_ligne;
+	$message.= $passage_ligne.$message_txt.$passage_ligne;
+	//==========
+	$message.= $passage_ligne."--".$boundary.$passage_ligne;
+	//=====Ajout du message au format HTML
+	$message.= "Content-Type: text/html; charset=\"ISO-8859-1\"".$passage_ligne;
+	$message.= "Content-Transfer-Encoding: 8bit".$passage_ligne;
+	$message.= $passage_ligne.$message_html.$passage_ligne;
+	//==========
+	$message.= $passage_ligne."--".$boundary."--".$passage_ligne;
+	$message.= $passage_ligne."--".$boundary."--".$passage_ligne;
+	//==========
+	 
+	//=====Envoi de l'e-mail.
+	mail($destinataire,$sujet,$message,$header);
+	//==========
+}
+
+
+function test() {
+	$texteMail = "blablablabla";
+	$test = include('ink\template\mailTest.php');
+	return $test;
+}
+	
+function test2() {
+	$test2 = fopen(".\ink\template\mailTest.html", "r");
+	return $test2;
+}
+
+function get_email( )
+{
+    ob_start( ) ;
+    include 'template/mailTest.html' ;
+    return ob_get_clean( ) ;
+}
+
+
 ?>

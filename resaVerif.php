@@ -1,22 +1,12 @@
 <?php
 
-	include('includes/header.php');
+	require('includes/header.php');
 /*********************************************************************************
 -> Ce fichier permet de v�rifier la possibilit� d'une r�servation selon 2 dates
 -> Si ok il affiche un formulaire de recherche de client 
 -> possibilit� de cr�ation de client �galement
 **********************************************************************************/
-
-	
 ?>
-
-<body>
-	<div id="menu" style="position:relative; float:left;">
-		<?php
-
-		include('menu.php');
-		?>
-	</div>
 
 	<div id="content" style="position:relative; float:left;">
 <?php 
@@ -388,11 +378,6 @@ if($etat==1)
 	} // fin if
 } // fin if		
 	
-	
-	
 
-
-
-
-	include('includes/footer.php');
+	require('includes/footer.php');
 ?>

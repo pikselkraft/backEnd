@@ -18,13 +18,13 @@
 //----                  Script de gestion pour calendrier de reservation                        ----
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
-//----   Paramètres possible dans l'url :                                                       ----
-//----       mois      : numero du premier mois à afficher dans le calendrier                   ----
-//----       an        : année du premier mois a afficher dans le calendrier                    ----
+//----   Paramï¿½tres possible dans l'url :                                                       ----
+//----       mois      : numero du premier mois ï¿½ afficher dans le calendrier                   ----
+//----       an        : annï¿½e du premier mois a afficher dans le calendrier                    ----
 //----       langue    : choix de la langue ( fr,francais, all,allemand, eng, anglais )         ----
-//----       logement  : tri des réservations suivant numéro "id_logement"                      ----
-//----       locataire : tri des réservations suivant numero "id_locataire"                     ----
-//----       date_lien : si égale à 0, les dates sont cliquables                                ----
+//----       logement  : tri des rï¿½servations suivant numï¿½ro "id_logement"                      ----
+//----       locataire : tri des rï¿½servations suivant numero "id_locataire"                     ----
+//----       date_lien : si ï¿½gale ï¿½ 0, les dates sont cliquables                                ----
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
 //----    Version 2.0                                                                         ----
@@ -33,7 +33,7 @@
 
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
-//----     Paramètres de configurations générales et modifiables                               -----
+//----     Paramï¿½tres de configurations gï¿½nï¿½rales et modifiables                               -----
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
 
@@ -51,14 +51,14 @@ $avec_bdd            = false ;
 					
 //echo "IDGITE : ". $idgite;
 //***************************************************************************************************
-// fichier de paramètrage de l'apparence du calendrier
+// fichier de paramï¿½trage de l'apparence du calendrier
 //***************************************************************************************************
-// si vous souhaitez avoir une apparence différente pour le calendrier administrateur et
-// pour la celndrier visiteurs, il faut créer de fichier parametres_calendrier.php
+// si vous souhaitez avoir une apparence diffï¿½rente pour le calendrier administrateur et
+// pour la celndrier visiteurs, il faut crï¿½er de fichier parametres_calendrier.php
 // et modifier le chemin vers ces fichiers
-// d'autres paramètres propres à chaque calendrier peuvent etre sélectionnés au début des fichiers
-// calendrier.php, ils permettent de conditionner l'affichage de sélecteur d'année, mois, couleur
-// champs de réservation
+// d'autres paramï¿½tres propres ï¿½ chaque calendrier peuvent etre sï¿½lectionnï¿½s au dï¿½but des fichiers
+// calendrier.php, ils permettent de conditionner l'affichage de sï¿½lecteur d'annï¿½e, mois, couleur
+// champs de rï¿½servation
 //***************************************************************************************************
 
  //***************************************************************************************************
@@ -66,7 +66,7 @@ $avec_bdd            = false ;
 //http://www.mathieuweb.fr/calendrier/personnaliser-calendrier.php
 //***************************************************************************************************
 
-//déclaration des variables initiales du tableau*****************************************************
+//dï¿½claration des variables initiales du tableau*****************************************************
 $taille_police_mois          = 16;
 $couleur_police_mois         = '#FFFFFF';
 $taille_police_nom_jour      = 12 ;
@@ -80,7 +80,7 @@ $avec_marquage_du_jour_d_aujourd_hui = true;
 $couleur_jour_aujourd_hui    = '#0D96FF';
 $decalage_ligne              = 0 ;
 $bordure_du_tableau          = 1  ;
-// jouer sur ce paramètre pour uniformiser la taille des calendriers
+// jouer sur ce paramï¿½tre pour uniformiser la taille des calendriers
 $hauteur_mini_cellule_date   = "17px";
 $couleur_bordure_tableau     = "#000000" ;
 $largeur_tableau             = "100px";
@@ -100,44 +100,44 @@ $couleur_sel_mois_annee      = '#000000';
 $avec_continuite_couleur      = true;
 // indiquer en toute lettre le nom du premier jour de la semaine *********************
 // lundi, mardi, mercredi, jeudi, vendredi, samedi, dimanche *************************
-//attention !!! le numéro de la semaine indiquée sera toujours le numéro de semaine commencant le lundi
+//attention !!! le numï¿½ro de la semaine indiquï¿½e sera toujours le numï¿½ro de semaine commencant le lundi
 $texte_jour_debut_semaine = "lundi";
-// couleur libre est également la couleur de fond des dates du calendrier
+// couleur libre est ï¿½galement la couleur de fond des dates du calendrier
 $couleur_libre               = '#B9CBDD';
-// pour pouvoir afficher plusieurs couleurs , il faut créer autant de variables $couleur_reserve[] que nécessaire, en modifiant l'index
+// pour pouvoir afficher plusieurs couleurs , il faut crï¿½er autant de variables $couleur_reserve[] que nï¿½cessaire, en modifiant l'index
 $couleur_reserve[1]          = '#FF0000';
-$intitule_couleur_reserve[1] = "Réservé";
+$intitule_couleur_reserve[1] = "Rï¿½servï¿½";
 $couleur_texte_jour_reserve[1]= '#FFFFFF';
 
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
-// sélection de l'affichage des modules ************************************************************
+// sï¿½lection de l'affichage des modules ************************************************************
 //avec selection possible du mois--------------------------------------------------------------------
 $selection_mois    = true ;
-//avec selection possible des annnées----------------------------------------------------------------
+//avec selection possible des annnï¿½es----------------------------------------------------------------
 $selection_an      = true ;
 
 //format de date sur le lien des jours dans le calendrier--------------------------------------------
 // si true alors selection format francais, si false alors format date anglais-----------------------
 $format_date_fr    = false ;
 
-//déclaration des noms des mois et jours en francais************************************************
-$mois_fr           = Array ( "", "Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Décembre" );
+//dï¿½claration des noms des mois et jours en francais************************************************
+$mois_fr           = Array ( "", "Janvier", "Fï¿½vrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Dï¿½cembre" );
 $jour_fr           = Array ( "Di", "Lu", "Ma", "Me", "Je", "Ve", "Sa", "Di", "S" );
-//déclaration des noms des mois et jours en allemand************************************************
-$mois_all          = Array ( "", "Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember" );
+//dï¿½claration des noms des mois et jours en allemand************************************************
+$mois_all          = Array ( "", "Januar", "Februar", "Mï¿½rz", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember" );
 $jour_all          = Array ( "So", "Mo", "Di", "Mi", "Do", "Fr", "Sa", "So", "W" );
-//déclaration des noms des mois et jours en anglais*************************************************
+//dï¿½claration des noms des mois et jours en anglais*************************************************
 $mois_eng          = Array ( "", "Jaunary", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" );
 $jour_eng          = Array ( "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su", "W" );
-//déclaration des noms des mois et jours en italien*************************************************
+//dï¿½claration des noms des mois et jours en italien*************************************************
 $mois_it           = Array ( "", "Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre" );
 $jour_it           = Array ( "Do", "Lu", "Ma", "Me", "Gi", "Ve", "Sa", "Do", "S" );
-//déclaration des noms des mois et jours en espagnol*************************************************
+//dï¿½claration des noms des mois et jours en espagnol*************************************************
 $mois_esp           = Array ( "", "Enero", "FebreroO", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" );
 $jour_esp           = Array ( "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa", "Do", "S" );
 
-//langue par défaut*********************************************************************************
+//langue par dï¿½faut*********************************************************************************
 if ( !(isset($_SESSION['langue'])) || ((empty($_SESSION['langue']))) )
 $langue = 'fr' ;
 //controle si choix de la langue dans l'url*********************************************************
@@ -146,7 +146,7 @@ if ( (isset($_GET['langue'])) && (!(empty($_GET['langue']))) )
 //si session langue existe alors la langue de la session devient prioritaire************************
 if ( (isset($_SESSION['langue'])) && (!(empty($_SESSION['langue']))) )
    $langue = $_SESSION['langue'];
-//sélection des tableaux suivant la langue choisie**************************************************
+//sï¿½lection des tableaux suivant la langue choisie**************************************************
 if ( $langue == 'fr' ) {
      $mois_texte = $mois_fr ;
      $jour_texte = $jour_fr ; }
@@ -190,9 +190,9 @@ if ( (isset($_GET['mois'])) && (!(empty($_GET['mois']))) )  {
 if ( (isset($_SESSION['mois'])) && (!(empty($_SESSION['mois']))) )
    $premier_mois = $_SESSION['mois'] ;
 
-//choix de l'année**********************************************************************************
+//choix de l'annï¿½e**********************************************************************************
 $annee_premier_mois       = date ("Y") + $offset_annee ;
-//controle si choix de l'année dans l'url***********************************************************
+//controle si choix de l'annï¿½e dans l'url***********************************************************
 if ( (isset($_GET['an'])) && (empty($_GET['an'])) )
     $_SESSION['an'] = '' ;
 if ( (isset($_GET['an'])) && (!(empty($_GET['an']))) )  {
@@ -203,37 +203,34 @@ if ( (isset($_GET['an'])) && (!(empty($_GET['an']))) )  {
     else if ( $_SESSION['an'] > 2030)
          $_SESSION['an'] = 2030 ;
     }
-//si session année existe alors la session devient prioritaire**************************************
+//si session annï¿½e existe alors la session devient prioritaire**************************************
 if ( (isset($_SESSION['an'])) && (!(empty($_SESSION['an']))) )
    $annee_premier_mois = $_SESSION['an'] ;
 
 
-
-
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
-//----     Ne plus rein modifié                                                                -----
+//----     Ne plus rein modifiï¿½                                                                -----
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
-
 
 
 $largeur_div = $largeur_tableau * $nombre_mois_afficher_ligne ;
 
 
-
-//selection du mois et année en cours***************************************************************
+//selection du mois et annï¿½e en cours***************************************************************
 $mois_en_cours  = (int)$premier_mois ;
 $annee_en_cours = $annee_premier_mois ;
 
 
-// affichage sélection mois, année, couleur et champs de réservations ********************************
+// affichage sï¿½lection mois, annï¿½e, couleur et champs de rï¿½servations ********************************
 if ($AffichChoixDate)
 {
+	echo '<div id="calendrier">';
 	echo '<Table border = 0 >
 		  <tr>
-		  <td width = "140">';
-	   // si nécessaire affichage du sélecteur d'année **************************************************
+		  <td width = "50">';
+	   // si nï¿½cessaire affichage du sï¿½lecteur d'annï¿½e **************************************************
 	   if ( $selection_an ) {
 			echo '<a href="affichTous.php?an=',$annee_en_cours - 1, '" class = selection><font style="font-size:',$taille_police_sel_mois_annee,'px" color="',$couleur_sel_mois_annee,'" face="',$police,'" >&nbsp;<< </a></font>';
 			echo '<b><font style="font-size:',$taille_police_sel_mois_annee,'px" color="',$couleur_sel_mois_annee,'" face="',$police,'" >&nbsp;',$annee_en_cours,'&nbsp;</font></b>';
@@ -242,8 +239,8 @@ if ($AffichChoixDate)
 	echo '</td>
 		  </tr>
 		  <tr>
-		  <td width = "140">';
-	   // si nécessaire affichage du sélecteur de mois **********************************************
+		  <td width = "50">';
+	   // si nï¿½cessaire affichage du sï¿½lecteur de mois **********************************************
 	   if ( $selection_mois ) {
 			echo '<form name="sel_mois" method="get" action="affichTous.php" id="Form1">';
 			echo '<select name="mois" size="1" id="Combobox1" onchange="document.sel_mois.submit();return false;" style="position:font-family:',$police,';font-size:',$taille_police_sel_mois_annee,'px;z-index:2">';
@@ -259,16 +256,15 @@ if ($AffichChoixDate)
 	echo '</td>
 		  </tr>
 		  </table> ';
-// sélection affichage avec lien vers page de gestion des locataires logements *********************
+	echo '</div>';
+// sï¿½lection affichage avec lien vers page de gestion des locataires logements *********************
 }
-echo '<div id="Calendrier" style="">';
+echo '<div id="calendrier">';
 /* Affichage des infos de base du Gite
 */
 $req="SELECT idgite,nom,capacite,url,montant_caution,titre,description FROM GITE WHERE idgite=".$idgite;
 					
-					$result = $mysqli->query($req);
-					
-							
+					$result = $mysqli->query($req);							
 
 					while ($row = $result->fetch_assoc())
 					{
@@ -278,8 +274,7 @@ $req="SELECT idgite,nom,capacite,url,montant_caution,titre,description FROM GITE
 						$titre=$row['titre'];
 						//$surface=$row['surface'];
 					}
-					
-				
+						
 //initailisation compteur de mois par ligne*********************************************************
 $compteur_mois_ligne = 1 ;
 
@@ -288,8 +283,8 @@ echo '<tr>';
 echo '<td>';
 echo '<div style="width:',$largeur_div,'px;">';
 
- echo "<p>". $nom . " : ".$titre." Capacité : ".$capacite." personnes</p>";
-//affichage des tableaux des mois desirés***********************************************************
+ echo "<p>". $nom . " : ".$titre." Capacitï¿½ : ".$capacite." personnes</p>";
+//affichage des tableaux des mois desirï¿½s***********************************************************
 for ( $compteur_mois = 1; $compteur_mois <= $nombre_mois_afficher; $compteur_mois++ )
  {
 
@@ -300,7 +295,7 @@ echo '<table cellPadding="',$espace_entre_cellule,'" cellSpacing="',$espace_dans
 //affichage du mois*********************************************************************************
 echo '<TR><TD align=center bgColor=',$couleur_fond_mois,' colspan = 8><b><font style="font-size:',$taille_police_mois,'px" color="',$couleur_police_mois,'" face="',$police,'" >',$mois_texte[$mois_en_cours],' ',$annee_en_cours,'</b></font></TD></TR>';
 
-//affichage nom des jours et numéro de semaine******************************************************
+//affichage nom des jours et numï¿½ro de semaine******************************************************
 echo '<TR>';
 //temporaire pour initailisation variable globales
 for ($j=1; $j<9; $j++)
@@ -315,7 +310,7 @@ for ($j=1; $j<9; $j++)
           $couleur_fond_nom_jour = $couleur_jour_semaine ;
        echo '<TD align = center bgColor=',$couleur_fond_nom_jour,'><font style="font-size:',$taille_police_nom_jour,'px" color="',$couleur_police_nom_jour,'" face="',$police,'" >',$jour_texte[correction_debut_semaine ($texte_jour_debut_semaine,$j)],'</font></td>';
      }
-echo '</TR>';
+echo '</tr>';
 
 //initialisation des calendriers*******************************************************************
 $fin_tableau              = false ;
@@ -336,7 +331,7 @@ $lundi_trouve = false;
 //creation du tableau avec numero des jours*********************************************************
 while ( !($fin_tableau) )
       {
-        echo '<TR>';
+        echo '<tr>';
         $compteur_ligne++;
         $au_moins_une_date_sur_la_ligne = false;
         //creation des cases par semaine************************************************************
@@ -350,19 +345,19 @@ while ( !($fin_tableau) )
                   {
                     if ( $j == $index_jour_samedi || $j == $index_jour_dimanche)
                         $couleur_disponibilite = $couleur_jour_week_end ;
-                    // test si le jour affiché correspond au jour d'aujourd'hui *******************
+                    // test si le jour affichï¿½ correspond au jour d'aujourd'hui *******************
                     if ( $avec_marquage_du_jour_d_aujourd_hui ) {
                         $date_aujourd_hui = date("Y")."-".(int)date("m")."-".(int)date("d");
                         $jour_aujourd_hui = $annee_en_cours."-".$mois_en_cours."-".$compteur_jour;
                         if ( $date_aujourd_hui ==  $jour_aujourd_hui )
                             $couleur_disponibilite = $couleur_jour_aujourd_hui ;
                         }
-                    //test si jour est reservé******************************************************
+                    //test si jour est reservï¿½******************************************************
                     $coul_police_jour = $couleur_police_jour ;
                     $class_date_lien = '' ;
 					/****************************/	
 					/*							*/
-					/* Recherche de réservation */
+					/* Recherche de rï¿½servation */
 					/*        et affichage      */
 					/****************************/	
 					$dateAtester =strtotime($annee_en_cours.'-'.$mois_en_cours.'-'.$compteur_jour);
@@ -425,8 +420,8 @@ while ( !($fin_tableau) )
                     $au_moins_une_date_sur_la_ligne = true ;
                   }
               elseif  ( $j == 8  && $au_moins_une_date_sur_la_ligne)  {
-                    //indique numéro de semaine*************************************************************************************************
-                    if ( !$lundi_trouve && $compteur_ligne == 1) {  // si aucun lundi dans premier ligne, calcul numéro semaine sur dernier lundi du mois précédent****
+                    //indique numï¿½ro de semaine*************************************************************************************************
+                    if ( !$lundi_trouve && $compteur_ligne == 1) {  // si aucun lundi dans premier ligne, calcul numï¿½ro semaine sur dernier lundi du mois prï¿½cï¿½dent****
                     $temp_mois_precedent = $mois_en_cours -1 ;
                     $temp_annee_precedent = $annee_en_cours ;
                     if  ( $temp_mois_precedent <= 0 ) {
@@ -449,7 +444,7 @@ while ( !($fin_tableau) )
                         }
                       }
                     $temp_semaine_en_cours = date("W",mktime ( 0,0,0,$memoire_numero_mois_premier_jour_sem_en_cours ,$memoire_numero_premier_jour_sem_en_cours ,$memoire_numero_annee_premier_jour_sem_en_cours ));
-                    echo '<TD bgColor=',$couleur_numero_semaine,' align=center><font style="font-size:',$taille_police_jour,'px" color="',$couleur_police_jour,'" face="',$police,'" >';
+                    echo '<td bgColor=',$couleur_numero_semaine,' align=center><font style="font-size:',$taille_police_jour,'px" color="',$couleur_police_jour,'" face="',$police,'" >';
                     $lundi_trouve = false;
                     echo $temp_semaine_en_cours;
                     echo '</td>';
@@ -459,15 +454,15 @@ while ( !($fin_tableau) )
                         $couleur_disponibilite = $couleur_jour_week_end ;
                     if ( $j == 8 && $avec_continuite_couleur )
                         $couleur_disponibilite = $couleur_numero_semaine ;
-                    echo '<TD bgColor=',$couleur_disponibilite,' height="',$hauteur_mini_cellule_date,'"></TD>';
+                    echo '<td bgColor=',$couleur_disponibilite,' height="',$hauteur_mini_cellule_date,'"></TD>';
                     }
              }
-        echo '</TR>';
+        echo '</tr>';
         if ( $compteur_jour > $numero_dernier_jour_mois && $compteur_ligne >= 6)
                         $fin_tableau = true ;
       }
 //fin de la table du mois
-echo '</TABLE>';
+echo '</table>';
 
 //incrementation du mois et annee en cours********************************************************
 $mois_en_cours = $mois_en_cours + 1;
@@ -488,24 +483,21 @@ echo '</td>';
 echo '</tr>';
 echo '</table>';
 ?>
-
-
-<div id="3" style="position:relative;float:left;">
-<form action="resaVerifBefore.php?idgite=<?php echo $idgite;?>" method="post"> 
+	<div class="row">
+		<div class="small-11 small-centered columns">
+		<form action="resaVerifBefore.php?idgite=<?php echo $idgite;?>" method="post"> 
 			
-			<fieldset style="position:relative;float:left;height:25px;">
+			<fieldset>
 				
-	
+				<label for=nom>Date Arrivï¿½e</label>	<input type="date" name="date_debut">
 				
-				<label for=nom>Date Arrivée</label>	<input type="date" name="date_debut">
-				
-				<label for=nom>Date Départ</label><input type="date" name="date_fin">
+				<label for=nom>Date Dï¿½part</label><input type="date" name="date_fin">
 				<input type="int" name="capacite" hidden>
-			</fieldset style="position:relative;float:left;">
+			</fieldse>
 			
-			<fieldset style="height:25px;">
+			<fieldset>
 				<button type=submit>Reserver !</button> <!-- test dans le header et redirection-->
 		  	</fieldset>
 		</form>
-</div>
-</div>
+		</div>
+	</div>

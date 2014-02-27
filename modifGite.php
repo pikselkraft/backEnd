@@ -1,31 +1,20 @@
 <?php
-	include('includes/header.php');
+	require('includes/header.php');
 ?>
 
-<body>
-	<div id="menu" style="position:relative; float:left;">
-		<?php
 
-		include('menu.php');
-		?>
-	</div>
-
-	<div id="ContentGite"  >*
-	<form action="modifGite.php?etat=M method="post">
-		<?php 
-						echo '<input type="text" name="capacite" value="'.$_POST["capacite"].'"/>';
-						echo '<input type="text" name="url" value="'.$_POST["url"].'"/>';
-						echo '<input type="text" name="montant_caution" value="'.$_POST["montant_caution"].'"/>';
-						echo '<input type="text" name="titre" value="'.$_POST["titre"].'"/>';
-						echo '<input type="text" name="description" value="'.$_POST["description"].'"/>';
-						echo '<input type="text" name="surface" value="'.$_POST["surface"].'"/>';
-						echo '</form>';
-	
-		?>
-		</form>
+	<div class="row">
+		<div class="small-11 small-centered columns">
+			<form action="modifGite.php?etat=M" method="POST">
+				<input type="text" name="capacite" value="<?= $_POST["capacite"]; ?>"/>';
+				<input type="text" name="url" value="<?= $_POST["url"]; ?>"/>';
+				<input type="text" name="montant_caution" value="<?= $_POST["montant_caution"]; ?>"/>';
+				<input type="text" name="titre" value="<?= $_POST["titre"]; ?>"/>';
+				<input type="text" name="description" value="<?= $_POST["description"]; ?>"/>';
+				<input type="text" name="surface" value="<?= $_POST["surface"]; ?>"/>';
+			</form>
 		</div>
-
-</body>
+	</div>
 
 <?php
 
@@ -87,5 +76,5 @@ while ($rowReqTarif = $resultreqTarif->fetch_assoc())
 			}
 			
 			
-	include('includes/footer.php');
+	require('includes/footer.php');
 ?>

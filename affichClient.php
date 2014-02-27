@@ -1,13 +1,9 @@
 <?php
 
-//GEstion d un client dans la BD
-
-//version: 1.0
-//
-//creation: 23/01/2014
+//Gestion d un client dans la BD
 
 
-	include('includes/header.php');
+	require('includes/header.php');
 
 	
 $MessageAction=''; // permet d'afficher un message de confirmation ou d erreur lors d'une action sur la BD
@@ -21,7 +17,7 @@ if(!empty($_GET["idclient"]))
 }
 else
 {
-	$MessageAction="Erreur Aucun client passé en paramètre";
+	$MessageAction="Erreur Aucun client passï¿½ en paramï¿½tre";
 }
 
 if (!empty($_GET["actionClient"]))
@@ -39,7 +35,7 @@ else
 		
     // differentes valeurs de la variable actionClient passee en argument 
 	// vide : on affiche un formulaire de recherche de clients
-	// M : on modifie les valeurs renseigné
+	// M : on modifie les valeurs renseignï¿½
 
 switch ($actionClient) 
 	{
@@ -67,7 +63,7 @@ $reqClient="select idclient, nom, prenom, entreprise, adresse, codepostal, ville
 $result_reqClient=$mysqli->query($reqClient);
 			if(!$mysqli)
 			{
-				$MessageAction ="ERREUR : Pas de résultat " ;  
+				$MessageAction ="ERREUR : Pas de rï¿½sultat " ;  
 			} 
 			else
 			{
@@ -77,7 +73,7 @@ while ($row = $result_reqClient->fetch_assoc())
 {			
 $affichage_info_client='<form action="affichClient.php?actionClient=MS&idclient='.$idclient.'" method="post"><ul>';
 $affichage_info_client.='<li><label for="nom">Nom : </label><input id="nom" name="nom" type="text" value="'.$row["nom"].'"'  .$modif. '></li>
-					<li><label for="prenom">Prénom : </label><input id="prenom" name="prenom" type="text" value="'.$row["prenom"].'"'  .$modif. '></li>
+					<li><label for="prenom">Prï¿½nom : </label><input id="prenom" name="prenom" type="text" value="'.$row["prenom"].'"'  .$modif. '></li>
 					<li><label for="entreprise">Entreprise : </label><input id="entreprise" name="entreprise" type="text" value="'.$row["entreprise"].'"'  .$modif. '></li>
 					<li><label for="adresse">Adresse : </label><input id="Adresse" name="Adresse" type="text" value="'.$row["Adresse"].'"'  .$modif. '></li>
 					<li><label for="codepostal">Codepostal : </label><input id="codepostal" name="codepostal" type="text" value="'.$row["codepostal"].'"'  .$modif. '></li>
@@ -87,7 +83,7 @@ $affichage_info_client.='<li><label for="nom">Nom : </label><input id="nom" name
 					<li><label for="port">Portable : </label><input id="port" name="port" type="text" value="'.$row["port"].'"'  .$modif. '></li>
 					<li><label for="email">Email : </label><input id="email" name="email" type="text" value="'.$row["email"].'"'  .$modif. '></li>
 					<li><label for="date_naissance">Date naissance : </label><input id="date_naissance" name="date_naissance" type="date" value="'.$row["date_naissance"].'"'  .$modif. '></li>
-					<li><label for="creation">Date création: </label><input id="creation" name="creation" type="text" value="'.date_format(date_create($row["creation"]),'d-m-Y H:i:s').'"'  .$modif. '></li>
+					<li><label for="creation">Date crï¿½ation: </label><input id="creation" name="creation" type="text" value="'.date_format(date_create($row["creation"]),'d-m-Y H:i:s').'"'  .$modif. '></li>
 					<li><label for="cheminot">Cheminot : </label><select name="cheminot">';
 					
 					if (((int)$row["cheminot"])==1) 
@@ -102,8 +98,8 @@ $affichage_info_client.='<li><label for="nom">Nom : </label><input id="nom" name
 					}
 					$affichage_info_client.='</select></li>
 						
-					<li><label for="code_cheminot">N° CP : </label><input id="code_cheminot" name="code_cheminot" type="text" value="'.$row["code_cheminot"].'"'  .$modif. '></li>
-					<li><label for="region">Région : </label><select name="region">';
+					<li><label for="code_cheminot">Nï¿½ CP : </label><input id="code_cheminot" name="code_cheminot" type="text" value="'.$row["code_cheminot"].'"'  .$modif. '></li>
+					<li><label for="region">Rï¿½gion : </label><select name="region">';
 					
 					if (((int)$row["region"])==1) 
 					{
@@ -148,9 +144,9 @@ $affichage_info_client.='<li><label for="nom">Nom : </label><input id="nom" name
 	$tableau_commande=' <table>
 								   <caption>Listes des commandes du client</caption>
 								 
-								   <thead> <!-- En-tête du tableau -->
+								   <thead> <!-- En-tï¿½te du tableau -->
 									   <tr>
-										   <th>N° de la commande</th>
+										   <th>Nï¿½ de la commande</th>
 										   <th>caution</th>
 										   <th>montant_option</th>
 										   <th>remise</th>
@@ -166,7 +162,7 @@ $affichage_info_client.='<li><label for="nom">Nom : </label><input id="nom" name
 								 
 								   <tfoot> <!-- Pied de tableau -->
 									   <tr>
-										   <th>N° de la commande</th>
+										   <th>Nï¿½ de la commande</th>
 										   <th>caution</th>
 										   <th>montant_option</th>
 										   <th>remise</th>
@@ -202,64 +198,38 @@ $affichage_info_client.='<li><label for="nom">Nom : </label><input id="nom" name
 								   </tbody>
 								</table>';
 ?>
-
-<body>
-	<div id="menu" style="position:relative; float:left;">
-		<?php
-
-			include('menu.php');
-		?>
-	</div>
-
-	<div id="content" style="position:relative; float:left;">
-
+	
 		<?php
 			echo $affichage_recherche;
 			echo $MessageAction;
-	
-		?><div class="tabs"  style="width:1000px;">
-        
-					   <div class="tab">
-						   <input type="radio" id="tab-1" name="tab-group-1" checked>
-						   <label for="tab-1" class="onglet">Infos Client</label>
-						   
-						   <div class="content" style="height:auto;">
-							  	<div class="gite_titre">
-									<?php echo $affichage_info_client;?>
-								</div>
-							   	<div class="description_gite">
-									<?php echo '<p class="texte_gite">Info à noter</p>';?>
-								</div>
-						   </div> 
-					   </div>
-						
-					   <div class="tab" class="onglet" style="height:auto;">
-					  
-						   <input type="radio" id="tab-2" name="tab-group-1">
-						   <label for="tab-2" class="onglet">Info Commande</label>
-						   
-						   <div class="content">
-							  <?php echo $tableau_commande;?>
-						   </div> 
-					   </div>
-						
-						<div class="tab">
-						   <input type="radio" id="tab-3" name="tab-group-1">
-						   <label for="tab-3" class="onglet">Promotion</label>
-						 
-						   <div class="content">
-							   <p>dynamique</p>
-						   </div> 
-					   </div>
-        
+		?>
+		<div class="row">
+			<div class="small-11 small-centered columns">
+				<dl class="tabs" data-tab>
+					<dd class="active"><a href="#panel2-1">Information Clients</a></dd>
+					<dd><a href="#panel2-2">Information Commande</a></dd>
+					<dd><a href="#panel2-3">Information RÃ©servation</a></dd>
+					<dd><a href="#panel2-4">Tab 4</a></dd>
+				</dl>
+				<div class="tabs-content">
+					<div class="content active" id="panel2-1">
+						<?= $affichage_info_client;?>
+					</div>
+					<div class="content" id="panel2-2">
+						<?= $tableau_commande;?>
+					</div>
+					<div class="content" id="panel2-3">
+						<p>Third panel content goes here...</p>
+					</div>
+					<div class="content" id="panel2-4">
+						<p>Fourth panel content goes here...</p>
+					</div>
+				</div>
+			</div>
 		</div>
-	</div>
-		
-				
-	
 
 </body>
 
 <?php
-	include('includes/footer.php');
+	require('includes/footer.php');
 ?>

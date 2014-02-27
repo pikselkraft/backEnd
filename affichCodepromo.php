@@ -1,13 +1,9 @@
 <?php
 
-//GEstion des codepromos des codes promo
-
-//version: 1.0
-//
-//creation: 23/01/2014
+//Gestion des codepromos des codes promo
 
 
-	include('includes/header.php');
+	require('includes/header.php');
 
 	
 $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur lors d'une action sur la BD
@@ -21,7 +17,7 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 	// S : on enregistre les modifications sur la codepromo modifiee
 	// D : on efface la codepromo
 	// AD: on ajoute une nouvelle codepromo dans la base
-	// SAM : on ajoute tous les samedis d'une année
+	// SAM : on ajoute tous les samedis d'une annï¿½e
 	if (!empty($_GET["actionCodePromo"]))
 	{
 		$actionCodePromo=$_GET["actionCodePromo"];
@@ -96,7 +92,7 @@ if (!empty($MessageAction))
 }
 /*************************************************
 *												 *
-*	affichages des codepromos stockées dans la base *
+*	affichages des codepromos stockï¿½es dans la base *
 *												 *	
 **************************************************/
 $reqPromo="select idcodepromo, code,remise,validite,actif,nb from CODEPROMO";
@@ -109,7 +105,7 @@ $affichage_codepromo_ligne='<table border="2"  rules="groups" id="tableauClient"
 				<thead>
 				<tr><td>idcodepromo</td><td>Code</td><td>remise</td><td>validite</td><td>actif</td><td>Nombre</td><th colspan="2">Action</th></tr>
 				</thead>';
-//Boucle qui parcourt les codepromos dans la base de données
+//Boucle qui parcourt les codepromos dans la base de donnï¿½es
 while ($row = $result_reqPromo->fetch_assoc())
 {
 
@@ -182,25 +178,17 @@ while ($row = $result_reqPromo->fetch_assoc())
 $affichage_codepromo_ligne.='</table>';
 ?>
 
-<body>
-	<div id="menu" style="position:relative; float:left;">
-		<?php
-
-			include('menu.php');
-		?>
-	</div>
-
-	<div id="content" style="position:relative; float:left;">
-
+	<div class="row">
+		<div class="small-11 small-centered columns">
 		<?php
 			echo $MessageAction;
 			echo $affichage_codepromo_ligne;
-		?>
-		
+		?>	
+		</div>
 	</div>
 
 </body>
 
 <?php
-	include('includes/footer.php');
+	require('includes/footer.php');
 ?>

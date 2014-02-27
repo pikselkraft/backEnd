@@ -1,17 +1,8 @@
-<?php
-session_start();	
-require('config.php');
-require('fonctions.php');
-?>
-
-<?php require('header.php'); ?>
-
 <?php 
+
+	require('includes/header.php');
+	
 //Gestion Mot de Passe
-//
-//VERSION: 1.0
-//
-//TEMPLATE NAME: mail_password
 //
 //********************************************
 // TEST MAIL
@@ -50,6 +41,7 @@ require('fonctions.php');
 		}else{echo"Vous n'avez pas de saisi de mail";}
 
 ?>
+
 				<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
 					<fieldset>
 						<legend>Votre email</legend>
@@ -61,4 +53,6 @@ require('fonctions.php');
 					</fieldset>
 				</form>
 
-<?php	require('footer.php'); ?>
+
+
+<?php	require('includes/footer.php'); ?>
