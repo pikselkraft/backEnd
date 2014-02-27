@@ -317,7 +317,7 @@ if (($_GET["etatTarif"]=='AD') && (!empty($_GET["idgite"]))) // mise � jour de
 				
 }
 ?>
-<body>
+
 	<div class="row">
 		<div class="small-11 small-centered columns">		
 		<?php 

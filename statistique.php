@@ -5,7 +5,13 @@
   <!-- Main Page Content and Sidebar -->
  
   <div class="row" id="top-page">
- 
+ 	<?php
+    	$testa = test();
+    	echo $testa;
+    	//envoiMail2('sdk@cesncf-stra.org', 'test','test');
+//    	$testa2 = test2();
+//    	testVar($testa2);
+    ?>
     <!-- Main Blog Content -->
     <div class="large-10 columns" role="content">
  

@@ -199,7 +199,6 @@ $affichage_info_client.='<li><label for="nom">Nom : </label><input id="nom" name
 								</table>';
 ?>
 
-<body>
 	<div class="row">
 		<div class="large-12 columns ">
 		  <div class="panel">

@@ -45,8 +45,8 @@
 		}
 		
 	</script>
-
- </html>
  <?php
  deco();
  ?>
+</body>
+</html>

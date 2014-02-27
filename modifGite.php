@@ -2,7 +2,7 @@
 	require('includes/header.php');
 ?>
 
-<body>
+
 	<div class="row">
 		<div class="small-11 small-centered columns">
 			<form action="modifGite.php?etat=M" method="POST">
@@ -15,8 +15,6 @@
 			</form>
 		</div>
 	</div>
-
-</body>
 
 <?php
 

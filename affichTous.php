@@ -6,11 +6,6 @@
 Affiche tous les calendriers des gites du Site *
 ***********************************************/
 	
-	?>
-
-<body>
-
-<?php	
 /***************************************************
 Fonctions permettant de construire le calendrier
 *****************************************************/		

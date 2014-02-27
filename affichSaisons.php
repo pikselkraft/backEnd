@@ -203,9 +203,6 @@ while ($row = $result_reqSaison->fetch_assoc())
 $affichage_saison_ligne.='</table>';
 ?>
 
-<body>
-
-
 	<div class="row">
 		<div class="small-11 small-centered columns">
 		<?php

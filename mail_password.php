@@ -41,7 +41,7 @@
 		}else{echo"Vous n'avez pas de saisi de mail";}
 
 ?>
-		<body>
+
 				<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
 					<fieldset>
 						<legend>Votre email</legend>
@@ -52,7 +52,7 @@
 						<button type=submit>Se connecter</button>
 					</fieldset>
 				</form>
-		</body>
+
 
 
 <?php	require('includes/footer.php'); ?>

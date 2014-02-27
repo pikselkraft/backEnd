@@ -198,8 +198,6 @@ $affichage_info_client.='<li><label for="nom">Nom : </label><input id="nom" name
 								   </tbody>
 								</table>';
 ?>
-
-<body>
 	
 		<?php
 			echo $affichage_recherche;

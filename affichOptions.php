@@ -146,7 +146,6 @@ while ($row = $result_reqOptions->fetch_assoc())
 $affichage_option_ligne.='</table>';
 ?>
 
-<body>
 		<div class="row">
 			<div class="small-11 small-centered columns">		
 			<?php

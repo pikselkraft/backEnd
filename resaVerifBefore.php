@@ -16,14 +16,14 @@ $idgite=$_POST["idgite"];
 
 if($mysqli) //GLOBALE MYSQL CONNEXION DB
 {
-	$req="SELECT idgite,nom,capacite,url,montant_caution,titre,description FROM GITE WHERE idgite=".$idgite; //recuperation information gîte
+	$req="SELECT idgite,nom,capacite,url,montant_caution,titre,description FROM GITE WHERE idgite=".$idgite; //recuperation information gï¿½te
 		echo $req;
 	$result = $mysqli->query($req);
 		
 	$result->data_seek(0);
 	$row = $result->fetch_assoc();
 		
-	$_SESSION['gite_tab'] = $row; // TABLEAU SESSION -> INFORMATION GÎTE
+	$_SESSION['gite_tab'] = $row; // TABLEAU SESSION -> INFORMATION Gï¿½TE
 	$gite_tab = $row;
 }
 	

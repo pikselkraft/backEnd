@@ -11,10 +11,11 @@ require('fonctions.php');
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	
 	<link rel="stylesheet" href="includes/css/foundation.css">
-	<link rel="stylesheet" href="includes/css/datePicker.css">
-	<link rel="stylesheet" href="includes/css/calendrier.css">
+<!--	<link rel="stylesheet" href="includes/css/datePicker.css">-->
+<!--	<link rel="stylesheet" href="includes/css/calendrier.css">-->
+	<link rel="stylesheet" href="includes/foundation_icons_general/stylesheets/general_foundicons.css">
 	
-	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+<!--	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">-->
 	<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 	<script src="scripts/jquery.ui.datepicker-fr.js"></script>
@@ -53,6 +54,8 @@ require('fonctions.php');
 	</style>
 
 </head>
+
+<body>
 
 <div class="row">
 	<div class="contain-to-grid fixed">
@@ -107,7 +110,6 @@ require('fonctions.php');
 				<ul class="dropdown">
 				  <li><a href="rechercheClient.php">Clients</a></li> 
 				  <li><a href="rechercheCommande.php?actionCommande=Z">Commande</a></li>
-				  <li><a href="rechercheResa.php">Reservation</a></li>
 				</ul>
 			</ul>
 			<ul class="left">

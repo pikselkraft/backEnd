@@ -8,11 +8,6 @@
 //
 //creation: 06/11/2013/
 
-?>
-
-<body>
-<?php 
-
 // r�cup�ration POST formulaire.php
 $_SESSION['resa']['login'] = strtolower(htmlspecialchars($_POST['login'])); // s�curit� : injection et majuscule
 //$_SESSION['resa']['cheminot'] = $_POST['cheminot'];
@@ -74,9 +69,8 @@ if($etat==2)
 				$port= htmlspecialchars($_POST['port']);
 				$datecrea=date("Y-m-d H:i:s"); 
 				$news= htmlspecialchars($_POST['news']);
-				$cheminotRegion = htmlspecialchars($_POST['nom']);   /*� definir*********************/
-				$cheminotCode = htmlspecialchars($_POST['nom']); /*� definir********************/
-				
+				$cheminotRegion = htmlspecialchars($_POST['nom']);   
+				$cheminotCode = htmlspecialchars($_POST['nom']); 
 				
 				//insertion dans la db
 		  		$sql = "INSERT INTO CLIENTS (email,mp,nom,prenom,date_naissance,cheminot,code_cheminot,region,entreprise,adresse,codepostal,ville,pays,tel,port,creation,newsletter) VALUES ('".$mail."','".$pass."','".$nom."','".$prenom."','".$naissance."','".$cheminot."','".$cheminotRegion."','".$cheminotCode."','".$entreprise."','".$adresse."','".$codepostal."','".$ville."','".$pays."','".$tel."','".$port."','".$datecrea."','".$news."')";

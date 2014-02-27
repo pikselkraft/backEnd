@@ -14,6 +14,10 @@ Affiche les infos d'une r�servation
 		* édition complete
 		* css tableau et form ?
 	
+		********************
+				OLD
+		********************
+	
 	****
 	
 */
@@ -36,8 +40,7 @@ if ($etatR=='S')
 }
 
 	?>
-	
-<body>
+
 	<div class="row">
 		<div class="small-11 small-centered columns">	
 			<?php

@@ -94,8 +94,6 @@ if (!empty($MessageAction))
 $reqTaxes="select idtaxe, tarif, denomination from TAXE";
 $result_reqTaxes=$mysqli->query($reqTaxes);
 
-
-
 // Creation du tableau pour afficher les taxes
 $affichage_taxe_ligne='<table border="2"  rules="groups" id="tableauClient" class="rechClient" width="400px"><thead>
 				<tr><td >idtaxe</td><td>Tarif</td><td>D�nomination</td><th colspan="2">Action</th></tr>
@@ -103,7 +101,6 @@ $affichage_taxe_ligne='<table border="2"  rules="groups" id="tableauClient" clas
 //Boucle qui parcourt les taxes dans la base de donn�es
 while ($row = $result_reqTaxes->fetch_assoc())
 {
-
 
 	if (($actionTaxe=='M') and ($idtaxe==$row["idtaxe"])) // on affiche un formulaire pour modifier l taxe demandee
 	{
@@ -136,8 +133,6 @@ while ($row = $result_reqTaxes->fetch_assoc())
 							</form></th></tr>';
 $affichage_taxe_ligne.='</table>';
 ?>
-
-<body>
 
 	<div class="row">
 		<div class="small-11 small-centered columns">

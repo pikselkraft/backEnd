@@ -8,9 +8,6 @@
 **********************************************************************************/
 ?>
 
-<body>
-
-
 	<div id="content" style="position:relative; float:left;">
 <?php 
 if(isset($_GET["idgite"]))
