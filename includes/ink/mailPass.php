@@ -1,9 +1,72 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<?php
+
+/**
+	* Gestion des mails d'envoi de mot de passe
+*/
+
+/************************************************************/
+/* constante 
+/***********************************************************/
+define("MAIL_METZVAL", "contact@gite-lemetzval.fr");
+define("MAIL_SDK", "sdk@cesncf-stra.org");
+define("MAIL_OCT", "oct@cesncf-stra.org");
+
+function envoiPass($email) // fonction qui g&eacute;n&eacute;re un nouveau mot de passe
+{
+	global $mysqli;
+	if(isset($email)) {
+		 $sqlVerifExistant 	= "SELECT civilite, nom, prenom, email,mp from CLIENTS WHERE email ='".$email."'" ; //verif mail unique
+		
+		 $result=$mysqli->query($sqlVerifExistant);
+		 
+		 if ($row=$result->fetch_Assoc()) {
+				
+			$civilite = $row['civilite'];
+			$nom = $row['nom'];
+			$prenom = $row['prenom'];		
+								
+			/* creation mot de passe pour client */	
+			$newPass = chaineAleatoire(8);
+			$Clef = "Matteo1234567890";
+			$pass = Cryptage($newPass,$Clef) ;
+			$pass = utf8_encode($pass); 
+ 		
+			$reqUpdate="Update CLIENTS SET mp= '".$pass."' where email='".$email."'";
+			$mysqli->query($reqUpdate);
+			TemplatePass($email, "Gite LeMetzval - Votre nouveau mot de passe ",$newPass,$civilite,$nom,$prenom);
+			return $newPass;
+		 }
+		 else
+		 {
+		 	$mailInvalide=false;
+		 	return $mailInvalide;
+		 }
+
+	}
+	else{echo "Email invalide";}
+}
+
+//fonction d'envoi mail password
+function TemplatePass($destinataire,$sujet,$pass,$civilite,$nom,$prenom,$copy) {
+	
+	if (!preg_match("#^[a-z0-9._-]+@(hotmail|live|msn).[a-z]{2,4}$#", $destinataire)) // On filtre les serveurs qui rencontrent des bogues.
+	{$passage_ligne = "\r\n";}
+	else{$passage_ligne = "\n";}
+	
+	//=====D&eacute;claration des messages au format texte et au format HTML.
+	$message_txt = $message;
+	$message_html = "<html><head></head><body><b>Salut &agrave; tous</b>, voici un e-mail envoy&eacute; par un <i>script PHP</i>.</body></html>";
+
+	//template du messaeg mail : 
+	$message_html='<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="width=device-width"/>
 	<style>
+/**********************************************
+* Ink v1.0.5 - Copyright 2013 ZURB Inc        *
+**********************************************/
 
 /* Client-specific Styles & Reset */
 
@@ -617,9 +680,161 @@ body.outlook p {
   }
 
   table[class="body"] .wrapper.first .columns,
-  table-
+  table[class="body"] .wrapper.first .column {
+    display: table !important;
+  }
+
+  table[class="body"] table.columns td,
+  table[class="body"] table.column td {
+    width: 100% !important;
+  }
+
+  table[class="body"] .columns td.one,
+  table[class="body"] .column td.one { width: 8.333333% !important; }
+  table[class="body"] .columns td.two,
+  table[class="body"] .column td.two { width: 16.666666% !important; }
+  table[class="body"] .columns td.three,
+  table[class="body"] .column td.three { width: 25% !important; }
+  table[class="body"] .columns td.four,
+  table[class="body"] .column td.four { width: 33.333333% !important; }
+  table[class="body"] .columns td.five,
+  table[class="body"] .column td.five { width: 41.666666% !important; }
+  table[class="body"] .columns td.six,
+  table[class="body"] .column td.six { width: 50% !important; }
+  table[class="body"] .columns td.seven,
+  table[class="body"] .column td.seven { width: 58.333333% !important; }
+  table[class="body"] .columns td.eight,
+  table[class="body"] .column td.eight { width: 66.666666% !important; }
+  table[class="body"] .columns td.nine,
+  table[class="body"] .column td.nine { width: 75% !important; }
+  table[class="body"] .columns td.ten,
+  table[class="body"] .column td.ten { width: 83.333333% !important; }
+  table[class="body"] .columns td.eleven,
+  table[class="body"] .column td.eleven { width: 91.666666% !important; }
+  table[class="body"] .columns td.twelve,
+  table[class="body"] .column td.twelve { width: 100% !important; }
+
+  table[class="body"] td.offset-by-one,
+  table[class="body"] td.offset-by-two,
+  table[class="body"] td.offset-by-three,
+  table[class="body"] td.offset-by-four,
+  table[class="body"] td.offset-by-five,
+  table[class="body"] td.offset-by-six,
+  table[class="body"] td.offset-by-seven,
+  table[class="body"] td.offset-by-eight,
+  table[class="body"] td.offset-by-nine,
+  table[class="body"] td.offset-by-ten,
+  table[class="body"] td.offset-by-eleven {
+    padding-left: 0 !important;
+  }
+
+  table[class="body"] table.columns td.expander {
+    width: 1px !important;
+  }
+
+  table[class="body"] .right-text-pad,
+  table[class="body"] .text-pad-right {
+    padding-left: 10px !important;
+  }
+
+  table[class="body"] .left-text-pad,
+  table[class="body"] .text-pad-left {
+    padding-right: 10px !important;
+  }
+
+  table[class="body"] .hide-for-small,
+  table[class="body"] .show-for-desktop {
+    display: none !important;
+  }
+
+  table[class="body"] .show-for-small,
+  table[class="body"] .hide-for-desktop {
+    display: inherit !important;
+  }
+}
 
   </style>
+  <style>
+
+    table.facebook td {
+      background: #3b5998;
+      border-color: #2d4473;
+    }
+
+    table.facebook:hover td {
+      background: #2d4473 !important;
+    }
+
+    table.twitter td {
+      background: #00acee;
+      border-color: #0087bb;
+    }
+
+    table.twitter:hover td {
+      background: #0087bb !important;
+    }
+
+    table.google-plus td {
+      background-color: #DB4A39;
+      border-color: #CC0000;
+    }
+
+    table.google-plus:hover td {
+      background: #CC0000 !important;
+    }
+
+    .template-label {
+      color: #ffffff;
+      font-weight: bold;
+      font-size: 11px;
+    }
+
+    .callout .wrapper {
+      padding-bottom: 20px;
+    }
+
+    .callout .panel {
+      background: #ECF8FF;
+      border-color: #b9e5ff;
+    }
+
+    .header {
+      background: #68A368;
+    }
+
+    .footer .wrapper {
+      background: #ebebeb;
+    }
+
+    .footer h5 {
+      padding-bottom: 10px;
+    }
+
+    table.columns .text-pad {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
+    table.columns .left-text-pad {
+      padding-left: 10px;
+    }
+
+    table.columns .right-text-pad {
+      padding-right: 10px;
+    }
+
+    @media only screen and (max-width: 600px) {
+
+      table[class="body"] .right-text-pad {
+        padding-left: 10px !important;
+      }
+
+      table[class="body"] .left-text-pad {
+        padding-right: 10px !important;
+      }
+    }
+
+	</style>
 </head>
 <body>
 	<table class="body">
@@ -639,10 +854,10 @@ body.outlook p {
                         <table class="twelve columns">
                           <tr>
                             <td class="six sub-columns">
-                              <img src="includes/img/metzval-logo.png">
+                              <img src="http://www.gite-lemetzval.fr/wp-content/uploads/2013/10/metzval-logo.png">
                             </td>
                             <td class="six sub-columns last" style="text-align:right; vertical-align:middle;">
-                              <span class="template-label">Le gîte Le Metzval</span>
+                              <span class="template-label">Le Metzval</span>
                             </td>
                             <td class="expander"></td>
                           </tr>
@@ -651,171 +866,24 @@ body.outlook p {
                       </td>
                     </tr>
                   </table>
-
                 </center>
               </td>
             </tr>
           </table>
 
-				 <br>
-
           <table class="container">
             <tr>
               <td>
-
-              <!-- content start -->
-
                 <table class="row">
                   <tr>
-                    <td class="wrapper">
-
-                      <table class="six columns">
-                        <tr>
-                          <td>
-                            <h2>Bonjour,<br> Han Fastolfe</h2>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et.</p>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et. Lorem ipsum dolor sit amet.</p>
-                          </td>
-                          <td class="expander"></td>
-                        </tr>
-                      </table>
-
-                      <table class="six columns">
-                        <tr>
-                          <td class="panel">
-                            <p>Phasellus dictum sapien a neque luctus cursus. Pellentesque sem dolor, fringilla et pharetra vitae. <a href="#">Click it! »</a></p>
-                          </td>
-
-                          <td class="expander"></td>
-                        </tr>
-                      </table>
-
-                      <table class="six columns">
-                        <tr>
-                          <td>
-                            <br>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et.</p>
-
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et. Lorem ipsum dolor sit amet.</p>
-
-                            <table class="button">
-                              <tr>
-                                <td>
-                                  <a href="www.gite-lemetzval.fr">Visiter notre site!</a>
-                                </td>
-                              </tr>
-                            </table>
-
-                          </td>
-                          <td class="expander"></td>
-                        </tr>
-                      </table>
-
-                    </td>
                     <td class="wrapper last">
-
-                      <table class="six columns">
+                      <table class="twelve columns">
                         <tr>
-                          <td class="panel">
-                            <h6>Nos gîtes</h6>
-                            <p>de 2 à 40 personnes</p>
-                            <table>
-                              <tr>
-                                <td>
-                                  <a href="#"Gîte 2 personnes &raquo;</a>
-                                </td>
-                              </tr>
-                            </table>
-                            <hr>
-                            <table>
-                              <tr>
-                                <td>
-                                  <a href="#">Gîte 2 personnes &raquo;</a>
-                                </td>
-                              </tr>
-                            </table>
-                            <hr>
-                            <table>
-                              <tr>
-                                <td>
-                                  <a href="#">Gîte 2 personnes &raquo;</a>
-                                </td>
-                              </tr>
-                            </table>
-                            <hr>
-                            <table>
-                              <tr>
-                                <td>
-                                  <a href="#">Gîte 2 personnes &raquo;</a>
-                                </td>
-                              </tr>
-                            </table>
-                            <hr>
-                            <table>
-                              <tr>
-                                <td>
-                                  <a href="#">Gîte 2 personnes &raquo;</a>
-                                </td>
-                              </tr>
-                            </table>
-                            <hr>
-                            <table>
-                              <tr>
-                                <td>
-                                  <a href="#">Gîte 2 personnes &raquo;</a>
-                                </td>
-                              </tr>
-                            </table>
-                            <hr>
-                            <table>
-                              <tr>
-                                <td>
-                                  <a href="#">Gîte 2 personnes &raquo;</a>
-                                </td>
-                              </tr>
-                            </table>
-                          </td>
-                          <td class="expander"></td>
-                        </tr>
-                      </table>
-
-                      <br>
-
-                      <table class="six columns">
-                        <tr>
-                          <td class="panel">
-                            <h6 style="margin-bottom:5px;">Nos réseaux sociaux</h6>
-                            <table class="tiny-button facebook">
-                              <tr>
-                                <td>
-                                  <a href="#">Facebook</a>
-                                </td>
-                              </tr>
-                            </table>
-
-                            <hr>
-
-                            <table class="tiny-button twitter">
-                              <tr>
-                                <td>
-                                  <a href="#">Google+</a>
-                                </td>
-                              </tr>
-                            </table>
-
-                            <hr>
-
-                            <table class="tiny-button google-plus">
-                              <tr>
-                                <td>
-                                  <a href="#">TripAdvisor</a>
-                                </td>
-                              </tr>
-                            </table>
-                            <br>
-                            <h6 style="margin-bottom:5px;">Nous contacter:</h6>
-                            <p>Phone: <b>408.341.0600</b></p>
-                            <p>Email: <a href="mailto:hseldon@trantor.com">contact@</a></p>
+                          <td>
+                            <h1>Bonjour '.$civilite.' '.$nom.' '.$prenom.'</h1>
+                						<p class="lead">Vous avez fais une demande de changement de mot de passe.</p>
+                						<p>Votre nouveau mot de passe est '.$pass.'</p>
+                          				<p>En cas de probl&egrave;me de connexion contacter le g&icirc;te.</p>
                           </td>
                           <td class="expander"></td>
                         </tr>
@@ -824,9 +892,76 @@ body.outlook p {
                     </td>
                   </tr>
                 </table>
-                <br>
-                <br>
-                <!-- Legal + Unsubscribe -->
+
+                <table class="row callout">
+                  <tr>
+                    <td class="wrapper last">
+
+                      <table class="twelve columns">
+                        <tr>
+                          <td class="panel">
+                            <p>Visitez notre site pour d&eacute;couvrir les r&eacute;gions Alsace et les Vosges<a href="http://www.gite-lemetzval.fr/"> Notre site! </a></p>
+                          </td>
+                          <td class="expander"></td>
+                        </tr>
+                      </table>
+
+                    </td>
+                  </tr>
+                </table>
+
+                <table class="row footer">
+                  <tr>
+                    <td class="wrapper">
+
+                      <table class="six columns">
+                        <tr>
+                          <td class="left-text-pad">
+
+                            <h5>Suivez-nous sur les r&eacute;seaux:</h5>
+
+                            <table class="tiny-button facebook">
+                              <tr>
+                                <td>
+                                  <a href="https://www.facebook.com/gitelemetzval" target="_blank">Facebook</a>
+                                </td>
+                              </tr>
+                            </table>
+
+                            <br>
+
+                            <table class="tiny-button google-plus">
+                              <tr>
+                                <td>
+                                  <a href="https://plus.google.com/107010704077220405499/posts" target="_blank">Google +</a>
+                                </td>
+                              </tr>
+                            </table>
+
+                          </td>
+                          <td class="expander"></td>
+                        </tr>
+                      </table>
+
+                    </td>
+                    <td class="wrapper last">
+
+                      <table class="six columns">
+                        <tr>
+                          <td class="last right-text-pad">
+                            <h5>Contact Info:</h5>
+                            <p>T&eacute;l&eacute;phone: 06 25 14 37 06</p>
+                            <p>Email: <a href="mailto:contact@gite-lemetzval.fr">contact@gite-lemetzval.fr</a></p>
+                          </td>
+                          <td class="expander"></td>
+                        </tr>
+                      </table>
+
+                    </td>
+                  </tr>
+                </table>
+
+
                 <table class="row">
                   <tr>
                     <td class="wrapper last">
@@ -835,7 +970,7 @@ body.outlook p {
                         <tr>
                           <td align="center">
                             <center>
-                              <p style="text-align:center;"><a href="#">Terms</a> | <a href="#">Privacy</a> | <a href="#">Unsubscribe</a></p>
+                              <p style="text-align:center;"><a href="#">Termes</a> | <a href="#">Vie priv&eacute;e</a> | <a href="#">D&eacute;sinscription</a></p>
                             </center>
                           </td>
                           <td class="expander"></td>
@@ -856,4 +991,41 @@ body.outlook p {
 		</tr>
 	</table>
 </body>
-</html>'
+</html>';
+	//==========
+	 
+	//=====Cr&eacute;ation de la boundary
+	$boundary = "-----=".md5(rand());
+	//==========
+ 
+	//=====Cr&eacute;ation du header de l'e-mail.
+	$header = "From: \"Gite le Metzval\"<sdk@cesncf-stra.org>".$passage_ligne;
+	$header.= "Reply-to: \"Gite le Metzval\" <sdk@cesncf-stra.org>".$passage_ligne;
+	$header.= "MIME-Version: 1.0".$passage_ligne;
+	$header.= "Content-Type: multipart/alternative;".$passage_ligne." boundary=\"$boundary\"".$passage_ligne;
+	//==========
+	 
+	//=====Cr&eacute;ation du message.
+	$message = $passage_ligne."--".$boundary.$passage_ligne;
+	//=====Ajout du message au format texte.
+	$message.= "Content-Type: text/plain; charset=\"ISO-8859-1\"".$passage_ligne;
+	$message.= "Content-Transfer-Encoding: 8bit".$passage_ligne;
+	$message.= $passage_ligne.$message_txt.$passage_ligne;
+	//==========
+	$message.= $passage_ligne."--".$boundary.$passage_ligne;
+	//=====Ajout du message au format HTML
+	$message.= "Content-Type: text/html; charset=\"ISO-8859-1\"".$passage_ligne;
+	$message.= "Content-Transfer-Encoding: 8bit".$passage_ligne;
+	$message.= $passage_ligne.$message_html.$passage_ligne;
+	//==========
+	$message.= $passage_ligne."--".$boundary."--".$passage_ligne;
+	$message.= $passage_ligne."--".$boundary."--".$passage_ligne;
+	//==========
+	 
+	//=====Envoi de l'e-mail.
+	mail($destinataire,$sujet,$message,$header);
+	//==========
+}
+
+
+?>

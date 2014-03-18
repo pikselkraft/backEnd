@@ -1,4 +1,3 @@
-
 <?php
 //fonction sie gîte le Metzval
 
@@ -30,18 +29,24 @@
 *********************************************
 	**	creation: 23/10/2013/
 
+/************************************************************/
+/* constante 
+/***********************************************************/
+define("MAIL_METZVAL", "contact@gite-lemetzval.fr");
+define("MAIL_SDK", "sdk@cesncf-stra.org");
+define("MAIL_OCT", "oct@cesncf-stra.org");
 
 /************************************************************/
 /* définir le fuseau horaire -> à mettre dans le header.php 
 /***********************************************************/
-date_default_timezone_set('Europe/London');
+date_default_timezone_set('Europe/Paris');
 
 $script_tz = date_default_timezone_get();
 
-if (strcmp($script_tz, ini_get('date.timezone')))
-{
-    //echo 'Le décalage horaire du script diffère du décalage horaire défini dans le fichier ini. <br />';
-} 
+//if (strcmp($script_tz, ini_get('date.timezone')))
+//{
+//    echo 'Le décalage horaire du script diffère du décalage horaire défini dans le fichier ini. <br />';
+//} 
 
 
 function testVar ($var) // fonction de debug simple

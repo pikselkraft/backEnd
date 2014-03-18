@@ -1,7 +1,7 @@
 <?php
 session_start(); 
 require('/var/www/resa/dev/config.php'); 
-require('fonctions.php'); 
+require('includes/fonctions.php'); 
 ?> 
 <html dir="ltr" lang="fr-FR">
 

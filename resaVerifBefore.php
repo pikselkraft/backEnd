@@ -11,13 +11,13 @@ if (isset($_GET["idgite"]))
 }
 else
 {
-$idgite=$_POST["idgite"];
+	$idgite=$_POST["idgite"];
 }
 
 if($mysqli) //GLOBALE MYSQL CONNEXION DB
 {
 	$req="SELECT idgite,nom,capacite,url,montant_caution,titre,description FROM GITE WHERE idgite=".$idgite; //recuperation information g�te
-		echo $req;
+	echo $req;
 	$result = $mysqli->query($req);
 		
 	$result->data_seek(0);

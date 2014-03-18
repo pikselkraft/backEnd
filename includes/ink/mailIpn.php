@@ -1,4 +1,61 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<?php
+
+/**
+	* Gestion des mails de rappel de facture
+*/
+
+/************************************************************/
+/* constante 
+/***********************************************************/
+define("MAIL_METZVAL", "contact@gite-lemetzval.fr");
+define("MAIL_SDK", "sdk@cesncf-stra.org");
+define("MAIL_OCT", "oct@cesncf-stra.org");
+
+function envoiIpn($email,$info1,$info2,$info3) // fonction qui g&eacute;n&eacute;re un nouveau mot de passe
+{
+	global $mysqli;
+	if(isset($email)) {
+		
+		 /**
+		 	* recuperation pdf
+		 */
+		 
+		 $sqlVerifExistant 	= "SELECT civilite, nom, prenom, email,mp from CLIENTS WHERE email ='".$email."'" ; //verif mail unique
+		
+		 $result=$mysqli->query($sqlVerifExistant);
+		 
+		 if ($row=$result->fetch_Assoc()) {
+				
+			$civilite = $row['civilite'];
+			$nom = $row['nom'];
+			$prenom = $row['prenom'];		
+
+			TemplateIpn($email, "Gite LeMetzval - Confirmation de votre reservation",$civilite,$nom,$prenom,$info1,$info2,$info3);
+			return true;
+		 }
+		 else
+		 {
+		 	$mailInvalide=false;
+		 	return $mailInvalide;
+		 }
+
+	}
+	else{echo "Email invalide";}
+}
+
+//fonction d'envoi mail 
+function TemplateIpn($destinataire,$sujet,$civilite,$nom,$prenom,$info1,$info2,$info3,$copy) {
+	
+	if (!preg_match("#^[a-z0-9._-]+@(hotmail|live|msn).[a-z]{2,4}$#", $destinataire)) // On filtre les serveurs qui rencontrent des bogues.
+	{$passage_ligne = "\r\n";}
+	else{$passage_ligne = "\n";}
+	
+	//=====D&eacute;claration des messages au format texte et au format HTML.
+	$message_txt = $message;
+	$message_html = "<html><head></head><body><b>Salut &agrave; tous</b>, voici un e-mail envoy&eacute; par un <i>script PHP</i>.</body></html>";
+
+	//template du messaeg mail : 
+	$message_html='<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -739,7 +796,7 @@ body.outlook p {
     }
 
     .header {
-      background: #999999;
+      background: #68A368;
     }
 
     .footer .wrapper {
@@ -794,10 +851,10 @@ body.outlook p {
                         <table class="twelve columns">
                           <tr>
                             <td class="six sub-columns">
-                              <img src="http://placehold.it/200x50">
+                              <img src="http://www.gite-lemetzval.fr/wp-content/uploads/2013/10/metzval-logo.png">
                             </td>
                             <td class="six sub-columns last" style="text-align:right; vertical-align:middle;">
-                              <span class="template-label">BASIC</span>
+                              <span class="template-label">Le Metzval</span>
                             </td>
                             <td class="expander"></td>
                           </tr>
@@ -806,7 +863,6 @@ body.outlook p {
                       </td>
                     </tr>
                   </table>
-
                 </center>
               </td>
             </tr>
@@ -815,22 +871,26 @@ body.outlook p {
           <table class="container">
             <tr>
               <td>
-
                 <table class="row">
                   <tr>
                     <td class="wrapper last">
-
                       <table class="twelve columns">
                         <tr>
                           <td>
-                            <h1>Hi, Susan Calvin</h1>
-                						<p class="lead">Phasellus dictum sapien a neque luctus cursus. Pellentesque sem dolor, fringilla et pharetra vitae.</p>
-                						<p>Phasellus dictum sapien a neque luctus cursus. Pellentesque sem dolor, fringilla et pharetra vitae. consequat vel lacus. Sed iaculis pulvinar ligula, ornare fringilla ante viverra et. In hac habitasse platea dictumst. Donec vel orci mi, eu congue justo. Integer eget odio est, eget malesuada lorem. Aenean sed tellus dui, vitae viverra risus. Nullam massa sapien, pulvinar eleifend fringilla id, convallis eget nisi. Mauris a sagittis dui. Pellentesque non lacinia mi. Fusce sit amet libero sit amet erat venenatis sollicitudin vitae vel eros. Cras nunc sapien, interdum sit amet porttitor ut, congue quis urna.</p>
+                            <h1>Bonjour '.$civilite.' '.$nom.' '.$prenom.'</h1>
+                						<p class="lead">Votre commande a bien &eacute;t&eacute; valid&eacute;e.</p>
+                          				<p>Dans l\'attente de vos nouvelles, nous vous souhaitons une agr&eacute;able journ&eacute;e.</p>
+                          				<ul>
+                          					<li>Votre num&eacute;ro de commande : '.$info1.'</li>
+                          					<li>La somme total : '.$info2.'</li>
+                          					<li>Le montant de l\'accompte et des taxes : '.$info3.'</li>
+                          					<li>Vous allez recevoir une facture d&eacute;taill&eacute;e dans un second mail.</li>
+                          				</ul>	
+                          				<i>Le Metzval</i>
                           </td>
                           <td class="expander"></td>
                         </tr>
                       </table>
-
                     </td>
                   </tr>
                 </table>
@@ -842,7 +902,7 @@ body.outlook p {
                       <table class="twelve columns">
                         <tr>
                           <td class="panel">
-                            <p>Phasellus dictum sapien a neque luctus cursus. Pellentesque sem dolor, fringilla et pharetra vitae. <a href="#">Click it! »</a></p>
+                            <p>Visitez notre site pour d&eacute;couvrir les r&eacute;gions Alsace et les Vosges<a href="http://www.gite-lemetzval.fr/"> Notre site! </a></p>
                           </td>
                           <td class="expander"></td>
                         </tr>
@@ -860,22 +920,12 @@ body.outlook p {
                         <tr>
                           <td class="left-text-pad">
 
-                            <h5>Connect With Us:</h5>
+                            <h5>Suivez-nous sur les r&eacute;seaux:</h5>
 
                             <table class="tiny-button facebook">
                               <tr>
                                 <td>
-                                  <a href="#">Facebook</a>
-                                </td>
-                              </tr>
-                            </table>
-
-                            <br>
-
-                            <table class="tiny-button twitter">
-                              <tr>
-                                <td>
-                                  <a href="#">Twitter</a>
+                                  <a href="https://www.facebook.com/gitelemetzval" target="_blank">Facebook</a>
                                 </td>
                               </tr>
                             </table>
@@ -885,7 +935,7 @@ body.outlook p {
                             <table class="tiny-button google-plus">
                               <tr>
                                 <td>
-                                  <a href="#">Google +</a>
+                                  <a href="https://plus.google.com/107010704077220405499/posts" target="_blank">Google +</a>
                                 </td>
                               </tr>
                             </table>
@@ -902,8 +952,8 @@ body.outlook p {
                         <tr>
                           <td class="last right-text-pad">
                             <h5>Contact Info:</h5>
-                            <p>Phone: 408.341.0600</p>
-                            <p>Email: <a href="mailto:hseldon@trantor.com">hseldon@trantor.com</a></p>
+                            <p>T&eacute;l&eacute;phone: 06 25 14 37 06</p>
+                            <p>Email: <a href="mailto:contact@gite-lemetzval.fr">contact@gite-lemetzval.fr</a></p>
                           </td>
                           <td class="expander"></td>
                         </tr>
@@ -922,7 +972,7 @@ body.outlook p {
                         <tr>
                           <td align="center">
                             <center>
-                              <p style="text-align:center;"><a href="#">Terms</a> | <a href="#">Privacy</a> | <a href="#">Unsubscribe</a></p>
+                              <p style="text-align:center;"><a href="#">Termes</a> | <a href="#">Vie priv&eacute;e</a> | <a href="#">D&eacute;sinscription</a></p>
                             </center>
                           </td>
                           <td class="expander"></td>
@@ -943,4 +993,42 @@ body.outlook p {
 		</tr>
 	</table>
 </body>
-</html>
+</html>';
+	//==========
+	 
+	//=====Cr&eacute;ation de la boundary
+	$boundary = "-----=".md5(rand());
+	//==========
+ 
+	//=====Cr&eacute;ation du header de l'e-mail.
+	$header = "From: \"Gite le Metzval\"<sdk@cesncf-stra.org>".$passage_ligne;
+	$header.= "Reply-to: \"Gite le Metzval\" <sdk@cesncf-stra.org>".$passage_ligne;
+	$header.= "MIME-Version: 1.0".$passage_ligne;
+	$header.= "Content-Type: multipart/alternative;".$passage_ligne." boundary=\"$boundary\"".$passage_ligne;
+	//==========
+	 
+	//=====Cr&eacute;ation du message.
+	$message = $passage_ligne."--".$boundary.$passage_ligne;
+	//=====Ajout du message au format texte.
+	$message.= "Content-Type: text/plain; charset=\"ISO-8859-1\"".$passage_ligne;
+	$message.= "Content-Transfer-Encoding: 8bit".$passage_ligne;
+	$message.= $passage_ligne.$message_txt.$passage_ligne;
+	//==========
+	$message.= $passage_ligne."--".$boundary.$passage_ligne;
+	//=====Ajout du message au format HTML
+	$message.= "Content-Type: text/html; charset=\"ISO-8859-1\"".$passage_ligne;
+	$message.= "Content-Transfer-Encoding: 8bit".$passage_ligne;
+	$message.= $passage_ligne.$message_html.$passage_ligne;
+	//==========
+	$message.= $passage_ligne."--".$boundary."--".$passage_ligne;
+	$message.= $passage_ligne."--".$boundary."--".$passage_ligne;
+	//==========
+	 
+	//=====Envoi de l'e-mail.
+	mail($destinataire,$sujet,$message,$header);
+	//==========
+}
+
+
+
+?>
