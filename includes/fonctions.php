@@ -33,7 +33,7 @@
 /* constante 
 /***********************************************************/
 define("MAIL_METZVAL", "contact@gite-lemetzval.fr");
-define("MAIL_SDK", "sdk@cesncf-stra.org");
+define("MAIL_SDK", "dsalmon@cesncf-stra.org");
 define("MAIL_OCT", "oct@cesncf-stra.org");
 
 /************************************************************/

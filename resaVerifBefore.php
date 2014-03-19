@@ -4,7 +4,6 @@ $resaEncours= $_SESSION['resaEncours'];
 if (empty($resaEncours)) {$resaEncours=0; $_SESSION['resaEncours']=0;   }
 
 $monTab= $_SESSION['Mesresa'];
-
 if (isset($_GET["idgite"]))
 {
 	$idgite=$_GET["idgite"];
@@ -33,4 +32,8 @@ $monTab[$resaEncours]['date_fin'] = $_POST["date_fin"];
 $_SESSION['Mesresa'] = $monTab;		
 
 header('Location:formulaire.php');
+?>
+
+<?php
+	require('includes/footer.php');
 ?>

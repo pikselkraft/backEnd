@@ -1,5 +1,6 @@
 <?php
-session_start(); 
+session_start();
+ob_start();
 require('/var/www/resa/dev/config.php'); 
 require('includes/fonctions.php'); 
 ?> 
@@ -19,6 +20,10 @@ require('includes/fonctions.php');
 	<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 	<script src="scripts/jquery.ui.datepicker-fr.js"></script>
+
+
+	<script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
+	<script src="http://modernizr.com/downloads/modernizr.js"></script>
 
 	<script src="scripts/js/vendor/modernizr.js"></script>
 	<script src="scripts/js/vendor/fastclick.js"></script>

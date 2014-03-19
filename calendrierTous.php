@@ -485,7 +485,7 @@ echo '</table>';
 ?>
 	<div class="row">
 		<div class="small-11 small-centered columns">
-		<form action="resaVerifBefore.php?idgite=<?php echo $idgite;?>" method="post"> 
+		<form action="formulaire.php?idgite=<?= $idgite;?>" method="post"> 
 			
 			<fieldset>
 				
