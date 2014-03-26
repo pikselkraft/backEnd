@@ -16,15 +16,12 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 	*/
 		
     /** 
-    
 			* differentes valeurs de la variable actionClient passee en argument 
 			* vide : on affiche un formulaire de recherche de clients
-
 			* R : on affiche les r�sultat
 				* MS : update info clinet
 				* D : suppresion client
 				* A : ajout client
-
 			* TE : trie mail
 			* TN : trie nom
 			* TP : trie prenom
@@ -32,7 +29,6 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 			* EM : envoi new mp par mail
 			* MAJ : afichage formulaire modification
 			* CR : formulaire création client 
-	
 	*/
 	
 	/***
@@ -53,7 +49,6 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 	}
 
 	/**
-	
 		* édition client sur page client 
 	*/
 	

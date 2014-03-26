@@ -226,8 +226,7 @@ if (($_GET["img"]=='AD') && (!empty($_GET["idgite"]))) // insertion d une nouvel
 
 		$reqInsert="insert into IMAGES (idgite, titre_image, une,url, description_image) values ('".$_GET["idgite"]."','".$_POST["titre_image"]."','".$_POST["une"]."','".$_POST["url"]."','".$_POST["description_image"]."')";
 	
-	
-					
+			
 		$mysqli->query($reqInsert);
 
 		

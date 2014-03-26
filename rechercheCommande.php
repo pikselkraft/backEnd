@@ -1,12 +1,5 @@
 <?php
 
-//recherche des commandes
-
-//version: 1.0
-//
-//creation: 27/01/2014
-
-
 /* NOTE 
 
 	!!****	
@@ -18,8 +11,6 @@
 	****!!
 	
 */
-
-
 	require('includes/header.php');
 	
 $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur lors d'une action sur la BD
@@ -94,7 +85,6 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 									
 									$modifStatut="UPDATE COMMANDE SET statut_facture='".$_POST['statutModif']."' WHERE idcommande='".$idcommande."'";
 									$mysqli->query($modifStatut);
-									
 									
 									/**
 										* modification des prix selon statut
@@ -222,8 +212,9 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 									$mysqli->query($suppCommande);
 									
 									if($mysqli) { // message succès
-										$MessageEdition = "La commande a été supprimée";
+										$MessageEdition = "La commande a &eacute;t&eacute; supprim&eacute;e";
 										$messageTableauSupp = "La commande n'existe plus"; // remplace l'affichage du tableau de la commande 
+										
 										/**
 	
 											!!* EVM envoi mail + template!!
@@ -280,11 +271,11 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 				*/
 				if(!$mysqli)
 				{
-					$MessageAction ="ERREUR : Pas de r�sultat pour cette recherche" ;  
+					$MessageAction ="ERREUR : Pas de r&eacute;sultat pour cette recherche" ;  
 				} 
 				else
 				{
-					$MessageAction="Resultat de la recherche : ";
+					$MessageAction="R&eacute;sultat de la recherche : ";
 				}			
 				//Boucle qui parcourt les clients dans la base de donn�es
 					
@@ -292,17 +283,17 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 				break;
 				
 			case "Z": //raffcihe les 20 derni�res commandes
-			$reqCommandeResa="select distinct CO.idcommande,  CM.idclient, C.nom, CO.taxe, CO.caution, CO.caution_paye, CO.montant_option, CO.remise, CO.code_promo, CO.date_creation, CO.statut_facture, CO.accompte, CO.accompte_paye, CO.total,CO.total_paye  
-					from COMMANDE CO, COMMANDERESERVER CM, CLIENTS C
-					where CM.idclient=C.idclient and CO.idcommande=CM.idcommande and CO.idcommande > ((select max(idcommande) from COMMANDE)-20)";
+			$reqCommandeResa="SELECT distinct CO.idcommande,  CM.idclient, C.nom, CO.taxe, CO.caution, CO.caution_paye, CO.montant_option, CO.remise, CO.code_promo, CO.date_creation, CO.statut_facture, CO.accompte, CO.accompte_paye, CO.total,CO.total_paye  
+					FROM COMMANDE CO, COMMANDERESERVER CM, CLIENTS C
+					WHERE CM.idclient=C.idclient and CO.idcommande=CM.idcommande and CO.idcommande > ((SELECT max(idcommande) FROM COMMANDE)-20)";
 			$result_reqCommandeResa=$mysqli->query($reqCommandeResa);
 			if(!$mysqli)
 			{
-				$MessageAction ="ERREUR : Pas de r�sultat pour cette recherche" ;  
+				$MessageAction ="ERREUR : Pas de r&eacute;sultat pour cette recherche" ;  
 			} 
 			else
 			{
-				$MessageAction="Affichage des 20 derni�res commandes en cours : ";
+				$MessageAction="Affichage des 20 derni&egrave;res commandes en cours : ";
 			}
 			break;			
 				
@@ -318,7 +309,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 			
 		// Creation du tableau pour afficher les clients
 				$affichage_commande_ligne.='<table><thead>
-								<tr width="50px"><th>IdCommande</th>
+								<tr width="50px"><th>Numéro de la Commande</th>
 								<th width="50">Date de Commande</th>
 								<th width="50">Nom</th>
 								<th width="50">Statut</th>
@@ -331,7 +322,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 								<th width="150" colspan="5">Action</th></tr>
 								</thead>';
 
-			//boucle qui parcourt le r�sultats des requetes demand�es dans la BD
+			//boucle qui parcourt le résultats des requetes demandées dans la BD
 
 			while ($row = $result_reqCommandeResa->fetch_assoc())
 			{
@@ -340,15 +331,15 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 					
 					switch ((int)$_POST['statutModif'])
 					{
-						case 0 : $couleurStatut='#000000';
+						case 0 : $couleurStatut ='#000000';
 						break;
-						case 1 : $couleurStatut='#fe0202';
+						case 1 : $couleurStatut ='#fe0202';
 						break;
-						case 2 : $couleurStatut='#feb402';
+						case 2 : $couleurStatut ='#feb402';
 						break;
-						case 3 : $couleurStatut='#02fe1a';
+						case 3 : $couleurStatut ='#02fe1a';
 						break;
-						case 4 : $couleurStatut='#02fe1a';
+						case 4 : $couleurStatut ='#02fe1a';
 						break;
 					}
 				}
@@ -356,15 +347,15 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 					
 					switch ((int)$row["statut_facture"])
 					{
-						case 0 : $couleurStatut='#000000';
+						case 0 : $couleurStatut ='#000000';
 						break;
-						case 1 : $couleurStatut='#fe0202';
+						case 1 : $couleurStatut ='#fe0202';
 						break;
-						case 2 : $couleurStatut='#feb402';
+						case 2 : $couleurStatut ='#feb402';
 						break;
-						case 3 : $couleurStatut='#02fe1a';
+						case 3 : $couleurStatut ='#02fe1a';
 						break;
-						case 4 : $couleurStatut='#02fe1a';
+						case 4 : $couleurStatut ='#02fe1a';
 						break;
 					}
 				}
@@ -374,7 +365,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 				if($editionCommande=='E') { // changement des informations de la commande (utilisation d'input)
 					
 						/** 
-							* stockages des sélecteurs pour els booleans  
+							* stockages des sélecteurs pour les booleans  
 						*/
 
 						$result=count($statut);
@@ -393,7 +384,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 										<option value="P">P (paye)</option>
 										<option value="R">R (rendu)</option>';
 										
-						$accompteSelect='<select name ="accomptePayeCommande"><option selected="'.$row["accompte_paye"].'" value="'.$row["accompte_paye"].'">Payé ou non</option>';
+						$accompteSelect='<select name ="accomptePayeCommande"><option selected="'.$row["accompte_paye"].'" value="'.$row["accompte_paye"].'">Pay&eacute; ou non</option>';
 
 						$accompteSelect.='<option value="1">oui</option>
 										<option value="0">non</option>';
@@ -416,7 +407,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 											</label>
 										</td>
 										<td '.$couleurCommande.'>
-											<label>Nom et prénom du client
+											<label>Nom et pr&eacute;nom du client
 												<input name="infoClient" type="text" size="5"  readonly value="'.$row["nom"].' '.$row["prenom"].'">													
 												</label>
 										</td>
@@ -431,7 +422,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 											</label>
 										</td>
 										<td '.$couleurCommande.'>
-											<label>Caution payée
+											<label>Caution pay&eacute;e
 													'.$cautionSelect.'
 											</label>
 										</td>
@@ -449,7 +440,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 												<input name="totalCommande" type="number" size="5"  value="'.$row["total"].'">														</label>
 										</td>
 										<td '.$couleurCommande.'>
-											<label>Total payé (somme payée)
+											<label>Total pay&eacute; (somme payée)
 												<input name="totalPayeCommande" type="number" size="5"  value="'.$row["total_paye"].'">													</label>
 										</td>
 										<td '.$couleurCommande.'>
@@ -466,8 +457,6 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 										
 									$result=count($statut);
 									$a=0;
-									//testVar($statut[(int)$row["statut_facture"]]["designation"]);
-									//testVar($_POST['statutModif']);
 
 									/* formulaire de modification du statut*/
 									$majStatut='<form action="rechercheCommande.php?actionCommande=R&editionCommande=US&idcommande='.$row["idcommande"].'" method="POST"><table><tr><td>';
@@ -484,42 +473,42 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 									<td '.$couleurCommande.'>'.date('d/m/Y �  H:i:s ',strtotime($row["date_creation"])).'</td>
 									<td '.$couleurCommande.'>'.$row["nom"].' '.$row["prenom"].'</td>
 									<td '.$couleurCommande.'>'.$majStatut.'</td>
-									<td '.$couleurCommande.'>'.$row["caution"].' �</td>
-									<td '.$couleurCommande.'>'.$row["caution_paye"].' �</td>									
-									<td '.$couleurCommande.'>'.$row["accompte"].' �</td>
-									<td '.$couleurCommande.'>'.$row["accompte_paye"].' �</td>
-									<td '.$couleurCommande.'>'.$row["total"].' �</td>
-									<td '.$couleurCommande.'>'.$row["total_paye"].' �</td>';
+									<td '.$couleurCommande.'>'.$row["caution"].' &euro;</td>
+									<td '.$couleurCommande.'>'.$row["caution_paye"].'</td>									
+									<td '.$couleurCommande.'>'.$row["accompte"].' &euro;</td>
+									<td '.$couleurCommande.'>'.$row["accompte_paye"].' </td>
+									<td '.$couleurCommande.'>'.$row["total"].' &euro;</td>
+									<td '.$couleurCommande.'>'.$row["total_paye"].' &euro;</td>';
 											
 				}
 				else if ($editionCommande=='UE' || $editionCommande=='US') { // 	affichage après update
-					//testVar($affichage_commande_ligne);
+
 					$affichage_commande_ligne.= '<tr >
 									<td '.$couleurCommande.'>'.$row["idcommande"].'</td>
 									<td '.$couleurCommande.'>'.date('d/m/Y �  H:i:s ',strtotime($row["date_creation"])).'</td>
 									<td '.$couleurCommande.'>'.$row["nom"].' '.$row["prenom"].'</td>
 									<td '.$couleurCommande.'>'.$statut[(int)$row["statut_facture"]]["designation"].'</td>
-									<td '.$couleurCommande.'>'.$row["caution"].' �</td>
-									<td '.$couleurCommande.'>'.$row["caution_paye"].' �</td>
-									<td '.$couleurCommande.'>'.$row["accompte"].' �</td>
-									<td '.$couleurCommande.'>'.$row["accompte_paye"].' �</td>
-									<td '.$couleurCommande.'>'.$row["total"].' �</td>
-									<td '.$couleurCommande.'>'.$row["total_paye"].' �</td>';
-					//testVar($affichage_commande_ligne);
+									<td '.$couleurCommande.'>'.$row["caution"].' &euro;</td>
+									<td '.$couleurCommande.'>'.$row["caution_paye"].'</td>
+									<td '.$couleurCommande.'>'.$row["accompte"].' &euro;</td>
+									<td '.$couleurCommande.'>'.$row["accompte_paye"].' </td>
+									<td '.$couleurCommande.'>'.$row["total"].' &euro;</td>
+									<td '.$couleurCommande.'>'.$row["total_paye"].' &euro;</td>';
+
 				}
 				else {
 				
 					$affichage_commande_ligne.= '<tr >
-									<td '.$couleurCommande.'>'.$row["idcommande"].'</td>
+									<td '.$couleurCommande.'><a href="rechercheResa.php?idcommande='.$row["idcommande"].'&actionResa=V">'.$row["idcommande"].'</a></td>
 									<td '.$couleurCommande.'>'.date('d/m/Y �  H:i:s ',strtotime($row["date_creation"])).'</td>
 									<td '.$couleurCommande.'>'.$row["nom"].' '.$row["prenom"].'</td>
 									<td '.$couleurCommande.'>'.$statut[(int)$row["statut_facture"]]["designation"].'</td>
-									<td '.$couleurCommande.'>'.$row["caution"].' �</td>
-									<td '.$couleurCommande.'>'.$row["caution_paye"].' �</td>
-									<td '.$couleurCommande.'>'.$row["accompte"].' �</td>
-									<td '.$couleurCommande.'>'.$row["accompte_paye"].' �</td>
-									<td '.$couleurCommande.'>'.$row["total"].' �</td>
-									<td '.$couleurCommande.'>'.$row["total_paye"].' �</td>';
+									<td '.$couleurCommande.'>'.$row["caution"].' &euro;</td>
+									<td '.$couleurCommande.'>'.$row["caution_paye"].'</td>
+									<td '.$couleurCommande.'>'.$row["accompte"].' &euro;</td>
+									<td '.$couleurCommande.'>'.$row["accompte_paye"].' &euro;</td>
+									<td '.$couleurCommande.'>'.$row["total"].' &euro;</td>
+									<td '.$couleurCommande.'>'.$row["total_paye"].' &euro;</td>';
 				}
 																	
 			$affichage_commande_ligne.= '<td '.$couleurCommande.'><a href="rechercheCommande.php?actionCommande=R&editionCommande=S&idcommande='.$row["idcommande"].'" title="Editer le statut"><i class="foundicon-edit"></i></a></td>
@@ -548,7 +537,7 @@ if (!empty($MessageAction))
 	$MessageAction='<span class="label [radius round]">'.$MessageAction.'</span>';
 }
 /**
-		*	affichages des Commandes stock�es dans la base	
+		*	affichages des Commandes stockees dans la base	
 */
 
 $result=count($statut);
@@ -575,7 +564,7 @@ $affichage_recherche.='</select><input type="submit" value="Rechercher"></form>'
 			
 				<?= $MessageAction; ?>
 				<?= $MessageEdition; ?>
-				<?= $messageAvertissement;?>
+				<?= $messageAvertissement; ?>
 			
 			</div>
 		</div>
@@ -585,14 +574,14 @@ $affichage_recherche.='</select><input type="submit" value="Rechercher"></form>'
 		<div class="large-12 columns">
 			<div class="panel">
 				<h1> Recherche des commandes</h1>
-				<?= $affichage_recherche;?>
+				<?= $affichage_recherche; ?>
 			</div>
 		</div>		
 	</div>
 	<div class="row">
 		<div class="large-12 columns">
-				<h3> Résultat</h3>
-				<?= $affichage_commande_ligne;?>
+				<h3> R&eacute;sultat</h3>
+				<?= $affichage_commande_ligne; ?>
 		</div>		
 	</div>
 
