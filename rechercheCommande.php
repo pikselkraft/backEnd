@@ -499,7 +499,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 				else {
 				
 					$affichage_commande_ligne.= '<tr >
-									<td '.$couleurCommande.'><a href="rechercheResa.php?idcommande='.$row["idcommande"].'&actionresa=V">'.$row["idcommande"].'</a></td>
+									<td '.$couleurCommande.'><a href="rechercheResa.php?idcommande='.$row["idcommande"].'&actionResa=V">'.$row["idcommande"].'</a></td>
 									<td '.$couleurCommande.'>'.date('d/m/Y �  H:i:s ',strtotime($row["date_creation"])).'</td>
 									<td '.$couleurCommande.'>'.$row["nom"].' '.$row["prenom"].'</td>
 									<td '.$couleurCommande.'>'.$statut[(int)$row["statut_facture"]]["designation"].'</td>
@@ -537,7 +537,7 @@ if (!empty($MessageAction))
 	$MessageAction='<span class="label [radius round]">'.$MessageAction.'</span>';
 }
 /**
-		*	affichages des Commandes stock�es dans la base	
+		*	affichages des Commandes stockees dans la base	
 */
 
 $result=count($statut);
