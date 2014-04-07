@@ -303,10 +303,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 			{
 				$MessageAction="Affichage des 20 derni&egrave;res commandes en cours : ";
 			}
-			break;
-
-			case "RT":
-				//			
+			break;		
 				
 		} // fin switch
 
