@@ -230,6 +230,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 									$result_recupComm=$mysqli->query($recupComm);
 									$remise = $_GET["remise"];
 									$modifCommande="UPDATE COMMANDE SET remise_taux=".$remise." WHERE idcommande='".$idcommande."'";
+									$result_modifCommande=$mysqli->query($modifCommande);
 							break;
 						}
 					} 
@@ -291,9 +292,20 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 				break;
 				
 			case "Z": //raffcihe les 20 derni�res commandes
-			$reqCommandeResa="SELECT distinct CO.idcommande,  CM.idclient, C.nom, CO.taxe, CO.caution, CO.caution_paye, CO.montant_option, CO.remise, CO.code_promo, CO.date_creation, CO.statut_facture, CO.accompte, CO.accompte_paye, CO.total,CO.total_paye  
-					FROM COMMANDE CO, COMMANDERESERVER CM, CLIENTS C
-					WHERE CM.idclient=C.idclient and CO.idcommande=CM.idcommande and CO.idcommande > ((SELECT max(idcommande) FROM COMMANDE)-20)";
+			// $reqCommandeResa="SELECT distinct CO.idcommande,  CM.idclient, C.nom, CO.taxe, CO.caution, CO.caution_paye, CO.montant_option, CO.remise, CO.code_promo, CO.date_creation, CO.statut_facture, CO.accompte, CO.accompte_paye, CO.total,CO.total_paye  
+			// 		FROM COMMANDE CO, COMMANDERESERVER CM, CLIENTS C
+			// 		WHERE CM.idclient=C.idclient and CO.idcommande=CM.idcommande and CO.idcommande > '((SELECT max(idcommande) FROM COMMANDE)-20)'";
+			// ancienne requête
+			$reqCommandeResa="SELECT distinct CO.idcommande,  CM.idclient, C.nom, C.prenom, CO.taxe, CO.caution, CO.caution_paye, 
+				CO.montant_option, CO.remise, CO.code_promo, CO.date_creation, CO.statut_facture, CO.accompte, CO.accompte_paye, 
+				CO.total, CO.total_paye, G.nom as nom_gite, G.idgite, R.date_debut, R.date_fin, CO.remise_taux
+				FROM COMMANDE CO, COMMANDERESERVER CM, CLIENTS C, GITE G, RESERVATION R
+				WHERE CM.idclient=C.idclient 
+				and CO.idcommande=CM.idcommande
+				and R.idreservation=CM.idreservation
+				and G.idgite=R.idgite
+				and CO.idcommande > '((SELECT max(idcommande) FROM COMMANDE)-20)'
+				ORDER BY CO.date_creation, CO.statut_facture";
 			$result_reqCommandeResa=$mysqli->query($reqCommandeResa);
 			if(!$mysqli)
 			{
@@ -317,17 +329,18 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 			
 		// Creation du tableau pour afficher les clients
 				$affichage_commande_ligne.='<table><thead>
-								<tr width="50px"><th>Numéro de la Commande</th>
-								<th width="50">Date de Commande</th>
-								<th width="50">Nom</th>
-								<th width="50">Statut</th>
-								<th width="50">Caution</th>
-								<th width="50">Caution payée (A:attente/P:payée/R:rendu)</th>
-								<th width="50">Accompte</th>
-								<th width="50">Accompte payé (1:oui/2:non)</th>
-								<th width="50">Total</th>
-								<th width="50">Total payé</th>
-								<th width="150" colspan="6">Action</th></tr>
+								<th width="100px">Numéro de la Commande</th>
+								<th width="50px">Nom et numéro du gîte</th>
+								<th width="50px">Periode de reservation</th>
+								<th width="50px">Date de Commande</th>
+								<th width="50px">Nom</th>
+								<th width="50px">Statut</th>
+								<th width="50px" data-tooltip class="has-tip" title="A:attente/P:Payé/R:Rendu">Caution</th>
+								<th width="50px">Accompte</th>
+								<th width="50px">Remise</th>
+								<th width="50px">Total</th>
+								<th width="50px">Total payé</th>
+								<th width="150px" colspan="6">Action</th></tr>
 								</thead>';
 
 			//boucle qui parcourt le résultats des requetes demandées dans la BD
@@ -341,13 +354,13 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 					{
 						case 0 : $couleurStatut ='#000000';
 						break;
-						case 1 : $couleurStatut ='#fe0202';
+						case 1 : $couleurStatut ='#d9534f';
 						break;
-						case 2 : $couleurStatut ='#feb402';
+						case 2 : $couleurStatut ='#f0ad4e';
 						break;
-						case 3 : $couleurStatut ='#02fe1a';
+						case 3 : $couleurStatut ='#5bc0de';
 						break;
-						case 4 : $couleurStatut ='#02fe1a';
+						case 4 : $couleurStatut ='#5cb85c';
 						break;
 					}
 				}
@@ -357,18 +370,22 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 					{
 						case 0 : $couleurStatut ='#000000';
 						break;
-						case 1 : $couleurStatut ='#fe0202';
+						case 1 : $couleurStatut ='#d9534f';
 						break;
-						case 2 : $couleurStatut ='#feb402';
+						case 2 : $couleurStatut ='#f0ad4e';
 						break;
-						case 3 : $couleurStatut ='#02fe1a';
+						case 3 : $couleurStatut ='#5bc0de';
 						break;
-						case 4 : $couleurStatut ='#02fe1a';
+						case 4 : $couleurStatut ='#5cb85c';
 						break;
 					}
 				}
 				
 				$couleurCommande='style=" border:2px solid '.$couleurStatut.';"';
+				if ($row["accompte_paye"] == 0)
+					$accompte_paye_symbole = '<i data-tooltip class="foundicon-error has-tip" title="Acompte non payé" style="font-style: normal;"> '.$row["accompte"].' &euro;</i>';
+				else
+					$accompte_paye_symbole = '<i data-tooltip class="foundicon-checkmark has-tip" title="Acompte payé" style="font-style: normal;"> '.$row["accompte"].' &euro;</i>';
 
 				if($editionCommande=='E') { // changement des informations de la commande (utilisation d'input)
 					
@@ -411,7 +428,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 										</td>
 										<td '.$couleurCommande.'>
 											<label>Date
-												<input name="dateCommande" type="date" size="25"  readonly value="'.date('d/m/Y �  H:i:s ',strtotime($row["date_creation"])).'">													
+												<input name="dateCommande" type="date" size="25"  readonly value="'.dateFr($row["date_creation"]).'">													
 											</label>
 										</td>
 										<td '.$couleurCommande.'>
@@ -478,51 +495,55 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 
 					$affichage_commande_ligne.= '<tr >
 									<td '.$couleurCommande.'>'.$row["idcommande"].'</td>
-									<td '.$couleurCommande.'>'.date('d/m/Y �  H:i:s ',strtotime($row["date_creation"])).'</td>
+									<td '.$couleurCommande.'>'.$row["nom_gite"].'('.$row["idgite"].')</td>
+									<td '.$couleurCommande.'>'.dateFr($row["date_debut"]).' - '.dateFr($row["date_fin"]).'</td>
+									<td '.$couleurCommande.'>'.dateFr($row["date_creation"]).'</td>
 									<td '.$couleurCommande.'>'.$row["nom"].' '.$row["prenom"].'</td>
 									<td '.$couleurCommande.'>'.$majStatut.'</td>
-									<td '.$couleurCommande.'>'.$row["caution"].' &euro;</td>
-									<td '.$couleurCommande.'>'.$row["caution_paye"].'</td>									
-									<td '.$couleurCommande.'>'.$row["accompte"].' &euro;</td>
-									<td '.$couleurCommande.'>'.$row["accompte_paye"].' </td>
+									<td data-tooltip class="has-tip" title="A:attente/P:Payé/R:Rendu" '.$couleurCommande.'>('.$row["caution_paye"].') '.$row["caution"].' &euro;</td>									
+									<td '.$couleurCommande.'>'.$accompte_paye_symbole.'</td>
+									<td '.$couleurCommande.'>'.$row["remise_taux"].' %</td>
 									<td '.$couleurCommande.'>'.$row["total"].' &euro;</td>
 									<td '.$couleurCommande.'>'.$row["total_paye"].' &euro;</td>';
+
 											
 				}
 				else if ($editionCommande=='UE' || $editionCommande=='US') { // 	affichage après update
 
 					$affichage_commande_ligne.= '<tr >
 									<td '.$couleurCommande.'>'.$row["idcommande"].'</td>
-									<td '.$couleurCommande.'>'.date('d/m/Y �  H:i:s ',strtotime($row["date_creation"])).'</td>
+									<td '.$couleurCommande.'>'.$row["nom_gite"].'('.$row["idgite"].')</td>
+									<td '.$couleurCommande.'>'.dateFr($row["date_debut"]).' - '.dateFr($row["date_fin"]).'</td>
+									<td '.$couleurCommande.'>'.dateFr($row["date_creation"]).'</td>
 									<td '.$couleurCommande.'>'.$row["nom"].' '.$row["prenom"].'</td>
 									<td '.$couleurCommande.'>'.$statut[(int)$row["statut_facture"]]["designation"].'</td>
-									<td '.$couleurCommande.'>'.$row["caution"].' &euro;</td>
-									<td '.$couleurCommande.'>'.$row["caution_paye"].'</td>
-									<td '.$couleurCommande.'>'.$row["accompte"].' &euro;</td>
-									<td '.$couleurCommande.'>'.$row["accompte_paye"].' </td>
+									<td data-tooltip class="has-tip" title="A:attente/P:Payé/R:Rendu" '.$couleurCommande.'>('.$row["caution_paye"].') '.$row["caution"].' &euro;</td>
+									<td '.$couleurCommande.'>'.$accompte_paye_symbole.'</td>
+									<td '.$couleurCommande.'>'.$row["remise_taux"].' %</td>
 									<td '.$couleurCommande.'>'.$row["total"].' &euro;</td>
 									<td '.$couleurCommande.'>'.$row["total_paye"].' &euro;</td>';
 
 				}
 				else {
-				
+					
 					$affichage_commande_ligne.= '<tr >
 									<td '.$couleurCommande.'><a href="rechercheResa.php?idcommande='.$row["idcommande"].'&actionResa=V">'.$row["idcommande"].'</a></td>
-									<td '.$couleurCommande.'>'.date('d/m/Y �  H:i:s ',strtotime($row["date_creation"])).'</td>
-									<td '.$couleurCommande.'>'.$row["nom"].' '.$row["prenom"].'</td>
+									<td '.$couleurCommande.'>'.$row["nom_gite"].'('.$row["idgite"].')</td>
+									<td '.$couleurCommande.'>'.dateFr($row["date_debut"]).' - '.dateFr($row["date_fin"]).'</td>
+									<td '.$couleurCommande.'>'.dateFr($row["date_creation"]).'</td>
+									<td '.$couleurCommande.'>'.$row["nom"]." ".$row["prenom"].'</td>
 									<td '.$couleurCommande.'>'.$statut[(int)$row["statut_facture"]]["designation"].'</td>
-									<td '.$couleurCommande.'>'.$row["caution"].' &euro;</td>
-									<td '.$couleurCommande.'>'.$row["caution_paye"].'</td>
-									<td '.$couleurCommande.'>'.$row["accompte"].' &euro;</td>
-									<td '.$couleurCommande.'>'.$row["accompte_paye"].' &euro;</td>
+									<td data-tooltip class="has-tip" title="A:attente/P:Payé/R:Rendu" '.$couleurCommande.'>('.$row["caution_paye"].') '.$row["caution"].' &euro;</td>
+									<td '.$couleurCommande.'>'.$accompte_paye_symbole.'</td>
+									<td '.$couleurCommande.'>'.$row["remise_taux"].' %</td>
 									<td '.$couleurCommande.'>'.$row["total"].' &euro;</td>
 									<td '.$couleurCommande.'>'.$row["total_paye"].' &euro;</td>';
 				}										
 			$affichage_commande_ligne.= '<td '.$couleurCommande.'><a href="rechercheCommande.php?actionCommande=R&editionCommande=S&idcommande='.$row["idcommande"].'" title="Editer le statut"><i class="foundicon-edit"></i></a></td>
 										<td '.$couleurCommande.'><a href="rechercheCommande.php?actionCommande=R&editionCommande=E&idcommande='.$row["idcommande"].'" title="Modification de la commande" ><i class="foundicon-add-doc"></i></a></td>
+										<td '.$couleurCommande.'><a  title="Editer les remises" onclick="remise_taux('.((double)$row["total"]-$row["taxe"]).','.$row["idcommande"].')" ><i class="foundicon-heart"></i></a></td>
 										<td '.$couleurCommande.'><a href="rechercheCommande.php?actionCommande=R&editionCommande=M&idcommande='.$row["idcommande"].'" title="Rappel mail de la commande" ><i class="foundicon-mail"></i></a></td>
 										<td '.$couleurCommande.'><a href="rechercheCommande.php?actionCommande=R&editionCommande=D&idcommande='.$row["idcommande"].'" title="Annuler la commande" onclick="return confirm(\'Etes vous sure de la suppression de cette commande?\');"><i class="foundicon-remove"></i></a></td>
-										<td '.$couleurCommande.'><a  title="Editer les remises" onclick="remise_taux('.((double)$row["total"]-$row["taxe"]).','.$row["idcommande"].')" ><i class="foundicon-edit"></i></a></td>
 										<td '.$couleurCommande.'><a href="rechercheClient.php?actionClient=R&idcommande='.$row["idcommande"].'" title="Voir le compte du client"><i class="foundicon-address-book"></i></a></td>
 										</tr>';
 			}		

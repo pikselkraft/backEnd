@@ -31,6 +31,7 @@ require('includes/fonctions.php');
 	<script src="scripts/js/foundation/foundation.js"></script>
 	<script src="scripts/js/foundation/foundation.topbar.js"></script>
 	<script src="scripts/js/foundation/foundation.tab.js"></script>
+	<script src="scripts/js/foundation/foundation.tooltip.js"></script>
 
 	<style>
 
