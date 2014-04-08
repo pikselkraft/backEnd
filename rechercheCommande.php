@@ -683,6 +683,7 @@ while ($rowTransaction = $resultTransaction->fetch_assoc())
 <script>
 function remise_taux(somme_ht,id){
 	var saisie = prompt("Le total hors taxes s'élève à "+somme_ht+"€, quelle remise (en %) voulez-vous appliquer à cette commande ?");
-	document.location = 'rechercheCommande.php?actionCommande=Z&editionCommande=R&idcommande='+id+'&remise='+saisie;
+	if (saisie!=null)
+		document.location = 'rechercheCommande.php?actionCommande=Z&editionCommande=R&idcommande='+id+'&remise='+saisie;
 }	
 </script>

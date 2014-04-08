@@ -419,7 +419,6 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 				break;
 				
 			case "CR":
-				testVar($row);
 				$affichage_info_client='
 					<form action="rechercheClient.php?actionClient=R&editionClient=A" method="POST">
 						<ul>';
