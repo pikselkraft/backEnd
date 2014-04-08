@@ -12,8 +12,9 @@ require('includes/fonctions.php');
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	
 	<link rel="stylesheet" href="includes/css/foundation.css">
-<!--	<link rel="stylesheet" href="includes/css/datePicker.css">-->
-<!--	<link rel="stylesheet" href="includes/css/calendrier.css">-->
+	<link rel="stylesheet" href="includes/css/datePicker.css">
+	<link rel="stylesheet" href="includes/css/responsive-tables.css">
+<!-- 	<link rel="stylesheet" href="includes/css/calendrier.css"> -->
 	<link rel="stylesheet" href="includes/foundation_icons_general/stylesheets/general_foundicons.css">
 	
 <!--	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">-->
@@ -31,9 +32,34 @@ require('includes/fonctions.php');
 	<script src="scripts/js/foundation/foundation.js"></script>
 	<script src="scripts/js/foundation/foundation.topbar.js"></script>
 	<script src="scripts/js/foundation/foundation.tab.js"></script>
+	<script src="scripts/js/foundation/foundation.alert.js"></script>
 	<script src="scripts/scripts.js"></script><!--  appel des focntions spécifiques -->
 	<style>
+		/**
+		 * A ajouter au fichier foundation + min.css
+		 */
+		
 
+		/**
+		 * input
+		 */
+		
+		.list-none {
+			
+			list-style:none;
+		}
+
+		/**
+		 * msg qui ne s'affiche pas
+		 */
+		
+		.msg-none {
+			display: none;
+		}
+		
+		/**
+		 * datapicker
+		 */
 			a.dp-choose-date {
 				float: left;
 				width: 16px;
@@ -56,6 +82,7 @@ require('includes/fonctions.php');
 				width: 140px;
 				float: left;
 			}
+
 	</style>
 
 </head>

@@ -1,4 +1,4 @@
-fi<?php
+<?php
 require('includes/header.php');
 
 
@@ -68,22 +68,6 @@ $payementMoins30 = $_SESSION['payementMoins30'];
 $payementPlus30  = $_SESSION['payementPlus30'];
 $testCodePromo   = $_SESSION['code-promo'];
 
-/********************************************
-	*	Reprise reservation (session, arr&ecirc;t sur page payement.php.php)
-*********************************************/
-// if(isset($_GET['poursuite']))
-// {
-// 	$repriseResa = $_GET['poursuite'];
-// 	if($repriseResa==2) // par cb
-// 	{
-// 		echo "<div class='msg'><p>Valider votre r&eacute;servation et r&eacute;gler votre accompte via Paypal</p></div>";
-// 		$payementCbComplet = true;
-// 	} else if ($repriseResa==3) // par cheque
-// 		{
-// 			echo "<div class='msg'><p>Envoy&eacute; le cheque pour valider votre r&eacute;servation</p></div>";
-// 			$payementChequeComplet = true;
-// 		}
-// }
 
 /**************************************************/
 /*******GESTION CODE PROMOTION ******
@@ -364,7 +348,7 @@ if((isset($_POST['nb_adulte'])) || (isset($monTab[$resaEncours]['nb_adulte'])))
 
 							if($mysqli) // si insertion commandereserver true
 							{
-								echo "<div class='msg-none'><p>Vous devez valider votre commande pour finaliser votre r&eacute;servation</p></div>";		
+								$message = "<div class='msg-none'><p>Vous devez valider votre commande pour finaliser votre r&eacute;servation</p></div>";		
 								/* insertion idoption et idreservation dans CHOIXOPTION */
 							}
 							else
@@ -409,12 +393,15 @@ if((isset($_POST['nb_adulte'])) || (isset($monTab[$resaEncours]['nb_adulte'])))
 			*	affiche adresse gite (payement par cheque)
 		*/
 ?>
-		<div class="fil-commande">
-			<p>etape 1: s&eacute;lection des dates >> etape 2: connexion >> etape 3: r&eacute;servation >> etape 4: validation</p>
-		</div>	
-		
-		<?= $message; ?>	
+
+<div class="row">
+	<div class="small-11 small-centered columns">	
+		<?= $message; ?>
+	</div>
+</div>	
 	
+<div class="row">
+	<div class="small-11 small-centered columns">
 		<div class="fiche-commande">
 			<h3>Votre Commande</h3>
 				<?php
@@ -540,14 +527,6 @@ if((isset($_POST['nb_adulte'])) || (isset($monTab[$resaEncours]['nb_adulte'])))
 						</tr>
 					</tbody>
 				</table>
-				<?php 
-					if($payementCbComplet==true || $payementChequeComplet==true)
-					{echo "<small>Vous allez payer la totalit&eacute; de la r&eacute;servation except&eacute; la caution.</small>";}
-					else
-					{echo "<small>Vous allez r&eacute;gler l'accompte (30% du tarif de la r&eacute;servation) avec les taxes de s&eacute;jour.</small>";}
-				?>
-				<br />
-				<small>La caution se r&egrave;gle sur place.</small>
 				<?php
 					}
 				} // fin if count montab = 1
@@ -765,34 +744,44 @@ if((isset($_POST['nb_adulte'])) || (isset($monTab[$resaEncours]['nb_adulte'])))
 			}
 		?>
 		</div>
+	</div>
+</div>
 	<!-- </div> -->
 <?php
 		if($payementChequeComplet==true)
 		{
 			?>
-			<div class="fiche-recap-final">
-				<h4>Merci d'envoyer votre ch&egrave;que au:</h4>
-				<div class="liste-adresse">
-					<ul>
-						<li>G&icirc;te le Metzval</li>
-						<li>Port: 06 25 14 37 06</li>
-						<li>7 Rue de la Gare</li>			
-						<li>68380 Metzeral</li>
-					</ul>
+			<div class="row">
+			<div class="small-11 small-centered columns">
+				<div class="fiche-recap-final">
+					<h4>Merci d'envoyer votre ch&egrave;que au:</h4>
+					<div class="liste-adresse">
+						<ul>
+							<li>G&icirc;te le Metzval</li>
+							<li>Port: 06 25 14 37 06</li>
+							<li>7 Rue de la Gare</li>			
+							<li>68380 Metzeral</li>
+						</ul>
+					</div>
+					<p>Un mail de confirmation vous a &eacute;t&eacute; envoy&eacute; (pensez &agrave; v&eacute;rifier vos spam).</p>
 				</div>
-				<p>Un mail de confirmation vous a &eacute;t&eacute; envoy&eacute; (pensez &agrave; v&eacute;rifier vos spam).</p>
 			</div>
-			<?php
-			
-			if($payementCbComplet || $payementChequeComplet) {$sommeRegler = $monTab[$resaEncours]['montantMoins30J'];}
-			else {$sommeRegler = $monTab[$resaEncours]['montantPlus30J'];}
-			
-			require('includes/ink/mailCheque.php');
-			envoiCheque($login,$idCommande,$sommeRegler,$date_debut,$date_fin,MAIL_METZVAL);
+			</div>
+				<?php
+				
+				if($payementCbComplet || $payementChequeComplet) {$sommeRegler = $monTab[$resaEncours]['montantMoins30J'];}
+				else {$sommeRegler = $monTab[$resaEncours]['montantPlus30J'];}
+				
+				require('includes/ink/mailCheque.php');
+				envoiCheque($login,$idCommande,$sommeRegler,$date_debut,$date_fin,MAIL_METZVAL);
 		}
 ?>
 
-<a href="affichTous.php">Retourner sur l'accueil</a>
+<div class="row">
+	<div class="small-11 small-centered columns">
+		<a href="affichTous.php">Retourner sur l'accueil</a>
+	</div>
+</div>
 
 <?php
 	require('includes/footer.php');

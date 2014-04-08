@@ -134,9 +134,7 @@ function correction_debut_semaine ($jour,$cle) {
 		while($gt<=8)
 		 {
 			$idgite=$gt;
-			?>
-			<div class="row">
-				<div class="small-11 small-centered columns">		
+			?>	
 					<?php
 						include('calendrierTous.php');
 					?>
@@ -146,8 +144,6 @@ function correction_debut_semaine ($jour,$cle) {
 		 }
 							 
 		?>
-				</div>
-			</div>	
 </body>
 
 <?php

@@ -63,7 +63,6 @@ $etat=$_GET['etat'];
 			{
 				if  (($row['mp'])==$pass2)
 				{
-					//echo "<div class='msg'>Votre mot de passe est correct</div>";
 					$LoginOk=true;
 					/* ajout du login dans la session */
 					$_SESSION['login']             = $login;
@@ -116,7 +115,7 @@ if(isset($_POST["login"]) and isset($_POST["password"]) and isset($_POST['nom'])
 
 				//insertion dans la db
 				$sql = "INSERT INTO CLIENTS (email,mp,nom,prenom,civilite,date_naissance,cheminot,code_cheminot,region,entreprise,adresse,codepostal,ville,pays,tel,port,creation,newsletter) VALUES ('".$mail."','".$pass."','".$nom."','".$prenom."','".$civilite."','".$naissance."','".$cheminot."','".$cheminotCode."','".$cheminotRegion."','".$entreprise."','".$adresse."','".$codepostal."','".$ville."','".$pays."','".$tel."','".$port."','".$datecrea."','".$news."')";
-				echo $sql;
+				testVar($sql);
 				$mysqli->query($sql);
 				$enreTest=false;
 				
@@ -170,11 +169,9 @@ if(isset($_POST["login"]) and isset($_POST["password"]) and isset($_POST['nom'])
 	$_SESSION['Mesresa'][0]['tarif'] = $monTab[$resaEncours]['tarif'];
 
 ?>
-<div class="fil-commande">
-	<p>etape 1: s&eacute;lection des dates >> etape 2: connexion >> etape 3: r&eacute;servation</p>
-</div>	
-		
-<div class="reservation-content">
+<div class="row">
+	<div class="small-11 small-centered columns">	
+	<div class="reservation-content">
 		<div class="reservation-centre">	
 		<form action="payement.php" method="POST" class="reservation-form" id="register-form">
 		<fieldset>
@@ -275,7 +272,6 @@ if(isset($_POST["login"]) and isset($_POST["password"]) and isset($_POST['nom'])
 						<label for="payementJ-30" id="payementJ-30">Votre moyen de payement :</label><input type="hidden" name="J-30" value="J-30">  <!--	permet test dans payement.php-->
 						<div class="centent-paye-center">
 							<input type="radio" name="payementJ-30" id="payementJ-30" value="1" class="paye-input-payement" required /><label for="payementcbJ-30" id="payementcbJ-30"><span class="txtbold">Carte bancaire</span>&nbsp;&nbsp;&nbsp;<img src="https://www.paypalobjects.com/webstatic/mktg/logo-center/logo_paypal_moyens_paiement_fr.jpg" border="0" alt="PayPal Acceptance Mark" width="25%" height="25%"></label>&nbsp;&nbsp;&nbsp;
-
 							<input type="radio" name="payementJ-30" id="payementJ-30" value="0" class="paye-input-payement" /><label for="payementchequeJ-30" id="payementchequeJ-30"><span class="txtbold">Ch&egrave;que</span>&nbsp;&nbsp;&nbsp;<img src="../../wp-content/uploads/2013/12/cheque-icon.png" alt="cheque-icon" width="6%" height="6%"></label>
 						</div>
 					<?php
@@ -289,7 +285,6 @@ if(isset($_POST["login"]) and isset($_POST["password"]) and isset($_POST['nom'])
 						<div class="centent-paye-center">
 							<input type="radio" name="payementJ+30" id="payementJ+30" value="1" class="paye-input-payement" required /><label for="payementcbJ+30" id="payementcbJ+30"><span class="txtbold">Carte bancaire</span>&nbsp;&nbsp;&nbsp;
 							<img src="https://www.paypalobjects.com/webstatic/mktg/logo-center/logo_paypal_moyens_paiement_fr.jpg" border="0" alt="PayPal Acceptance Mark" width="25%" height="25%"></label>&nbsp;&nbsp;&nbsp;
-
 							<input type="radio" name="payementJ+30" id="payementJ+30" value="0" class="paye-input-payement" /><label for="payementchequeJ+30" id="payementchequeJ+30"><span class="txtbold">Ch&egrave;que</span>&nbsp;&nbsp;&nbsp;
 							<img src="images/cheque-icon.png" alt="cheque-icon" width="6%" height="6%"></label>
 						</div>
@@ -297,7 +292,6 @@ if(isset($_POST["login"]) and isset($_POST["password"]) and isset($_POST['nom'])
 					<?php
 					}
 					?>
-					
 					</span>
 					<span class="label-block">
 						<label for="condition" class="label-inline">Accepter les conditions de vente<input type="checkbox" id="cgv" name="condition" value="1" required /></label>
@@ -306,43 +300,7 @@ if(isset($_POST["login"]) and isset($_POST["password"]) and isset($_POST['nom'])
 		<button type="submit" id="reservation" name="reservation">R&eacute;server</button> <!-- test mode payement sur la page payement.php en fonction du post -->
 	</form>
 	</div>
-
-	<div class="fiche-recap-reservation"> <!-- recapitulatif date, gite et prix -->
-		<div class="fiche-border-sidebar">
-			<h2>R&eacute;capitulatif de votre r&eacute;servation</h2>
-			<ul> <!-- r&eacute;cup&eacute;ration des &eacute;l&eacute;ments de session, stock&eacute;s en d&eacute;but de page -->
-				<hr width="75%" align="center">
-				<li><?php echo "Le g&icirc;te: <span class='txtbold'>".$nomGite."</span>"; ?></li>
-				<hr width="75%" align="center">
-				<li><?php echo "Pour <span class='txtbold'>".$cap.' personnes</span>'; ?></li>
-				<hr width="75%" align="center">
-				<li><?php echo "Du: <span class='txtbold'>".dateFr($date_debut)."</span>"; ?></li>
-				<hr width="75%" align="center">
-				<li><?php echo "Au: <span class='txtbold'>".dateFr($date_fin)."</span>"; ?></li>
-				<hr width="75%" align="center">
-				<li><?php echo "Pour un tarif de <span class='txtbold'>".$tarif2." &euro; </span>"; ?></li>
-				<li>(hors taxe de s&eacute;jour)</li>
-				<hr width="75%" align="center">
-				
-				<?php  
-					$reqimg = 	"SELECT i.url
-								FROM IMAGES i
-								WHERE i.idgite ='".$idgite."'
-								AND i.une=1";
-					$sqlimg = $mysqli->query($reqimg);
-
-					while ($row= $sqlimg->fetch_assoc()) { 	
-						echo '<div class="resa-recap-img">';
-							echo '<img class="miniature" src="../'.utf8_encode($row['url']).'" alt="miniature-gite">' ;
-						echo '</div>';
-					}	
-				?> 
-			</ul>			
-			<ul>
-				<li>G&icirc;te Le Metzval</li>
-				<hr width="75%" align="center">
-			</ul>
-		</div>
-	</div>
 </div>
+</div>
+
 <?php require('includes/footer.php'); ?>
