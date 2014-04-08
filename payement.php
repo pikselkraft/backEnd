@@ -1,10 +1,6 @@
 fi<?php
 require('includes/header.php');
 
-/*
-Template Name: Payement
-Page dynamique formulaire processus de r&eacute;servation
-*/
 
 /**
  * SESSION
@@ -75,19 +71,19 @@ $testCodePromo   = $_SESSION['code-promo'];
 /********************************************
 	*	Reprise reservation (session, arr&ecirc;t sur page payement.php.php)
 *********************************************/
-if(isset($_GET['poursuite']))
-{
-	$repriseResa = $_GET['poursuite'];
-	if($repriseResa==2) // par cb
-	{
-		echo "<div class='msg'><p>Valider votre r&eacute;servation et r&eacute;gler votre accompte via Paypal</p></div>";
-		$payementCbComplet = true;
-	} else if ($repriseResa==3) // par cheque
-		{
-			echo "<div class='msg'><p>Envoy&eacute; le cheque pour valider votre r&eacute;servation</p></div>";
-			$payementChequeComplet = true;
-		}
-}
+// if(isset($_GET['poursuite']))
+// {
+// 	$repriseResa = $_GET['poursuite'];
+// 	if($repriseResa==2) // par cb
+// 	{
+// 		echo "<div class='msg'><p>Valider votre r&eacute;servation et r&eacute;gler votre accompte via Paypal</p></div>";
+// 		$payementCbComplet = true;
+// 	} else if ($repriseResa==3) // par cheque
+// 		{
+// 			echo "<div class='msg'><p>Envoy&eacute; le cheque pour valider votre r&eacute;servation</p></div>";
+// 			$payementChequeComplet = true;
+// 		}
+// }
 
 /**************************************************/
 /*******GESTION CODE PROMOTION ******
@@ -526,12 +522,12 @@ if((isset($_POST['nb_adulte'])) || (isset($monTab[$resaEncours]['nb_adulte'])))
 							</td>
 						</tr>
 						<tr style="border-color:red;">
-							<td><span class="txtbold-red">Reste &agrave; r&eacute;gler avant votre arrivée</span></td>
+							<td><span class="txtbold-red">Reste &agrave; r&eacute;gler avant votre arriv&eacute;e</span></td>
 							<td>
 								<?php 
 									if($payementCbComplet==true || $payementChequeComplet==true)
 									{
-										$reste = "La caution lors de votre arrivée.";
+										$reste = "La caution lors de votre arriv&eacute;e.";
 										echo '<span class="txtbold-red">'.$reste.'</span>';
 									}
 									else
@@ -638,7 +634,7 @@ if((isset($_POST['nb_adulte'])) || (isset($monTab[$resaEncours]['nb_adulte'])))
 								<?php 
 									if($payementCbComplet==true || $payementChequeComplet==true)
 									{
-										$reste ="La caution lors de votre arrivée.";
+										$reste ="La caution lors de votre arriv&eacute;e.";
 										echo '<span class="txtbold-red">'.$reste.' &euro; </span>';
 									}
 									else
@@ -651,14 +647,7 @@ if((isset($_POST['nb_adulte'])) || (isset($monTab[$resaEncours]['nb_adulte'])))
 						</tr>
 					</tbody>
 				</table>
-				<?php 
-					if($payementCbComplet==true || $payementChequeComplet==true)
-					{echo "<small>Vous allez payer la totalit&eacute; de la r&eacute;servation except&eacute; la caution.</small>";}
-					else
-					{echo "<small>Vous allez r&eacute;gler l'accompte (30% du tarif de la r&eacute;servation) avec les taxes de s&eacute;jour.</small>";}
-				?>
-				<br />
-				<small>La caution se r&egrave;gle sur place.</small>
+
 				<?php
 					/**
 						* requete afficahge resa
@@ -769,7 +758,7 @@ if((isset($_POST['nb_adulte'])) || (isset($monTab[$resaEncours]['nb_adulte'])))
 						<input name="custom" type="hidden" value="<?php echo $idClient ?>" />
 						<input name="invoice" type="hidden" value="<?php echo $idCommande ?>" />
 						<input type="submit" value="Valider votre r&eacute;servation" class="btn-paypal" />
-						<a href="?page_id=205&etat=E">Modifier votre r&eacute;servation</a>
+						<!-- <a href="?page_id=205&etat=E">Modifier votre r&eacute;servation</a> -->
 				</fieldset>
 			</form>
 		<?php
@@ -792,23 +781,19 @@ if((isset($_POST['nb_adulte'])) || (isset($monTab[$resaEncours]['nb_adulte'])))
 					</ul>
 				</div>
 				<p>Un mail de confirmation vous a &eacute;t&eacute; envoy&eacute; (pensez &agrave; v&eacute;rifier vos spam).</p>
-				<p>Votre r&eacute;servation sera effective au moment de la remise du ch&egrave;que</p>
-				<br />
-				<small>Vous allez r&eacute;gler l'accompte (30% du tarif de la r&eacute;servation) avec les taxes de s&eacute;jour.</small>
-				<small>La caution se r&egrave;gle sur place.</small><br />
-				<small>En cas de modification de votre r&eacute;servation, contactez le g&icirc;te, merci.</small>
-				
-				<p><a href="http://www.gite-lemetzval.fr/?page_id=167">Découvrez la région Alsace en parcourant nos articles</a></p>
 			</div>
 			<?php
 			
 			if($payementCbComplet || $payementChequeComplet) {$sommeRegler = $monTab[$resaEncours]['montantMoins30J'];}
 			else {$sommeRegler = $monTab[$resaEncours]['montantPlus30J'];}
 			
-			require('mailCheque.php');
+			require('includes/ink/mailCheque.php');
 			envoiCheque($login,$idCommande,$sommeRegler,$date_debut,$date_fin,MAIL_METZVAL);
 		}
 ?>
+
+<a href="affichTous.php">Retourner sur l'accueil</a>
+
 <?php
 	require('includes/footer.php');
 ?>

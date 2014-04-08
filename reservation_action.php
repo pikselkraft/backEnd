@@ -2,13 +2,6 @@
 require('includes/header.php');
 require('includes/ink/mailBienvenu.php');
 
-
-//formulaire de r&eacute;servation g&icirc;te le Metzval
-//
-//version: 1.0
-//
-//Template Name: Reservation
-
 /**
  * SESSION
  * GESTION SESSION
@@ -18,7 +11,6 @@ require('includes/ink/mailBienvenu.php');
  * V&eacute;rification donn&eacute;es connexion
  * Calcul du tarif en enfonction du statut
  * Envoi des donn&eacute;es de payement (mode payement/nombre enfants, adultes) --> payement.php
- *
  * Creation: 06/11/2013/ 
 */
 
@@ -28,17 +20,13 @@ require('includes/ink/mailBienvenu.php');
 $resaEncours      = $_SESSION['resaEncours'];
 $monTab           = $_SESSION['Mesresa'];
 $resaPrecedente   = $resaEncours - 1 ;
-$_SESSION['test'] = true;
-//testVar2($monTab['0'],"Recapitulatif des resas1","Recapitulatif des resas indice 0");
-//testVar2($monTab['1'],"Recapitulatif des resas2","Recapitulatif des resas indice 1");
-
 
 /* r&eacute;cup&eacute;ration post formulaire.php */
 
 if(isset($_POST['login'])) { /* recuperation du login*/
 	
-	$login = strtolower(secInput($_POST['login']));
-	$monTab[0]['login']=$login;
+	$login              = strtolower(secInput($_POST['login']));
+	$monTab[0]['login'] = $login;
 }
 
 /* stockage des variables du post du formulaire.php */
@@ -47,13 +35,6 @@ $date_fin 	= $monTab[$resaEncours]['date_fin'];
 $idgite 	= $monTab[$resaEncours]['idgite'];
 $nomGite 	= $monTab[$resaEncours]['nom'];
 $tarif 		= $monTab[$resaEncours]['tarif'];
-
-/* ajout du login dans la session */
-$_SESSION['login'] = $login;
-$monTab[$resaEncours]['login'] = $login;
-$_SESSION['Mesresa']=$monTab;
-//testVar2($monTab,"test monTab","monTab");
-
 
 /* capacite du gite -> test du nombre adultes et enfants conforment */
 $cap = $_SESSION['gite_tab']['capacite'];
@@ -69,32 +50,44 @@ if(isset($_GET['poursuite']))
 	{echo "<div class='msg'><p>Saisissez &agrave; nouveau vos informations pour finaliser votre r&eacute;servation</p></div>";}
 }
 
-	if(isset($_POST["login"]) and isset($_POST["password"]) and isset($_POST['nom']))
+$LoginOk = false;
+$etat=$_GET['etat'];
+	if(isset($_POST["login"]) and isset($_POST["password"]) and isset($_POST['connexion']))
 	{
 		$login     	= strtolower(secInput($_POST['login']));
-		$pass2      = Cryptage($_POST["password"], $Clef) ;
-		$pass2		= utf8_encode($pass2);
-
+		$pass2      = md5($_POST["password"]);
 		$sql = "SELECT nom,prenom,mp,email FROM CLIENTS WHERE email = '".$login."'";
 		$result = $mysqli->query($sql);
 
 			while ($row = $result->fetch_Assoc()) 
 			{
-	
-				if  (utf8_decode($row['MP'])==$pass2)
+				if  (($row['mp'])==$pass2)
 				{
-						echo "<div class='msg'>Votre mot de passe est correct</div>";
-						$LoginOk=true;
+					//echo "<div class='msg'>Votre mot de passe est correct</div>";
+					$LoginOk=true;
+					/* ajout du login dans la session */
+					$_SESSION['login']             = $login;
+					$monTab[$resaEncours]['login'] = $login;
+					$_SESSION['Mesresa']           = $monTab;
+					$_SESSION['test'] = true;
+
 				}
 				else 
 				{		
-					echo "<div class='msg-error'><p>Votre mot de passe est incorrect, merci de recommencer</p></div>"; 
+					echo "<div class='msg-error'><p>Votre mot de passe est incorrect, merci de recommencer</p></div>";
+					?>
+					<script>
+						alert("Votre mot de passe est incorrect, merci de recommencer");
+						location.replace("?page_id=192");
+					</script>
+					<?php
+					exit();
 				}
 			}
-
-		$LoginOk=false;
-		$Clef = "Matteo1234567890";
-		$etat=$_GET['etat'];	
+	}
+if(isset($_POST["login"]) and isset($_POST["password"]) and isset($_POST['nom']))
+{
+		$pass2 = md5($_POST["password"]);
 		if($etat==2)
 		{
 			if (isset($_POST['nom']) && isset($_POST['prenom']) && isset($_POST['naissance']) ) 
@@ -102,26 +95,28 @@ if(isset($_GET['poursuite']))
 			{ 
 				
 				// r&eacute;cup&eacute;ration des donn&eacute;es
-				$mail= strtolower(secInput($_POST['login']));
-				$pass =$_POST['password'];
-				$nom= secInput($_POST['nom']);
-				$prenom= secInput($_POST['prenom']);
-				$civilite= secInput($_POST['civilite']);
-				$naissance= secInput($_POST['naissance']);
-				$cheminot= secInput($_POST['cheminot']);
+				$mail           = strtolower(secInput($_POST['login']));
+				$pass           = $pass2;
+				$nom            = secInput($_POST['nom']);
+				$prenom         = secInput($_POST['prenom']);
+				$civilite       = secInput($_POST['civilite']);
+				$naissance      = secInput($_POST['naissance']);
+				$cheminot       = secInput($_POST['cheminot']);
 				$cheminotRegion = $_POST['ce_cheminot'];
-				$cheminotCode = secInput($_POST['region']);
-				$entreprise= secInput($_POST['entreprise']);
-				$adresse= secInput($_POST['adresse']);
-				$codepostal= secInput($_POST['codepostal']);
-				$ville= secInput($_POST['ville']);
-				$pays= secInput($_POST['pays']);
-				$tel= secInput($_POST['tel']);
-				$port= secInput($_POST['port']);
-				$datecrea=date("Y-m-d H:i:s");
-				$news= secInput($_POST['news']);
+				$cheminotCode   = secInput($_POST['region']);
+				$entreprise     = secInput($_POST['entreprise']);
+				$adresse        = secInput($_POST['adresse']);
+				$codepostal     = secInput($_POST['codepostal']);
+				$ville          = secInput($_POST['ville']);
+				$pays           = secInput($_POST['pays']);
+				$tel            = secInput($_POST['tel']);
+				$port           = secInput($_POST['port']);
+				$datecrea       = date("Y-m-d H:i:s");
+				$news           = secInput($_POST['news']);
+
 				//insertion dans la db
 				$sql = "INSERT INTO CLIENTS (email,mp,nom,prenom,civilite,date_naissance,cheminot,code_cheminot,region,entreprise,adresse,codepostal,ville,pays,tel,port,creation,newsletter) VALUES ('".$mail."','".$pass."','".$nom."','".$prenom."','".$civilite."','".$naissance."','".$cheminot."','".$cheminotCode."','".$cheminotRegion."','".$entreprise."','".$adresse."','".$codepostal."','".$ville."','".$pays."','".$tel."','".$port."','".$datecrea."','".$news."')";
+				echo $sql;
 				$mysqli->query($sql);
 				$enreTest=false;
 				
@@ -129,17 +124,16 @@ if(isset($_GET['poursuite']))
 				  if($mysqli)
 				  {
 				  	echo "<div class='msg'><p>L'inscription s'est bien d&eacute;roul&eacute;e</p></div>" ;   // redirection vers page r&eacute;capitulative (post) de la r&eacute;servation et permet la connexion
-				  	envoiBienvenu($mail);
+				  	//envoiBienvenu($mail);
 				  } 
 				  else 
 				  {echo "<div class='msg-error'><p>Erreur, merci de vous enregistrer &agrave; nouveau</p></div>";}
 			}
 			else
-			{echo "<div class='msg-error'><p>Veuillez remplir le formulaire, merci'</p></div>";}
+			{echo "<div class='msg-error'><p>Veuillez remplir le formulaire, merci</p></div>";}
 		} // fin if etat = 2
 	} // fin if	isset post
 //} // fin if test rafraichissement	
-
 ?>
 
 <?php 	
@@ -147,16 +141,15 @@ if(isset($_GET['poursuite']))
 		* gestion cheminot ou non et tarif 
 */
 				
-	$statutCheminot='EX';
-	$reqCheminot = "SELECT c.cheminot,c.code_cheminot,c.region FROM CLIENTS c WHERE email='".$login."'"; // requete boolean cheminot
+	$statutCheminot ='EX';
+	$reqCheminot    = "SELECT c.cheminot,c.code_cheminot,c.region FROM CLIENTS c WHERE email='".$login."'"; // requete boolean cheminot
 	$resultCheminot = $mysqli->query($reqCheminot);
 
 	while ($ressqlCheminot = $resultCheminot->fetch_assoc()) /* parcours tableau r&eacute;cup&eacute;ration statut, region */
 	{
-		$testCheminot=$ressqlCheminot['cheminot'];
-		$regionCheminot=$ressqlCheminot['region']; 
+		$testCheminot   =$ressqlCheminot['cheminot'];
+		$regionCheminot =$ressqlCheminot['region']; 
 	}
-
 	if($testCheminot) // si statut cheminot = 1
 	{
 		if($regionCheminot) // si statut codecheminot = 1 alors t.statut_client ='".$statutCheminot'" -> cheminot_region (calculTarif)
@@ -172,9 +165,9 @@ if(isset($_GET['poursuite']))
 	{
 			$statutCheminot='EX';
 	}
-	$tarif2 = calculTarif($date_debut,$date_fin,$idgite,$statutCheminot); 
-	$monTab[$resaEncours]['tarif']=	$tarif2;
-	$_SESSION['Mesresa'][0]['tarif']= $monTab[$resaEncours]['tarif'];
+	$tarif2                          = calculTarif($date_debut,$date_fin,$idgite,$statutCheminot); 
+	$monTab[$resaEncours]['tarif']   =	$tarif2;
+	$_SESSION['Mesresa'][0]['tarif'] = $monTab[$resaEncours]['tarif'];
 
 ?>
 <div class="fil-commande">
@@ -183,7 +176,7 @@ if(isset($_GET['poursuite']))
 		
 <div class="reservation-content">
 		<div class="reservation-centre">	
-		<form action="payement.php" method="POST" class="reservation-form">
+		<form action="payement.php" method="POST" class="reservation-form" id="register-form">
 		<fieldset>
 			<legend>Votre R&eacute;servation</legend>
 				<span class="label-block">
@@ -194,41 +187,41 @@ if(isset($_GET['poursuite']))
 				</span>
 				<span class="label-block">
 					<label id="message-capacite">La capacit&eacute; maximum du g&icirc;te s&eacute;lectionn&eacute; est de <span class="txtbold"><?= $cap;?> personnes.</span></label>
-				<span class="label-block">
-					<label for=nb_adulte>Nombre d'adultes :</label>
-					<input id=nb_adulte name=nb_adulte type=number min=0 max="<?= $cap;?>" value=0 required>
-		
-					<label for=nb_enfantTotal>Nombre d'enfants:</label>
-					<input id=nb_enfantTotal name=nb_enfantTotal type=number min=0 max="<?= $cap;?>" value=0 required>
-		
-					<label for=nb_enfant>Enfants de plus 13 ans :</label>
-					<input id=nb_enfant name=nb_enfant type=number  min=0 max="<?= $cap;?>" value=0 required>
+					<span class="label-block">
+						<label for=nb_adulte>Nombre d'adultes :</label>
+						<input id=nb_adulte name=nb_adulte type=number min=0 max="<?= $cap; ?>" value=0 required>
+					</span>
+					<span class="label-block">
+						<label for=nb_enfantTotal>Nombre d'enfants:</label>
+						<input id=nb_enfantTotal name=nb_enfantTotal type=number min=0 max="<?= $cap; ?>" value=0 required>
+			
+						<label for=nb_enfant>Enfants de plus 13 ans :</label>
+						<input id=nb_enfant name=nb_enfant type=number  min=0 max="<?= $cap; ?>" value=0 required>
+					</span>
 				</span>
-				</span>
-				<span class="label-block">
-					<label for="choix-option" >Choix des options:</label>
+				<!-- <span class="label-block">
+					<label for="choix-option" >Choix des options:</label> -->
 					<?php
-					$reqOption = "SELECT idoption, denomination, option_tarif FROM OPTIONRESA"; // requ&ecirc;te de la liste des options		
-					$sqlOption=$mysqli->query($reqOption);
+					// $reqOption = "SELECT idoption, denomination, option_tarif FROM OPTIONRESA"; // requ&ecirc;te de la liste des options		
+					// $sqlOption=$mysqli->query($reqOption);
 							
-					while ($resqlOption=$sqlOption->fetch_Assoc()) // affichage liste dynamiquement avec value correspondant &agrave; l'idoption
-					{
-						$num_option=$resqlOption['idoption'];
-						$nom_option=$resqlOption['denomination'];
-						$prix_option=$resqlOption['option_tarif'];
+					// while ($resqlOption=$sqlOption->fetch_Assoc()) // affichage liste dynamiquement avec value correspondant &agrave; l'idoption
+					// {
+					// 	$num_option  =$resqlOption['idoption'];
+					// 	$nom_option  =$resqlOption['denomination'];
+					// 	$prix_option =$resqlOption['option_tarif'];
 						
-						echo '<span class="paye-label"><input class="paye-input" type="checkbox" name="option[]" value='.$num_option.' />'.ucfirst($nom_option).' ('.$prix_option.' euros)</span>&nbsp;&nbsp;&nbsp;';
-					}
+					// 	echo '<span class="paye-label"><input class="paye-input" type="checkbox" name="option[]" value='.$num_option.' />'.ucfirst($nom_option).' ('.$prix_option.' euros)</span>&nbsp;&nbsp;&nbsp;';
+					// }
 					?>
-				</span>
+		<!-- 		</span> -->
 		</fieldset>
 		<fieldset>
 		<legend>Modalit&eacute;s de payement et r&eacute;servation</legend>
 				<?php
 				if($idgite==1)
 				{
-					echo "<div class='msg'><p>Vous ne pouvez r&eacute;server un autre g&icirc;te en m&ecirc;me temsp que le centre complet </p></div><br />";
-					echo "<div class='msg'><p>Pour r&eacute;servez un autre g&icirc;te pendant une autre date, validez cette r&eacute;servation ou contactez le g&icirc;te par t&eacute;l&eacute;phone</p></div>";
+					echo "";
 				}
 				else {
 				?>
@@ -247,13 +240,14 @@ if(isset($_GET['poursuite']))
 						<select id="gite-select" name="gite-select"> 
 					<?php
 							$reqGite = "SELECT idgite,nom, capacite FROM GITE WHERE idgite!=1 AND idgite !=".$idgite;
-							$sqlGite=$mysqli->query($reqGite);
+							$sqlGite =$mysqli->query($reqGite);
 
 							while ($resqlGite=$sqlGite->fetch_Assoc()) 
 							{
-								$idGite = $resqlGite['idgite'];
-								$nomGite = $resqlGite['nom'];
+								$idGite       = $resqlGite['idgite'];
+								$nomGite      = $resqlGite['nom'];
 								$capaciteGite = $resqlGite['capacite'];
+								
 								/* liste des g&icirc;te, value = idgite s&eacute;lectionn&eacute; */
 								echo '<option value='.$idGite.' id="gite-select2" name="gite-select2" >'.$nomGite.' ('.$capaciteGite.' personnes)</option>';	
 							}
@@ -263,9 +257,8 @@ if(isset($_GET['poursuite']))
 					</span>
 					
 					<span class="label-block">
-						<label for='label-code-promo' id='label-code-promo'>Si vous avez un code promotion: </label><input type="text" name="code-promo" class="paye-input" value="XXXXXXXX" size="10" id="code-promo">
+						<label for='label-code-promo' id='label-code-promo'>Si vous avez un code promotion: </label><input type="text" name="code-promo" class="paye-input" size="10" id="code-promo">
 					</span>		
-
 
 					<span class="label-block">
 						<p id="information-resa">Vous serez redirig&eacute; vers la page du g&icirc;te s&eacute;lectionn&eacute;, votre r&eacute;servation en cours sera r&eacute;gl&eacute;e au moment de la validation de votre prochaine r&eacute;servation</p>
@@ -279,11 +272,11 @@ if(isset($_GET['poursuite']))
 						$testCb = true; //	permet test dans payement.php
 					?>
 						
-						<label for=payementJ-30 id=payementJ-30>Votre moyen de payement :</label><input type="hidden" name="J-30" value="J-30">  <!--	permet test dans payement.php-->
+						<label for="payementJ-30" id="payementJ-30">Votre moyen de payement :</label><input type="hidden" name="J-30" value="J-30">  <!--	permet test dans payement.php-->
 						<div class="centent-paye-center">
-							<input type="radio" name="payementJ-30" id="payementJ-30" value="1" class="paye-input-payement" /><label for="payementcbJ-30" id="payementcbJ-30"><span class="txtbold">Carte bancaire</span>&nbsp;&nbsp;&nbsp;<img src="https://www.paypalobjects.com/webstatic/mktg/logo-center/logo_paypal_moyens_paiement_fr.jpg" border="0" alt="PayPal Acceptance Mark" width="25%" height="25%"></label>&nbsp;&nbsp;&nbsp;
+							<input type="radio" name="payementJ-30" id="payementJ-30" value="1" class="paye-input-payement" required /><label for="payementcbJ-30" id="payementcbJ-30"><span class="txtbold">Carte bancaire</span>&nbsp;&nbsp;&nbsp;<img src="https://www.paypalobjects.com/webstatic/mktg/logo-center/logo_paypal_moyens_paiement_fr.jpg" border="0" alt="PayPal Acceptance Mark" width="25%" height="25%"></label>&nbsp;&nbsp;&nbsp;
 
-							<input type="radio" name="payementJ-30" id="payementJ-30" value="0" class="paye-input-payement"/><label for="payementchequeJ-30" id="payementchequeJ-30"><span class="txtbold">Ch&egrave;que</span>&nbsp;&nbsp;&nbsp;<img src="wp-content/themes/twentythirteen_child/images/cheque-icon.png" alt="cheque-icon" width="6%" height="6%"></label>
+							<input type="radio" name="payementJ-30" id="payementJ-30" value="0" class="paye-input-payement" /><label for="payementchequeJ-30" id="payementchequeJ-30"><span class="txtbold">Ch&egrave;que</span>&nbsp;&nbsp;&nbsp;<img src="../../wp-content/uploads/2013/12/cheque-icon.png" alt="cheque-icon" width="6%" height="6%"></label>
 						</div>
 					<?php
 					}
@@ -294,19 +287,20 @@ if(isset($_GET['poursuite']))
 					
 						<label for="payementJ+30" id="payementJ+30">Votre moyen de payement :</label><input type="hidden" name="J+30" id="J+30" value="J+30" class="paye-input" /> <!--	permet test dans payement.php-->
 						<div class="centent-paye-center">
-							<input type="radio" name="payementJ+30" id="payementJ+30" value="1" class="paye-input-payement" /><label for="payementcbJ+30" id="payementcbJ+30"><span class="txtbold">Carte bancaire</span>&nbsp;&nbsp;&nbsp;
+							<input type="radio" name="payementJ+30" id="payementJ+30" value="1" class="paye-input-payement" required /><label for="payementcbJ+30" id="payementcbJ+30"><span class="txtbold">Carte bancaire</span>&nbsp;&nbsp;&nbsp;
 							<img src="https://www.paypalobjects.com/webstatic/mktg/logo-center/logo_paypal_moyens_paiement_fr.jpg" border="0" alt="PayPal Acceptance Mark" width="25%" height="25%"></label>&nbsp;&nbsp;&nbsp;
 
-							<input type="radio" name="payementJ+30" id="payementJ+30" value="0" class="paye-input-payement"/><label for="payementchequeJ+30" id="payementchequeJ+30"><span class="txtbold">Ch&egrave;que</span>&nbsp;&nbsp;&nbsp;
-							<img src="wp-content/themes/twentythirteen_child/images/cheque-icon.png" alt="cheque-icon" width="6%" height="6%"></label>
-						</div
+							<input type="radio" name="payementJ+30" id="payementJ+30" value="0" class="paye-input-payement" /><label for="payementchequeJ+30" id="payementchequeJ+30"><span class="txtbold">Ch&egrave;que</span>&nbsp;&nbsp;&nbsp;
+							<img src="images/cheque-icon.png" alt="cheque-icon" width="6%" height="6%"></label>
+						</div>
 				
 					<?php
 					}
 					?>
-					<p>Pour une réservation dans moins de 30 jours, vous payez la totalité (avec les taxes), excepté la caution.</p>
-					<p>Pour une réservation dans plus de 30 jours, vous payez un accompte (30% de la totalité avec les taxes), excepté la caution.</p>
 					
+					</span>
+					<span class="label-block">
+						<label for="condition" class="label-inline">Accepter les conditions de vente<input type="checkbox" id="cgv" name="condition" value="1" required /></label>
 					</span>
 		</fieldset>
 		<button type="submit" id="reservation" name="reservation">R&eacute;server</button> <!-- test mode payement sur la page payement.php en fonction du post -->
@@ -333,18 +327,16 @@ if(isset($_GET['poursuite']))
 				<?php  
 					$reqimg = 	"SELECT i.url
 								FROM IMAGES i
-								WHERE i.idgite =".$idgite."
+								WHERE i.idgite ='".$idgite."'
 								AND i.une=1";
-
 					$sqlimg = $mysqli->query($reqimg);
 
 					while ($row= $sqlimg->fetch_assoc()) { 	
-
 						echo '<div class="resa-recap-img">';
-							echo '<img class="miniature" src="'.utf8_encode($row['url']).'" alt="miniature-gite">' ;
+							echo '<img class="miniature" src="../'.utf8_encode($row['url']).'" alt="miniature-gite">' ;
 						echo '</div>';
 					}	
-								?> 
+				?> 
 			</ul>			
 			<ul>
 				<li>G&icirc;te Le Metzval</li>
@@ -353,5 +345,4 @@ if(isset($_GET['poursuite']))
 		</div>
 	</div>
 </div>
-<a href="sessionReset.php">Supprimer les r&eacute;servation en cours</a>
 <?php require('includes/footer.php'); ?>
