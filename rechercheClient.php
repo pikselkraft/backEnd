@@ -98,7 +98,9 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 		}
 		else if ($editionClient=='A') {
 		
-				$email=$_POST["email"]; // recuperation email
+				$email=strtolower($_POST["email"]); // recuperation email
+				if (empty($email))
+					$email = "aucun";
 				
 				$newPass = chaineAleatoire(8); // creation d'un mot de passe
 			
@@ -417,138 +419,110 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 				break;
 				
 			case "CR":
-			
+				testVar($row);
 				$affichage_info_client='
 					<form action="rechercheClient.php?actionClient=R&editionClient=A" method="POST">
 						<ul>';
 					$affichage_info_client.='
-							<li>
-								<label for="nom">Nom : 
-									<input id="nom" name="nom" type="text" value="'.$row["nom"].'"'  .$modif. '>
-								</label></li>
-							<li>
-								<label for="prenom">Pr�nom : 
-									<input id="prenom" name="prenom" type="text" value="'.$row["prenom"].'"'.$modif.'>
-								</label>
-							</li>
-							<li>
-								<label for="entreprise">Entreprise : 
-									<input id="entreprise" name="entreprise" type="text" value="'.$row["entreprise"].'"'  .$modif. '>
-								</label>
-							</li>
-							<li>
-								<label for="adresse">Adresse : 
-									<input id="Adresse" name="Adresse" type="text" value="'.$row["Adresse"].'"'  .$modif. '>
-								</label>
-							</li>
-							<li>
-								<label for="codepostal">Codepostal : 
-									<input id="codepostal" name="codepostal" type="text" value="'.$row["codepostal"].'"'  .$modif. '>
-								</label>							</li>
-							<li>
-								<label for="ville">Ville :
-									<input id="ville" name="ville" type="text" value="'.$row["ville"].'"'  .$modif. '>
-								</label>
-							</li>
-							<li>
-								<label for="pays">Pays : 
-									<input id="pays" name="pays" type="text" value="'.$row["pays"].'"'  .$modif. '>
-								</label>
-							</li>
-							<li>
-								<label for="tel">Tel : 
-									<input id="tel" name="tel" type="text" value="'.$row["tel"].'"'  .$modif. '>
-								</label>
-							</li>
-							<li>
-								<label for="port">Portable : 
-									<input id="port" name="port" type="text" value="'.$row["port"].'"'  .$modif. '>
-								</label>
-							</li>
-							<li><label for="email">Email : 
-									<input id="email" name="email" type="text" value="'.$row["email"].'"'  .$modif. '>
-								</label>
-							</li>
-							<li>
-								<label for="date_naissance">Date naissance : 
-									<input id="date_naissance" name="date_naissance" type="date" value="'.$row["date_naissance"].'"'  .$modif. '>
-								</label>
-							</li>
-							<li>
-								<label for="creation">Date cr�ation: 
-									<input id="creation" name="creation" type="text" value="'.date_format(date_create($row["creation"]),'d-m-Y H:i:s').'"'  .$modif. '>
-								</label>
-							</li>
-
-							<li>
-								<label for="cheminot">Cheminot : 
-									<select name="cheminot">';
-									if (((int)$row["cheminot"])==1) 
-									{
-										$affichage_info_client.='<option selected="selected" value="'.$row["cheminot"].'">Oui</option>
-																<option  value="0">Non</option>';
-									}
-									else							
-									{
-										$affichage_info_client.='<option selected="selected" value="'.$row["statut"].'">Non</option>
-																<option  value="1">Oui</option>';
-									}
-									$affichage_info_client.='</select>
-								</label>
-							</li>
-
-							<li>
-								<label for="code_cheminot">N� CP : 
-									<input id="code_cheminot" name="code_cheminot" type="text" value="'.$row["code_cheminot"].'"'  .$modif. '>
-								</label>
-							</li>
-							<li>
-								<label for="region">R�gion : 
-									<select name="region">';
-
-									if (((int)$row["region"])==1) 
-									{
-										$affichage_info_client.='<option selected="selected" value="'.$row["region"].'">Oui</option>
-																<option  value="0">Non</option>';
-									}
-									else							
-									{
-										$affichage_info_client.='<option selected="selected" value="'.$row["region"].'">Non</option>
-																<option  value="1">Oui</option>';
-									}
-									$affichage_info_client.='
-									</select>
-								</label>
-							</li>
-
-							<li>
-								<label for="newsletter">Newsleters ';
-
-									$affichage_info_client.='<select name="newsletter">';
-									if (((int)$row["newsletter"])==1) 
-									{
-										$affichage_info_client.='<option selected="selected" value="'.$row["newsletter"].'">Oui</option>
-																<option  value="0">Non</option>';
-									}
-									else							
-									{
-										$affichage_info_client.='<option selected="selected" value="'.$row["newsletter"].'">Non</option>
-																<option  value="Oui">Oui</option>';
-									}
-									$affichage_info_client.='
-									</select>
-								</label>
-							</li>
 						<li>
-							<label for="commentaire">Commentaire 
-								<input id="commentaire" name="commentaire" type="text" value="'.$row["commentaire"].'"'  .$modif. '>
+							<label for="nom">Nom : 
+								<input id="nom" name="nom" type="text"'  .$modif. '>
+							</label></li>
+						<li>
+							<label for="prenom">Pr�nom : 
+								<input id="prenom" name="prenom" type="text"'.$modif.'>
 							</label>
 						</li>
 						<li>
-							<input type="submit" value="Ajouter le client">
+							<label for="entreprise">Entreprise : 
+								<input id="entreprise" name="entreprise" type="text"'  .$modif. '>
+							</label>
+						</li>
+						<li>
+							<label for="adresse">Adresse : 
+								<input id="Adresse" name="Adresse" type="text"'  .$modif. '>
+							</label>
+						</li>
+						<li>
+							<label for="codepostal">Codepostal : 
+								<input id="codepostal" name="codepostal" type="text"'  .$modif. '>
+							</label>							</li>
+						<li>
+							<label for="ville">Ville :
+								<input id="ville" name="ville" type="text"'  .$modif. '>
+							</label>
+						</li>
+						<li>
+							<label for="pays">Pays : 
+								<input id="pays" name="pays" type="text"'  .$modif. '>
+							</label>
+						</li>
+						<li>
+							<label for="tel">Tel : 
+								<input id="tel" name="tel" type="text"'  .$modif. '>
+							</label>
+						</li>
+						<li>
+							<label for="port">Portable : 
+								<input id="port" name="port" type="text"'  .$modif. '>
+							</label>
+						</li>
+						<li><label for="email">Email : 
+								<input id="email" name="email" type="text" placeholder="Laissez ce champ vide si le client n\'a pas d\'adresse email"'  .$modif. '>
+							</label>
+						</li>
+						<li>
+							<label for="date_naissance">Date naissance : 
+								<input id="date_naissance" name="date_naissance" type="date"'  .$modif. '>
+							</label>
+						</li>
+						<li>
+							<label for="creation">Date cr�ation: 
+								<input id="creation" name="creation" type="text"'  .$modif. '>
+							</label>
+						</li>
+						
+						<li>
+							<label for="cheminot">Cheminot : 
+								<select name="cheminot">
+									<option value="1">Oui</option>
+									<option selected="selected" value="0">Non</option>
+								</select>
+							</label>
+						</li>
+						
+						<li>
+							<label for="code_cheminot">N� CP : 
+								<input id="code_cheminot" name="code_cheminot" type="text"'  .$modif. '>
+							</label>
+						</li>
+						<li>
+							<label for="region">R�gion : 
+								<select name="region">
+									<option selected="selected" value="1">Oui</option>
+									<option value="0">Non</option>
+								</select>
+							</label>
+						</li>
+					
+						<li>
+							<label for="newsletter">Newsleters
+								<select name="newsletter">
+									<option selected="selected" value="1">Oui</option>
+									<option value="0">Non</option>
+								</select>
+							</label>
+						</li>
+						<li>
+							<label for="commentaire">Commentaire 
+								<input id="commentaire" name="commentaire" type="text"'  .$modif. '>
+							</label>
+						</li>
+						<li>
+							<input type="submit" value="Modifier">
 						</li>
 					</form>
-				</ul>';	
+				</ul>';		
 					
 				break;	
 	}
@@ -616,7 +590,7 @@ $affichage_recherche.='<a href="rechercheClient.php?actionClient=CR" class="butt
 	<div class="row">
 		<div class="large-12 columns">
 			<div class="panel">
-			<h2>Message</h2>
+			<h2>Recherche</h2>
 				<?= $affichage_recherche; ?>
 				<?= $MessageAction; ?>
 				<?= $avertissementSuppression?>
