@@ -25,9 +25,9 @@ require('includes/ink/mailBienvenu.php');
 /**************************************************/
 /******* SESSION **************************
 /************************************************/
-$resaEncours = $_SESSION['resaEncours'];
-$monTab=$_SESSION['Mesresa'];
-$resaPrecedente = $resaEncours - 1 ;
+$resaEncours      = $_SESSION['resaEncours'];
+$monTab           = $_SESSION['Mesresa'];
+$resaPrecedente   = $resaEncours - 1 ;
 $_SESSION['test'] = true;
 //testVar2($monTab['0'],"Recapitulatif des resas1","Recapitulatif des resas indice 0");
 //testVar2($monTab['1'],"Recapitulatif des resas2","Recapitulatif des resas indice 1");

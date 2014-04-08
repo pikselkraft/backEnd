@@ -248,9 +248,10 @@
 		
 	</script>
 
+ 	
  
  <?php
- 	deco();
+ 	deco(); // deconnexion de la DB
  ?>
 
 </body>

@@ -232,7 +232,7 @@ function calculTarif ($date_debut,$date_fin,$idgite,$statutCheminot)  // CALCUL 
 			else
 		   {
 				$nbBs++; 
-			  	var_dump($nbBs);   
+			  	//var_dump($nbBs);   
 		   }
 		 $date2= date('Y-m-d', strtotime($date2." +1 day")); // INCREMENTATION EN FORMAT CHAINE MAIS VARIABLE AU FORMAT DATE
 		
@@ -250,7 +250,7 @@ function calculTarif ($date_debut,$date_fin,$idgite,$statutCheminot)  // CALCUL 
 	else {
 		$reqTarif.= " AND t.statut_client ='EX'";	// sinon statut exterieur
 	}
-	echo $reqTarif ;
+	//echo $reqTarif ;
 	$sqlTarif = $mysqli->query($reqTarif);
 	$totalTarif=0;
 	

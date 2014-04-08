@@ -31,7 +31,7 @@ require('includes/fonctions.php');
 	<script src="scripts/js/foundation/foundation.js"></script>
 	<script src="scripts/js/foundation/foundation.topbar.js"></script>
 	<script src="scripts/js/foundation/foundation.tab.js"></script>
-
+	<script src="scripts/scripts.js"></script><!--  appel des focntions spécifiques -->
 	<style>
 
 			a.dp-choose-date {
