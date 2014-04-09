@@ -32,6 +32,8 @@ require('includes/fonctions.php');
 	<script src="scripts/js/foundation/foundation.topbar.js"></script>
 	<script src="scripts/js/foundation/foundation.tab.js"></script>
 	<script src="scripts/js/foundation/foundation.tooltip.js"></script>
+	<script src="scripts/js/foundation/foundation.reveal.js"></script>
+
 
 	<style>
 
@@ -56,6 +58,12 @@ require('includes/fonctions.php');
 			input.dp-applied {
 				width: 140px;
 				float: left;
+			}
+			.button-mail {
+				background-color: red;
+				border: 2px solid blue;
+				color: red;
+
 			}
 	</style>
 

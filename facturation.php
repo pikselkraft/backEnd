@@ -1,10 +1,10 @@
 <?php
 
-	require('includes/header.php');
-
-	//$idCommande = $_GET['idcommande'];
-	$idCommande=314;
-	$reqInfoCo="SELECT idcommande, taxe, caution, caution_paye, montant_option, remise, code_promo, date_creation, statut_facture, accompte, accompte_paye, total, total_paye FROM COMMANDE WHERE idcommande=".$idCommande;
+	if (isset($_GET['idcommande']) || isset($idcommande))
+		$idcom = $_GET['idcommande'];
+	else
+		$idcom=314;
+	$reqInfoCo="SELECT idcommande, taxe, caution, caution_paye, montant_option, remise, code_promo, date_creation, statut_facture, accompte, accompte_paye, total, total_paye FROM COMMANDE WHERE idcommande=".$idcom;
 	$resultInfoCo=$mysqli->query($reqInfoCo);
 	while ($rowInfoCo = $resultInfoCo->fetch_assoc())
 	{
@@ -26,7 +26,7 @@
 	$information    = serialize($tab);
 	$informationUrl = urlencode($information);
 
-	$reqInfoResa="SELECT c.idreservation, r.date_debut, r.date_fin, c.idclient FROM COMMANDERESERVER c, RESERVATION r WHERE idcommande='".$idCommande."' LIMIT 0,1";
+	$reqInfoResa="SELECT c.idreservation, r.date_debut, r.date_fin, c.idclient FROM COMMANDERESERVER c, RESERVATION r WHERE idcommande='".$idcom."' LIMIT 0,1";
 	$resultInfoResa=$mysqli->query($reqInfoResa);
 	while ($rowInfoResa = $resultInfoResa->fetch_assoc())
 	{
@@ -52,14 +52,17 @@
 	
 	$tabFusion           = array_merge((array)$tab, (array)$tabResa);
 	$tabFinal            = array_merge((array)$tabFusion, (array)$tabClient);
-	testVar($tabFinal);
+	//testVar($tabFinal);
 	
 	$informationEncodage = serialize($tabFinal);
 	$informationUrl      = urlencode($informationEncodage);
 
+	require_once 'includes/pdf/example/facture-GiteLemetzval.php';
+
+/*
 ?>
 	
-	<div class="row">
+ 	<div class="row">
 		<div class="small-11 small-centered columns">
 		
 			<?= '<a href="includes/pdf/example/facture-GiteLemetzval.php?information='.$informationUrl.' title="PDF [new window]" target="_blank">PDF</a>' ?>
@@ -69,5 +72,5 @@
 <?php
 
 	require('includes/footer.php'); 
-
+*/
 ?>
