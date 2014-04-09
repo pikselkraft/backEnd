@@ -134,20 +134,21 @@ function correction_debut_semaine ($jour,$cle) {
 		while($gt<=8)
 		 {
 			$idgite=$gt;
-			?>
-			<div class="row">
-				<div class="small-11 small-centered columns">		
+			?>	  
+
+      <div class="row">
+          <div class="small-12 small-centered columns">
 					<?php
 						include('calendrierTous.php');
 					?>
+        </div>
+      </div>
 			<?php
 			$gt++;
 			$AffichChoixDate=false;
 		 }
 							 
 		?>
-				</div>
-			</div>	
 </body>
 
 <?php

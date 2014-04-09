@@ -44,11 +44,11 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 
 			if(!$mysqli)
 			{
-				$MessageAction ="ERREUR : Mise a jour saison impossible" ;  
+				$MessageAction ="ERREUR : Mise &agrave; jour saison impossible." ;  
 			} 
 			else
 			{
-				$MessageAction="Enregistrement des modifications OK";
+				$MessageAction="Enregistrement des modifications effectué.";
 			}
 					
 		
@@ -60,25 +60,25 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 				$mysqli->query($reqSuppression);
 				if(!$mysqli)
 				{
-					$MessageAction="ERREUR : Effacement de la saison pas effectuee" ;  
+					$MessageAction="ERREUR : L'effacement de la saison n'est pas effectu&eacute;" ;  
 				}
 				else
 				{ 
-					$MessageAction="Saison correctement effacee";
+					$MessageAction="La saison est effac&eacute;e.";
 				}	
 				
 			break;
 		case "AD": // ajout d une nouvelle saison dans la BD
-			$reqInsert="insert into SAISON (date_debut,date_fin,statut) values ('".$_POST["date_debut"]."','".$_POST["date_fin"]."','".$_POST["statut"]."')";
+			$reqInsert="INSERT INTO SAISON (date_debut,date_fin,statut) VALUES ('".$_POST["date_debut"]."','".$_POST["date_fin"]."','".$_POST["statut"]."')";
 				$mysqli->query($reqInsert);
 				
 			if(!$mysqli)
 			{
-				$MessageAction= "ERREUR : insertion d une nouvelle saison dans la BD" ;  
+				$MessageAction= "ERREUR : l'insertion d'une nouvelle saison dans la base de donn&eacute;es impossible." ;  
 			}
 			else 
 			{
-				$MessageAction= "insertion nouvelle saison ok";
+				$MessageAction= "L'insertion de la nouvelle saison est r&eacute;ussie.";
 			}
 			break;
 		case "SAM": // ajout de tous les samedis pour une ann�e
@@ -100,7 +100,7 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 					{
 						if (date('D',strtotime($date_test))=='Sat') // la date est elle bien un samedi ? oui on l'insere sinon on passe au jour suivant
 						{
-							$reqInsert="insert into SAISON (date_debut,date_fin,statut) values ('".$date_test."','".$date_test."','HS')";
+							$reqInsert="INSERT INTO SAISON (date_debut,date_fin,statut) VALUES ('".$date_test."','".$date_test."','HS')";
 							$mysqli->query($reqInsert);
 					
 						}
@@ -124,7 +124,7 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 			}
 			else
 			{
-				$MessageAction= "le format de l'annee n'est pas correcte";
+				$MessageAction= "Le format de l'ann&eacute;e n'est pas correct.";
 			
 			}
 			break;	
@@ -139,7 +139,7 @@ if (!empty($MessageAction))
 *	affichages des saisons stock�es dans la base *
 *												 *	
 **************************************************/
-$reqSaison="select idsaison, date_debut,date_fin,statut from SAISON";
+$reqSaison="SELECT idsaison, date_debut,date_fin,statut FROM SAISON";
 $result_reqSaison=$mysqli->query($reqSaison);
 
 
@@ -180,12 +180,10 @@ while ($row = $result_reqSaison->fetch_assoc())
 							<img src="images/cancel.gif" title="Annuler"></a></td>
 							</tr></table>
 							</form></th></tr>';
-	
-	
 	}
 	else // on affiche la saison normalement
 	{
-	$affichage_saison_ligne.='<tr height="28px"><td>'.$row["idsaison"].'</td><td>'.$row["date_debut"].'</td><td>'.$row["date_fin"].'</td><td>'.$row["statut"].'</td>
+		$affichage_saison_ligne.='<tr height="28px"><td>'.$row["idsaison"].'</td><td>'.$row["date_debut"].'</td><td>'.$row["date_fin"].'</td><td>'.$row["statut"].'</td>
 							<td><a href="affichSaisons.php?idsaison='.$row["idsaison"].'&actionSaison=M"><img src="images/edit.gif" title="Modifier"></a></td>
 							<td><a href="affichSaisons.php?idsaison='.$row["idsaison"].'&actionSaison=D" onclick="return confirm(\'Etes vous s?re de vouloir supprimer cette saison ?\');">
 							<img src="images/delete.gif" title="Supprimer"></a></td>
@@ -194,7 +192,7 @@ while ($row = $result_reqSaison->fetch_assoc())
 	
 }
 //permet de creer un formulaire pour ajouter une nouvelle saison dans la bd
-	$affichage_saison_ligne.='<tr ><th colspan="5"><form action="affichSaisons.php?actionSaison=AD" method="post">
+	$affichage_saison_ligne.='<tr ><th colspan="8"><form action="affichSaisons.php?actionSaison=AD" method="post">
 							<table><tr><td><input name="idsaison" type="text" size="5" readonly></td><td><input name="date_debut" size="6" type="date"></td><td><input name="date_fin" size="6" type="date"></td><td><select name="statut"><option value="HS">HS</option><option value="IN">IN</option></select></td>
 							<td><INPUT src="images/save.gif" title="Enregistrer" type="image" name="envoi" Value="submit"></td>
 							
@@ -204,20 +202,21 @@ $affichage_saison_ligne.='</table>';
 ?>
 
 	<div class="row">
-		<div class="small-11 small-centered columns">
+		<div class="small-6 large-centered columns">
+			<h3>Gestion des types de saison</h3>
 		<?php
-			echo $MessageAction;
+			echo '<p>'.$MessageAction.'</p>';
 			echo $affichage_saison_ligne;
 		?>
 		</div>
 	</div>
 		
 	<div class="row">
-		<div class="small-11 small-centered columns">
-			<p> Pour ins�rer tous les samedi de l'ann�e en Saison Type Haute Saison, hors p�riode d�j� existante</p>
+		<div class="small-6 large-centered columns">
+			<p> Pour ins&eacute;rer tous les samedi de l'ann&eacute;e en Saison Type Haute Saison, hors p&eacute;riode d&eacute;j&agrave; existante</p>
 			<form action="affichSaisons.php?actionSaison=SAM" method="POST" onsubmit="return verif_action()">	
-				<label for="annee">Merci de renseigner l'ann�e : </label><input id="annee" name="annee" type="text">
-				<input type="submit" value="Ins�rer">
+				<label for="annee">Merci de renseigner l'ann&eacute;e : </label><input id="annee" name="annee" type="text">
+				<input class ="button tiny" type="submit" value="Ins&eacute;rer">
 			</form>
 		</div>
 	</div>

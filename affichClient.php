@@ -6,8 +6,8 @@
 	require('includes/header.php');
 
 	
-$MessageAction=''; // permet d'afficher un message de confirmation ou d erreur lors d'une action sur la BD
-$modif='  '; // par defaut les donnes ne sont pas modifiables
+$MessageAction =''; // permet d'afficher un message de confirmation ou d erreur lors d'une action sur la BD
+$modif         ='  '; // par defaut les donnes ne sont pas modifiables
 /*********************************************
 *		Traitement des clients  des gites     *
 **********************************************/

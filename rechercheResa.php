@@ -47,7 +47,6 @@ if ($actionResa==='U') {
 	 * recuperation du statut du tarif
 	 */
 	$reqClient="SELECT cheminot, region FROM CLIENTS WHERE idclient=".$idClient;
-	testVar($reqClient);
 	$resultClient=$mysqli->query($reqClient);
 	while ($rowClient = $resultcommanderesa->fetch_assoc())
 	{
@@ -78,11 +77,11 @@ if ($actionResa==='U') {
 	$resultResaOld=$mysqli->query($infoResaOld);
 	while ($rowResaOld = $resultResaOld->fetch_assoc())
 	{
-		$nbAdulteOld =$rowResaOld["nb_adulte"];
-		$nbEnfantOld =$rowResaOld["nb_enfant"];
-		$dateDebOld  =$rowResaOld["date_debut"];
-		$dateFinOld  =$rowResaOld["date_fin"];
-		$idGiteOld   =$rowResaOld["idgite"];
+		$nbAdulteOld = $rowResaOld["nb_adulte"];
+		$nbEnfantOld = $rowResaOld["nb_enfant"];
+		$dateDebOld  = $rowResaOld["date_debut"];
+		$dateFinOld  = $rowResaOld["date_fin"];
+		$idGiteOld   = $rowResaOld["idgite"];
 	}
 
 	$tarifOld         = calculTarif($dateDebOld,$dateFinOld,$idGiteOld,$statutTarif); // calcul ancien tarif
@@ -97,7 +96,7 @@ if ($actionResa==='U') {
 	/**
 	 * [Post description]
 	 * @var recuperation des modifications
-	 */
+	*/
 	$nbAdulteModif    = $_POST['nb_adulte'];
 	$nbEnfantModif    = $_POST['nb_enfant'];
 	$dateDebutModif   = $_POST['date_debut'];
@@ -145,32 +144,37 @@ if ($actionResa==='U') {
 	$taxeEnfant    = calculTaxe ("enfant",$facteurEnfant ,$idreservation,"I");
 
 	
-	$taxe          = $taxeAdulte + $taxeEnfant;
-	$diffTaxe      = $taxeOld - $taxe;
-	$taxeMaj       = $taxeOld + $diffTaxe;
-	$diffTarif     = $tarifOld - $tarifNew;
+	$taxe       = $taxeAdulte + $taxeEnfant;
+	$diffTaxe   = $taxeOld - $taxe;
+	$taxeApayer = -$diffTaxe; // taxe à rembourser ou à payer au/par le client
+	
+	$taxeMaj    = $taxeOld + $diffTaxe;
+	$diffTarif  = $tarifOld - $tarifNew;
 
 	/**
 	 * [$taxeMaj description]
 	 * 		Mise à jour de la taxe avec la différence
 	 * [$totalMaj description]
 	 * 		Mise à jour du total avec la différence
+	 * [$diffTaxe description]
+	 * 		diff taxe à régler ou non (boolean)
 	 */
-	$taxeMaj       = $taxeOld - ($diffTaxe);
-	$totalMaj      = $tarifOld - ($diffTarif);
+	$taxeMaj  = $taxeOld - ($diffTaxe);
+	$totalMaj = $tarifOld - ($diffTarif);
+	//testVar($_POST['diffTaxe']);
+	$diffTaxe = $_POST['diffTaxe']; 
 
-	$modifCommande="UPDATE COMMANDE SET total= '".$totalMaj."', taxe= '".$taxeMaj."' WHERE idcommande='".$idCommande."'";
+	$modifCommande="UPDATE COMMANDE SET total= '".$totalMaj."', taxe= '".$taxeMaj."', taxe_difference= '".$taxeApayer."', difftaxe_paye= '".$diffTaxe."' WHERE idcommande='".$idCommande."'";
+	//testVar($modifCommande);
 	$mysqli->query($modifCommande);
 
 
 	$actionResa='V'; // affichage des resa de la commande avec maj
 }
-
-
 	if (!empty($idResa))
 	{
 		$reqcommanderesa="SELECT idcommande, idreservation, idclient FROM COMMANDERESERVER WHERE idreservation=".$idResa ;
-		testVar($reqcommanderesa);
+		//testVar($reqcommanderesa);
 		$resultcommanderesa=$mysqli->query($reqcommanderesa);
 		while ($row = $resultcommanderesa->fetch_assoc())
 		{
@@ -292,12 +296,18 @@ if ($actionResa==='U') {
 									</td>
 									<td>
 										<label>Nombre d\'adultes
-											<input name="nb_adulte" type="number" size="25" value="' . $info['adulte'] . '">													
+											<input name="nb_adulte" type="number" size="25" id="taxeAdulte" value="' . $info['adulte'] . '">													
 										</label>
 									</td>
 									<td>
 										<label>Nombre d\'enfants
-											<input name="nb_enfant" type="number" size="5"  value="' . $info['enfant'] . '">		
+											<input name="nb_enfant" type="number" size="5"  id="taxeEnfant" value="' . $info['enfant'] . '">		
+										</label>
+									</td>
+									<td id="choixTaxe">
+										<label for="diffTaxe">La diff&eacute;rence est d&eacute;j&agrave; r&eacute;gl&eacute;e ?
+											Oui <input name="diffTaxe" type="radio" id="#ans" value="1" required>
+											Non <input name="diffTaxe" type="radio"  value="0">
 										</label>
 									</td>
 									<td>
@@ -327,16 +337,19 @@ if ($actionResa==='U') {
 									</td>
 									<td>
 										<label>Enregistrer les modifications
-											<input src="images/save.gif" title="Enregistrer" type="image" name="envoi" value="submit">
+											<input src="images/save.gif" title="Enregistrer" type="image" id="#ans" name="envoi" value="submit">
 										</label>
 									</td>
 								</tr>
 							</table>
 						</form>';
-
+						?>
+						<script>
+							
+						</script>
+						<?php 
 					$i++;
 					} // fin while
-
 				}
 
 				$messageSupp = "";
@@ -371,9 +384,6 @@ if ($actionResa==='U') {
 							 *  si seul resa supp
 							 *  sinon maj comme update
 							 */
-
-
-
 
 					$messageSupp = "La r&eacute;servation a &eacute;t&eacute; supprim&eacute;e.";
 

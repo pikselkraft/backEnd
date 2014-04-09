@@ -41,11 +41,11 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 
 			if(!$mysqli)
 			{
-				$MessageAction ="ERREUR : Mise a jour taxe impossible" ;  
+				$MessageAction ="ERREUR : Mise a jour de la taxe impossible." ;  
 			} 
 			else
 			{
-				$MessageAction="Enregistrement des modifications OK";
+				$MessageAction="Enregistrement des modifications r&eacute;ussies.";
 			}
 					
 		
@@ -54,37 +54,37 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 		case "D": //suppression d une taxe
 				//on verifie d abord si cette taxe est encore utilisee par un gite, si oui on refuse la suppression
 				
-					$reqSuppression="delete from TAXE
-					where idtaxe='".$_GET["idtaxe"]."'";
+					$reqSuppression="DELETE FROM TAXE
+					WHERE idtaxe='".$_GET["idtaxe"]."'";
 						$mysqli->query($reqSuppression);
 				
 					if(!$mysqli)
 					{
-						$MessageAction="ERREUR : Effacement de l taxe pas effectuee" ;  
+						$MessageAction="ERREUR : La taxe n'est pas effac&eacute;e.";  
 					}
 					else
 					{ 
-						$MessageAction="Taxe correctement effacee";
+						$MessageAction="La taxe est correctement effac&eacute;e.";
 					}	
 				 
 			break;
 		case "AD": // ajout d une nouvelle taxe dans la BD
-			$reqInsert="insert into TAXE (tarif,denomination) values ('".$_POST["tarif"]."','".$_POST["denomination"]."')";
+			$reqInsert="INSERT into TAXE (tarif,denomination) VALUES ('".$_POST["tarif"]."','".$_POST["denomination"]."')";
 				$mysqli->query($reqInsert);
 			if(!$mysqli)
 			{
-				$MessageAction= "ERREUR : insertion d un nouveau tarif dans la BD" ;  
+				$MessageAction= "ERREUR : insertion d'un nouveau tarif dans la base de donn&eacute;es impossible." ;  
 			}
 			else 
 			{
-				$MessageAction= "insertion nouvelle taxe ok";
+				$MessageAction= "Insertion d'une nouvelle taxe r&eacute;ussie.";
 			}
 			break;
 	}
 
 if (!empty($MessageAction))
 {
-	$MessageAction='<div class="messageInfo">'.$MessageAction.'</div>';
+	$MessageAction='<div class="messageInfo alert-box">'.$MessageAction.'</div>';
 }
 /*************************************************
 *												 *
@@ -125,7 +125,7 @@ while ($row = $result_reqTaxes->fetch_assoc())
 	
 }
 //permet de creer un formulaire pour ajouter une nouvelle taxe dans la bd
-	$affichage_taxe_ligne.='<tr ><th colspan="4"><form action="affichTaxe.php?actionTaxe=AD" method="post">
+	$affichage_taxe_ligne.='<tr ><th colspan="8"><form action="affichTaxe.php?actionTaxe=AD" method="post">
 							<table><tr><td><input name="idtaxe" type="text" size="5" readonly></td><td><input name="tarif" size="6" type="text"></td><td><input name="denomination" type="text"></td>
 							<td><INPUT src="images/save.gif" title="Enregistrer" type="image" name="envoi" Value="submit"></td>
 							
@@ -135,9 +135,10 @@ $affichage_taxe_ligne.='</table>';
 ?>
 
 	<div class="row">
-		<div class="small-11 small-centered columns">
+		<div class="small-6 large-centered columns">
+			<h3>Gestion des taxes</h3>
 		<?php
-			echo $MessageAction;
+			echo '<p>'.$MessageAction.'</p>';
 			echo $affichage_taxe_ligne;
 		?>
 		</div>

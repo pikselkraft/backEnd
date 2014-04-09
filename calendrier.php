@@ -10,8 +10,8 @@
 
 ?>
 
-	<div class="row">
-		<div class="small-11 small-centered columns">
+<!-- 	<div class="row">
+		<div class="small-6 large-centered columns"> -->
 
 <?php
 //--------------------------------------------------------------------------------------------------
@@ -615,11 +615,11 @@ echo '</td>';
 echo '</tr>';
 echo '</table>';
 ?>		
-		</div>
+		<!-- </div>
 	</div>
-
+ -->
 	<div class="row">
-	  <div class="small-8 large-centered columns">
+	  <div class="small-6 large-centered columns">
 			<form action="resaVerifBefore.php" method="post"> 
 
 				<fieldset>
