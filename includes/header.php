@@ -33,6 +33,7 @@ require('includes/fonctions.php');
 	<script src="scripts/js/foundation/foundation.topbar.js"></script>
 	<script src="scripts/js/foundation/foundation.tab.js"></script>
 	<script src="scripts/js/foundation/foundation.alert.js"></script>
+
 	<script src="scripts/scripts.js"></script><!--  appel des focntions spécifiques -->
 	<style>
 
@@ -101,10 +102,9 @@ require('includes/fonctions.php');
 			  <li class="has-dropdown">
 				<a href="statistique.php">Statistiques</a>
 				<ul class="dropdown">
-				  <li><a href="#">R&eacute;servation</a></li>
-				  <li><a href="#">CA</a></li>
-				  <li><a href="#">CA</a></li>
-				  <li><a href="#">CA</a></li>
+				  <li><a href="statGite.php">Occupation des g&icirc;tes</a></li>
+				  <li><a href="statCa.php">R&eacute;sultats financiers</a></li>
+
 				</ul>
 			  </li>
 			  <li class="has-dropdown">
