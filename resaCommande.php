@@ -14,26 +14,20 @@ $_SESSION['resa']['login'] = strtolower(htmlspecialchars($_POST['login'])); // s
 
 
 // stockage dans des variables de POST du formulaire.php
-$login 		= $_SESSION['resa']['login'];
-//$cheminot 	= $_SESSION['resa']['cheminot'];
-//echo $cheminot;
-$date_debut = $_SESSION['resa']['date_debut'];
-$date_fin 	= $_SESSION['resa']['date_fin'];
-$idgite = $_GET['idgite'];
-$_SESSION['resa']['idgite']=$idgite;
-$tarif 		= $_SESSION['resa']['tarif'];
+$login                      = $_SESSION['resa']['login'];
+$date_debut                 = $_SESSION['resa']['date_debut'];
+$date_fin                   = $_SESSION['resa']['date_fin'];
+$idgite                     = $_GET['idgite'];
+$_SESSION['resa']['idgite'] = $idgite;
+$tarif                      = $_SESSION['resa']['tarif'];
 
-//echo $date_fin;
-//echo date("l",strtotime($date_fin));
-
-$nb_resa= count($_SESSION['Mesresa'])-1;
+$nb_resa                    = count($_SESSION['Mesresa'])-1;
 
 //	echo $nb_resa;
 	echo "test avant if de la deuxi�me RESA ".$nb_resa;
 	if($_SESSION['test'])
 	{
 		$nb_resa++;
-		echo 'test nb resa '.$nb_resa;
 		$_SESSION['test']=false;
 	} else
 	{
