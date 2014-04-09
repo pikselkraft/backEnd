@@ -46,41 +46,41 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 
 			if(!$mysqli)
 			{
-				$MessageAction ="ERREUR : Mise a jour codepromo impossible" ;  
+				$MessageAction ="ERREUR : Mise &agrave; jour du codepromo impossible." ;  
 			} 
 			else
 			{
-				$MessageAction="Enregistrement des modifications OK";
+				$MessageAction="L'enregistrement des modifications effectu&eacute;.";
 			}
 					
 		
 			$actionCodePromo='';
 			break;
 		case "D": //suppression d une codepromo
-				$reqSuppression="delete from CODEPROMO
-				where idcodepromo='".$_GET["idcodepromo"]."'";
+				$reqSuppression="DELETE FROM CODEPROMO
+				WHERE idcodepromo='".$_GET["idcodepromo"]."'";
 				$mysqli->query($reqSuppression);
 				if(!$mysqli)
 				{
-					$MessageAction="ERREUR : Effacement de la codepromo pas effectuee" ;  
+					$MessageAction="ERREUR : L'effacement du codepromo n'est pas pas effectu&eacute;." ;  
 				}
 				else
 				{ 
-					$MessageAction="Promo correctement effacee";
+					$MessageAction="Le codepromo est effac&eacute;.";
 				}	
 				
 			break;
 		case "AD": // ajout d une nouvelle codepromo dans la BD
-			$reqInsert="insert into CODEPROMO (code,remise,validite,actif,nb) values ('".$_POST["code"]."','".$_POST["remise"]."','".$_POST["validite"]."','".$_POST["actif"]."','".$_POST["nb"]."')";
+			$reqInsert="INSERT INTO CODEPROMO (code,remise,validite,actif,nb) VALUES ('".$_POST["code"]."','".$_POST["remise"]."','".$_POST["validite"]."','".$_POST["actif"]."','".$_POST["nb"]."')";
 				$mysqli->query($reqInsert);
 				
 			if(!$mysqli)
 			{
-				$MessageAction= "ERREUR : insertion d une nouvelle codepromo dans la BD" ;  
+				$MessageAction= "ERREUR : insertion d'un nouveau codepromo dans la base de donn&eacute;es impossible." ;  
 			}
 			else 
 			{
-				$MessageAction= "insertion nouvelle codepromo ok";
+				$MessageAction= "Insertion d'un nouveau codepromo réussie.";
 			}
 			break;
 		
@@ -179,7 +179,8 @@ $affichage_codepromo_ligne.='</table>';
 ?>
 
 	<div class="row">
-		<div class="small-11 small-centered columns">
+		<div class="small-6 large-centered columns">
+		<h3>Gestion des codes de promotion</h3>
 		<?php
 			echo $MessageAction;
 			echo $affichage_codepromo_ligne;

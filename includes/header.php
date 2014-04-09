@@ -35,10 +35,6 @@ require('includes/fonctions.php');
 	<script src="scripts/js/foundation/foundation.alert.js"></script>
 	<script src="scripts/scripts.js"></script><!--  appel des focntions spécifiques -->
 	<style>
-		/**
-		 * A ajouter au fichier foundation + min.css
-		 */
-		
 
 		/**
 		 * input
@@ -105,7 +101,7 @@ require('includes/fonctions.php');
 			  <li class="has-dropdown">
 				<a href="statistique.php">Statistiques</a>
 				<ul class="dropdown">
-				  <li><a href="#">Reservation</a></li>
+				  <li><a href="#">R&eacute;servation</a></li>
 				  <li><a href="#">CA</a></li>
 				  <li><a href="#">CA</a></li>
 				  <li><a href="#">CA</a></li>
@@ -116,7 +112,7 @@ require('includes/fonctions.php');
 				<ul class="dropdown">
 				  <li><a href="facturation.php">Facturation</a></li>
 				  <li><a href="mailing.php">Mailing</a></li>
-				  <li><a href="reseauxSociaux.php">Réseaux Sociaux</a></li>
+				  <li><a href="reseauxSociaux.php">R&eacute;seaux Sociaux</a></li>
 				</ul>
 			  </li>
 			</ul>
@@ -124,7 +120,7 @@ require('includes/fonctions.php');
 			<!-- Left Nav Section -->
 			<ul class="left">
 			 <li class="has-dropdown">
-				<a href="#">Gîtes</a>
+				<a href="#">G&icirc;tes</a>
 				<ul class="dropdown">
 					<li><a href="calendrier.php?idgite=1">Tout le centre</a></li>
 					<li><a href="calendrier.php?idgite=2">Gite 1</a></li>
@@ -159,3 +155,5 @@ require('includes/fonctions.php');
 		</nav>
 	</div>
 </div>
+<br>
+<br>

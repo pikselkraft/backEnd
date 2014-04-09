@@ -40,16 +40,16 @@ if (!empty($_GET["etatTarif"]))
 if (($_GET["etatTarif"]=='S') && (!empty($_GET["idtarif"]))) // mise � jour des infos du tarif d'un gite
 {
 
-	$reqUpdate="update TARIF	
+	$reqUpdate="UPDATE TARIF	
 				 SET prix ='".$_POST["prix"]."' ,
 				 statut_client='".$_POST["statut_client"]."',
 				 saison='".$_POST["saison"]."', commentaire='".$_POST["commentaire"]."'
-				 where idtarif='".$_GET["idtarif"]."'" ;
+				 WHERE idtarif='".$_GET["idtarif"]."'" ;
 			$mysqli->query($reqUpdate);
 
 				  if(!$mysqli)
 				  {
-						echo "ERREUR : Mise � jour du tarif pas effectu�e" ;  
+						echo "ERREUR : La mise &agrave; jour des tarifs n'est pas effectu&eacute;e." ;  
 				  } 
 	
 	echo "save OK";
@@ -59,14 +59,14 @@ if (($_GET["etatTarif"]=='S') && (!empty($_GET["idtarif"]))) // mise � jour de
 if (($_GET["etatTarif"]=='D') && (!empty($_GET["idtarif"]))) // on supprime le tarif et sa relation avec le gite
 {
 
-	$reqSuppresion="delete from POSSEDETARIF	
-				  where idgite='".$GET["idgite"]."'
-				 and idtarif='".$_GET["idtarif"]."'" ;
+	$reqSuppresion="DELETE FROM POSSEDETARIF	
+				  WHERE idgite='".$GET["idgite"]."'
+				 AND idtarif='".$_GET["idtarif"]."'" ;
 				$mysqli->query($reqSuppresion);
 
 				if(!$mysqli)
 				{
-					echo "ERREUR : Effacement du tarif pas effectu�e" ;  
+					echo "ERREUR : L'effacement des tarifs n'est pas effectu&eacute;e." ;  
 				}
 				// else
 				// {
@@ -129,7 +129,7 @@ if (($options=='D') && (!empty($_GET["idoption"]))) // on supprime le tarif et s
 echo $reqSuppression;
 				if(!$mysqli)
 				{
-					echo "ERREUR : Effacement de option pas effectu�e" ;  
+					echo "ERREUR : L'effacement des options n'est pas effectu&eacute;e" ;  
 				}
 				// else
 				// {
@@ -150,11 +150,11 @@ if (($options=='AD') && (!empty($_GET["idgite"]))&& (!empty($_POST["idoption"]))
 
 	
 				
-				$reqInsert="insert into POSSEDEOPTION (idgite,idoption) values ('".$_GET["idgite"]."','".$_POST["idoption"]."')";
+				$reqInsert="INSERT INTO POSSEDEOPTION (idgite,idoption) VALUES ('".$_GET["idgite"]."','".$_POST["idoption"]."')";
 				$mysqli->query($reqInsert);
 			if(!$mysqli)
 					{
-						echo "ERREUR : Effacement des options pas effectu�e" ;  
+						echo "ERREUR : L'effacement des options n'est pas effectu&eacute;e." ;  
 					}
 	
 
@@ -192,7 +192,7 @@ echo $reqSuppression;
 
 				if(!$mysqli)
 				{
-					echo "ERREUR : Effacement de l image pas effectu�e" ;  
+					echo "ERREUR : L'image n'a pas &eacute;t&eacute; effac&eacute;e." ;  
 				}
 				
 
@@ -210,12 +210,11 @@ if (($img=='S') && (!empty($_GET["idimage"])))
 				 description_image='".$_POST["description_image"]."',
 				 url='".$_POST["url"]."'
 				  where idimage='".$_GET["idimage"]."'" ;
-echo $reqUpdate;
 			$mysqli->query($reqUpdate);
 
 				  if(!$mysqli)
 				  {
-						echo "ERREUR : Mise � jour pas effectu�e" ;  
+						echo "ERREUR : La mise &agrave; jour n'est pas effectu&eacute;e." ;  
 				  } 
 		$img='A';
 					 
@@ -233,7 +232,7 @@ if (($_GET["img"]=='AD') && (!empty($_GET["idgite"]))) // insertion d une nouvel
 			 
 			 if(!$mysqli)
 			  {
-				echo "ERREUR : Mise � jour du tarif pas effectu�e" ;  
+				echo "ERREUR : La mise &agrave; jour du tarif n'est pas effectu&eacute;e." ;  
 			  }
 			  
 	
@@ -261,7 +260,7 @@ TEst de l'argument etatG
 if (($_GET["etatG"]=='S') && (!empty($_GET["idgite"]))&& (!empty($_POST["nom"])))
 {
 
-	$reqUpdate="update GITE
+	$reqUpdate="UPDATE GITE
 				 SET nom ='".$_POST["nom"]."' ,
 				 capacite='".$_POST["capacite"]."',
 				 url='".$_POST["url"]."',
@@ -269,13 +268,13 @@ if (($_GET["etatG"]=='S') && (!empty($_GET["idgite"]))&& (!empty($_POST["nom"]))
 				 titre='".$_POST["titre"]."',
 				 description='".$_POST["description"]."',
 				 surface='".$_POST["surface"]."'
-				 where idgite='".$_GET["idgite"]."'" ;
+				 WHERE idgite='".$_GET["idgite"]."'" ;
 
 			$mysqli->query($reqUpdate);
 
 				  if(!$mysqli)
 				  {
-						echo "ERREUR : Mise � jour pas effectu�e" ;  
+						echo "ERREUR : La mise &agrave; jour n'est pas effectu&eacute;e" ;  
 				  } 
 				 
 				
@@ -284,14 +283,14 @@ if (($_GET["etatG"]=='S') && (!empty($_GET["idgite"]))&& (!empty($_POST["nom"]))
 if (($_GET["etatTarif"]=='AD') && (!empty($_GET["idgite"]))) // mise � jour des infos du tarif d'un gite
 {
 
-		$reqInsert="insert into TARIF (prix, statut_client, saison, commentaire) values ('".$_POST["prix"]."','".$_POST["statut_client"]."','".$_POST["saison"]."','".$_POST["commentaire"]."')";
+		$reqInsert="INSERT INTO TARIF (prix, statut_client, saison, commentaire) VALUES ('".$_POST["prix"]."','".$_POST["statut_client"]."','".$_POST["saison"]."','".$_POST["commentaire"]."')";
 	
 	
 					
 		$mysqli->query($reqInsert);
 
 		//on recherche l'idtarif que l'on vient d'ins�rer
-		$reqMax="select max(idtarif) as maxiTarif from TARIF";
+		$reqMax="SELECT max(idtarif) AS maxiTarif FROM TARIF";
 				$result_reqMax=$mysqli->query($reqMax);
 				while ($row = $result_reqMax->fetch_assoc())
 				{
@@ -302,7 +301,7 @@ if (($_GET["etatTarif"]=='AD') && (!empty($_GET["idgite"]))) // mise � jour de
 			 
 			 if(!$mysqli)
 			  {
-				echo "ERREUR : Mise � jour du tarif pas effectu�e" ;  
+				echo "ERREUR : la mise &agrave; jour du tarif n'est pas effectu&eacute;e." ;  
 			  }
 			  else
 			  {
@@ -318,7 +317,8 @@ if (($_GET["etatTarif"]=='AD') && (!empty($_GET["idgite"]))) // mise � jour de
 ?>
 
 	<div class="row">
-		<div class="small-11 small-centered columns">		
+		<div class="small-11 small-centered columns">
+		<h3>Gestion des informations des g&icirc;tes</h3>	
 		<?php 
 	
 		$idgite=$_GET["idgite"];
@@ -819,8 +819,6 @@ if (($_GET["etatTarif"]=='AD') && (!empty($_GET["idgite"]))) // mise � jour de
 		?>
 		</div>
 	</div>
-
-</body>
 
 <?php
 	require('includes/footer.php');

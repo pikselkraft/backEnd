@@ -34,7 +34,7 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 	switch ($actionOption) 
 	{
 		case "S": //enregistrement des modifs de l option
-			$reqUpdate="update OPTIONRESA	
+			$reqUpdate="UPDATE OPTIONRESA	
 					 SET option_tarif ='".$_POST["option_tarif"]."',
 					 denomination='".$_POST["denomination"]."'
 					 where idoption='".$_GET["idoption"]."'" ;
@@ -42,11 +42,11 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 
 			if(!$mysqli)
 			{
-				$MessageAction ="ERREUR : Mise a jour option impossible" ;  
+				$MessageAction ="ERREUR : Mise &agrave; jour option impossible." ;  
 			} 
 			else
 			{
-				$MessageAction="Enregistrement des modifications OK";
+				$MessageAction="Les modifications sont enregistrées.";
 			}
 					
 		
@@ -82,32 +82,32 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 				$mysqli->query($reqInsert);
 			if(!$mysqli)
 			{
-				$MessageAction= "ERREUR : insertion d un nouveau tarif dans la BD" ;  
+				$MessageAction= "ERREUR : insertion d'un nouveau tarif dans la base de données." ;  
 			}
 			else 
 			{
-				$MessageAction= "insertion nouvelle option ok";
+				$MessageAction= "Insertion de la nouvelle option r&eacute;ussie.";
 			}
 			break;
 	}
 
 if (!empty($MessageAction))
 {
-	$MessageAction='<div class="messageInfo">'.$MessageAction.'</div>';
+	$MessageAction='<div class="messageInfo alert-box">'.$MessageAction.'</div>';
 }
 /*************************************************
 *												 *
 *	affichages des options stock�es dans la base *
 *												 *	
 **************************************************/
-$reqOptions="select idoption, option_tarif, denomination from OPTIONRESA";
+$reqOptions="SELECT idoption, option_tarif, denomination FROM OPTIONRESA";
 $result_reqOptions=$mysqli->query($reqOptions);
 
 
 
 // Creation du tableau pour afficher les options
 $affichage_option_ligne='<table border="2"  rules="groups" id="tableauClient" class="rechClient" width="400px"><thead>
-				<tr><td >idoption</td><td>Tarif</td><td>D�nomination</td><th colspan="2">Action</th></tr>
+				<tr><td >idoption</td><td>Tarif</td><td>D&eacute;nomination</td><th colspan="2">Action</th></tr>
 				</thead>';
 //Boucle qui parcourt les options dans la base de donn�es
 while ($row = $result_reqOptions->fetch_assoc())
@@ -137,7 +137,7 @@ while ($row = $result_reqOptions->fetch_assoc())
 	
 }
 //permet de creer un formulaire pour ajouter une nouvelle option dans la bd
-	$affichage_option_ligne.='<tr ><th colspan="4"><form action="affichOptions.php?actionOption=AD" method="post">
+	$affichage_option_ligne.='<tr ><th colspan="8"><form action="affichOptions.php?actionOption=AD" method="post">
 							<table><tr><td><input name="idoption" type="text" size="5" readonly></td><td><input name="option_tarif" size="6" type="text"></td><td><input name="denomination" type="text"></td>
 							<td><INPUT src="images/save.gif" title="Enregistrer" type="image" name="envoi" Value="submit"></td>
 							
@@ -147,9 +147,10 @@ $affichage_option_ligne.='</table>';
 ?>
 
 		<div class="row">
-			<div class="small-11 small-centered columns">		
+			<div class="small-6 large-centered columns">
+			<h3>Gestion des options</h3>		
 			<?php
-				echo $MessageAction;
+				echo '<p>'.$MessageAction.'</p>';
 				echo $affichage_option_ligne;
 			?>
 			</div>
