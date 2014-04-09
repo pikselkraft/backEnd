@@ -18,13 +18,15 @@
 > pdf/mailing step one
 > gestion commande
 
-**v0.3 (gestion ???)**
+**v0.3**
 > gestion client
 > mailing
 
-**v0.4 (gestion ???)**
-> gestion resa
-> mailing
+**v0.4**
+> pdf/mailing end
+> chartjs integration
+> css step one
+> 
 
 ###tag1.0
 
@@ -32,10 +34,12 @@
 > gestion stat
 
 **v1.2**
-> gestion mailing
+> test
+> performance (css/js/files)
 
-**v1.3**
-> gestion remise
+###tag2.0
+
+> production
 
 
 
