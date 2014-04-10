@@ -3,7 +3,7 @@
 				<hr />
 					<div class="row">
 						<div class="large-6 columns">
-							<p>Gîte le Metzval</p>
+							<p>G&icirc;te le Metzval</p>
 						</div>
 					<div class="large-6 columns">
 						<a href="#top-page">Aller en haut de la page</a>

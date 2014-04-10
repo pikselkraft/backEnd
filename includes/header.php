@@ -98,7 +98,7 @@ require('includes/fonctions.php');
 				<ul class="dropdown">
 				  <li><a href="facturation.php">Facturation</a></li>
 				  <li><a href="mailing.php">Mailing</a></li>
-				  <li><a href="reseauxSociaux.php">Réseaux Sociaux</a></li>
+				  <li><a href="reseauxSociaux.php">R&eacute;seaux Sociaux</a></li>
 				</ul>
 			  </li>
 			</ul>
@@ -106,15 +106,15 @@ require('includes/fonctions.php');
 			<!-- Left Nav Section -->
 			<ul class="left">
 			 <li class="has-dropdown">
-				<a href="#">Gîtes</a>
+				<a href="#">G&icirc;tes</a>
 				<ul class="dropdown">
 					<li><a href="calendrier.php?idgite=1">Tout le centre</a></li>
-					<li><a href="calendrier.php?idgite=2">Gite 1</a></li>
-					<li><a href="calendrier.php?idgite=3">Gite 2</a></li>
-					<li><a href="calendrier.php?idgite=4">Gite 3</a></li>
-					<li><a href="calendrier.php?idgite=5">Gite 4</a></li>
-					<li><a href="calendrier.php?idgite=6">Gite 5</a></li>
-					<li><a href="calendrier.php?idgite=7">Gite 6</a></li>
+					<li><a href="calendrier.php?idgite=2">G&icirc;te 1</a></li>
+					<li><a href="calendrier.php?idgite=3">G&icirc;te 2</a></li>
+					<li><a href="calendrier.php?idgite=4">G&icirc;te 3</a></li>
+					<li><a href="calendrier.php?idgite=5">G&icirc;te 4</a></li>
+					<li><a href="calendrier.php?idgite=6">G&icirc;te 5</a></li>
+					<li><a href="calendrier.php?idgite=7">G&icirc;te 6</a></li>
 					<li><a href="calendrier.php?idgite=8">Dortoir</a></li>
 				</ul>
 			</ul>
@@ -128,9 +128,9 @@ require('includes/fonctions.php');
 			</ul>
 			<ul class="left">
 			 <li class="has-dropdown">
-				<a href="#">Gestion Gîte</a>
+				<a href="#">Gestion G&icirc;te</a>
 				<ul class="dropdown">
-				  <li><a href="affichGite.php">Gestion gîtes</a></li> 
+				  <li><a href="affichGite.php">Gestion g&icirc;tes</a></li> 
 				  <li><a href="affichOptions.php">Gestion options</a></li>
 				  <li><a href="affichSaisons.php">Gestion saisons</a></li>
 				  <li><a href="affichCodepromo.php">Gestion code promotion</a></li> 
