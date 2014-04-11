@@ -14,8 +14,8 @@ define("MAIL_METZVAL", "contact@gite-lemetzval.fr");
 define("MAIL_SDK", "sdk@cesncf-stra.org");
 define("MAIL_OCT", "oct@cesncf-stra.org");
 
-if ( isset($_POST["email"]) && isset($_POST["message"]) )
-	envoiSansFacture($_POST["email"], $_POST["message"] ) ;
+if ( isset($_POST["email"]) && isset($_POST["message"]) && isset($_POST["sujet"]) )
+	envoiSansFacture($_POST["email"], $_POST["message"], $_POST["sujet"] ) ;
 
 function envoiFacture($email,$chaineFichier,$message="")
 {

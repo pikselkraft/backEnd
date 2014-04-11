@@ -141,12 +141,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 										break;
 
 									}
-								//fait pour l'annulation (en js et jquerry) et pour "total payé"
-								/**
-	
-									!!* EVM envoi mail + template!!
-								*/		
-
+								//mail fait pour l'annulation (en js et jquerry) et pour "total payé"
 							break;
 							
 							case "UE": //Update après édition commande
@@ -155,7 +150,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 										* édition des prix et statuts
 									*/
 									
-									$modifCommande="UPDATE COMMANDE SET caution_paye= '".$_POST['cautionPayeCommande']."', accompte= '".$_POST['accompteCommande']."', total= '".$_POST['totalCommande']."', total_paye= '".$_POST['totalPayeCommande']."' WHERE idcommande='".$idcommande."'";
+									$modifCommande="UPDATE COMMANDE SET caution_paye= '".$_POST['cautionPayeCommande']."', accompte= '".$_POST['accompteCommande']."', total= '".$_POST['totalCommande']."', total_paye= '".$_POST['totalPayeCommande']."', remise_taux=".$_POST["remise_taux"]." WHERE idcommande='".$idcommande."'";
 
 									$mysqli->query($modifCommande);
 
@@ -387,10 +382,21 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 				}
 				
 				$couleurCommande='style=" border:2px solid '.$couleurStatut.';"';
+
+				//calcul de la remise
+				if ((int)$row["remise_taux"] > 0){
+					$taux_remise = $row["remise_taux"];
+					$totalSansRemise = $row["total"];
+					$row["total"] = $row["total"] * (1-($row["remise_taux"]/100)); 
+					$row["remise_taux"] = $row["remise_taux"]." % (".$totalSansRemise*($row["remise_taux"]/100)."&euro;)";
+				}
+
+				//affichage avec logo acompte paye ou non
 				if ($row["accompte_paye"] == 0)
 					$accompte_paye_symbole = '<i data-tooltip class="foundicon-error has-tip" title="Acompte non payé" style="font-style: normal;"> '.$row["accompte"].' &euro;</i>';
 				else
 					$accompte_paye_symbole = '<i data-tooltip class="foundicon-checkmark has-tip" title="Acompte payé" style="font-style: normal;"> '.$row["accompte"].' &euro;</i>';
+
 
 				if($editionCommande=='E') { // changement des informations de la commande (utilisation d'input)
 					
@@ -457,6 +463,11 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 											</label>
 										</td>
 										<td '.$couleurCommande.'>
+											<label>Remise (en %)
+												<input name="remise_taux" type="number" size="5"  value="'.$taux_remise.'">
+											</label>
+										</td>
+										<td '.$couleurCommande.'>
 											<label>Total (montant du total)
 												<input name="totalCommande" type="number" size="5"  value="'.$row["total"].'">
 											</label>
@@ -500,7 +511,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 									<td '.$couleurCommande.'>'.$majStatut.'</td>
 									<td data-tooltip class="has-tip" title="A:attente/P:Pay&eacute;/R:Rendu" '.$couleurCommande.'>('.$row["caution_paye"].') '.$row["caution"].' &euro;</td>									
 									<td '.$couleurCommande.'>'.$accompte_paye_symbole.'</td>
-									<td '.$couleurCommande.'>'.$row["remise_taux"].' %</td>
+									<td '.$couleurCommande.'>'.$row["remise_taux"].'</td>
 									<td '.$couleurCommande.'>'.$row["total"].' &euro;</td>
 									<td '.$couleurCommande.'>'.$row["total_paye"].' &euro;</td>';
 
@@ -517,7 +528,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 									<td '.$couleurCommande.'>'.$statut[(int)$row["statut_facture"]]["designation"].'</td>
 									<td data-tooltip class="has-tip" title="A:attente/P:Pay&eacute;/R:Rendu" '.$couleurCommande.'>('.$row["caution_paye"].') '.$row["caution"].' &euro;</td>
 									<td '.$couleurCommande.'>'.$accompte_paye_symbole.'</td>
-									<td '.$couleurCommande.'>'.$row["remise_taux"].' %</td>
+									<td '.$couleurCommande.'>'.$row["remise_taux"].'</td>
 									<td '.$couleurCommande.'>'.$row["total"].' &euro;</td>
 									<td '.$couleurCommande.'>'.$row["total_paye"].' &euro;</td>';
 
@@ -533,7 +544,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 									<td '.$couleurCommande.'>'.$statut[(int)$row["statut_facture"]]["designation"].'</td>
 									<td data-tooltip class="has-tip" title="A:attente/P:Pay&eacute;/R:Rendu" '.$couleurCommande.'>('.$row["caution_paye"].') '.$row["caution"].' &euro;</td>
 									<td '.$couleurCommande.'>'.$accompte_paye_symbole.'</td>
-									<td '.$couleurCommande.'>'.$row["remise_taux"].' %</td>
+									<td '.$couleurCommande.'>'.$row["remise_taux"].'</td>
 									<td '.$couleurCommande.'>'.$row["total"].' &euro;</td>
 									<td '.$couleurCommande.'>'.$row["total_paye"].' &euro;</td>';
 				}										
@@ -690,7 +701,7 @@ while ($rowTransaction = $resultTransaction->fetch_assoc())
 ?>
 <script>
 function remise_taux(somme_ht,id){
-	var saisie = prompt("Le total hors taxes s'&eacute;lève à "+somme_ht+"€, quelle remise (en %) voulez-vous appliquer à cette commande ?");
+	var saisie = prompt("Le total hors taxes s'élève à "+somme_ht+"€, quelle remise (en %) voulez-vous appliquer à cette commande ?");
 	if (saisie!=null)
 		document.location = 'rechercheCommande.php?actionCommande=Z&editionCommande=R&idcommande='+id+'&remise='+saisie;
 }

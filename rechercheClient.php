@@ -171,7 +171,7 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 					$mysqli->query($suppClient);
 					
 					if($mysqli) {
-						$MessageAction="Le client a été supprimé";
+						$MessageAction="Le client a &eacute;t&eacute; supprim&eacute;";
 					}
 					else {
 						$MessageAction="Erreur lors de la suppression du client";
@@ -290,7 +290,7 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 				
 				if(!$mysqli)
 				{
-					$MessageAction ="ERREUR : Pas de r�sultat " ;  
+					$MessageAction ="ERREUR : Pas de r&eacute;sultat " ;  
 				} 
 				else
 				{
@@ -308,7 +308,7 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 								<input id="nom" name="nom" type="text" value="'.$row["nom"].'"'  .$modif. '>
 							</label></li>
 						<li>
-							<label for="prenom">Pr�nom : 
+							<label for="prenom">Pr&eacute;nom : 
 								<input id="prenom" name="prenom" type="text" value="'.$row["prenom"].'"'.$modif.'>
 							</label>
 						</li>
@@ -337,7 +337,7 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 							</label>
 						</li>
 						<li>
-							<label for="tel">Tel : 
+							<label for="tel">T&eacute;l&eacute;phone : 
 								<input id="tel" name="tel" type="text" value="'.$row["tel"].'"'  .$modif. '>
 							</label>
 						</li>
@@ -356,7 +356,7 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 							</label>
 						</li>
 						<li>
-							<label for="creation">Date cr�ation: 
+							<label for="creation">Date cr&eacute;ation: 
 								<input id="creation" name="creation" type="text" value="'.date_format(date_create($row["creation"]),'d-m-Y H:i:s').'"'  .$modif. '>
 							</label>
 						</li>
@@ -379,12 +379,12 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 						</li>
 						
 						<li>
-							<label for="code_cheminot">N� CP : 
+							<label for="code_cheminot">N&deg; CP : 
 								<input id="code_cheminot" name="code_cheminot" type="text" value="'.$row["code_cheminot"].'"'  .$modif. '>
 							</label>
 						</li>
 						<li>
-							<label for="region">R�gion : 
+							<label for="region">R&eacute;gion : 
 								<select name="region">';
 							
 								if (((int)$row["region"])==1) 
@@ -403,7 +403,7 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 						</li>
 					
 						<li>
-							<label for="newsletter">Newsleters ';
+							<label for="newsletter">Newsletters ';
 					
 								$affichage_info_client.='<select name="newsletter">';
 								if (((int)$row["newsletter"])==1) 
@@ -426,7 +426,7 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 						</label>
 					</li>
 					<li>
-						<input type="submit" value="Modifier">
+						<input class="button" type="submit" value="Modifier">
 					</li>
 				</form>
 			</ul>';	
@@ -444,7 +444,7 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 								<input id="nom" name="nom" type="text"'  .$modif. '>
 							</label></li>
 						<li>
-							<label for="prenom">Pr�nom : 
+							<label for="prenom">Pr&eacute;nom : 
 								<input id="prenom" name="prenom" type="text"'.$modif.'>
 							</label>
 						</li>
@@ -473,7 +473,7 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 							</label>
 						</li>
 						<li>
-							<label for="tel">Tel : 
+							<label for="tel">T&eacute;l&eacute;phone : 
 								<input id="tel" name="tel" type="text"'  .$modif. '>
 							</label>
 						</li>
@@ -492,7 +492,7 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 							</label>
 						</li>
 						<li>
-							<label for="creation">Date cr�ation: 
+							<label for="creation">Date cr&eacute;ation: 
 								<input id="creation" name="creation" type="text"'  .$modif. '>
 							</label>
 						</li>
@@ -507,12 +507,12 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 						</li>
 						
 						<li>
-							<label for="code_cheminot">N� CP : 
+							<label for="code_cheminot">N&deg; CP : 
 								<input id="code_cheminot" name="code_cheminot" type="text"'  .$modif. '>
 							</label>
 						</li>
 						<li>
-							<label for="region">R�gion : 
+							<label for="region">R&eacute;gion : 
 								<select name="region">
 									<option selected="selected" value="1">Oui</option>
 									<option value="0">Non</option>
@@ -521,7 +521,7 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 						</li>
 					
 						<li>
-							<label for="newsletter">Newsleters
+							<label for="newsletter">Newsletters
 								<select name="newsletter">
 									<option selected="selected" value="1">Oui</option>
 									<option value="0">Non</option>
@@ -534,7 +534,7 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 							</label>
 						</li>
 						<li>
-							<input type="submit" value="Modifier">
+							<input calss="button" type="submit" value="Cr&eacute;er">
 						</li>
 					</form>
 				</ul>';		
@@ -556,7 +556,7 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 		
 			// Creation du tableau pour afficher les clients
 					$affichage_client_ligne='<table border="2"  rules="groups" id="tableauClient" class="rechClient" width="600"><thead>
-									<tr><td ><a href="rechercheClient?actionClient=TE">Email</a></td><td><a href="rechercheClient?actionClient=TN">Nom</a></td><td><a href="rechercheClient?actionClient=TP">Pr�nom</a></td><td><a href="rechercheClient?actionClient=TT">Portable</A></td><th colspan="6">Action</th></tr>
+									<tr><td ><a href="rechercheClient?actionClient=TE">Email</a></td><td><a href="rechercheClient?actionClient=TN">Nom</a></td><td><a href="rechercheClient?actionClient=TP">Pr&eacute;nom</a></td><td><a href="rechercheClient?actionClient=TT">Portable</A></td><th colspan="6">Action</th></tr>
 									</thead>';
 				//boucle qui parcourt le r�sultats des requetes demand�es dans la BD
 				while ($row = $result_reqClient->fetch_assoc())
@@ -570,9 +570,9 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 											<td><a href="rechercheClient.php?actionClient=MAJ&idclient='.$row["idclient"].'&email='.$row["email"].'" title="Modifier les informations du client"><i class="foundicon-edit"></i></a></td>
 											<td><a onclick="apercuMail(\''.$row["email"].'\',\''.ucfirst($row["civilite"]).'. '.ucfirst($row["prenom"]).' '.ucfirst($row["nom"]).'\');" title="Envoyer un mail"><i class="foundicon-mail"></i></a></td>'
 											//<td><a href="rechercheClient.php?actionClient=EM&email='.$row["email"].'" title="Envoyer un email"><i class="foundicon-mail"></i></a></td>
-											.'<td><a href="rechercheClient.php?actionClient=MDP&email='.$row["email"].'" title="Generer un nouveau Mot de passe" onclick="return confirm(\'Etes vous sure de vouloir reg�n�rer un mot de passe?\');"><i class="foundicon-lock"></i></a></td>
+											.'<td><a href="rechercheClient.php?actionClient=MDP&email='.$row["email"].'" title="Generer un nouveau Mot de passe" onclick="return confirm(\'&Ecirc;tes vous sur(e) de vouloir reg&eacute;n&eacute;rer un mot de passe?\');"><i class="foundicon-lock"></i></a></td>
 											<td><a href="rechercheCommande.php?actionCommande=R&email='.$row["email"].'" title="Voir les commandes du client"><i class="foundicon-cart"></i></a></td> 
-											<td><a href="rechercheClient.php?actionClient=R&editionClient=D&idclient='.$row["idclient"].'" title="Supprimer ce client" onclick="return confirm(\'Etes vous sure de vouloir supprimer le client\');"><i class="foundicon-remove"></i></a></td>
+											<td><a href="rechercheClient.php?actionClient=R&editionClient=D&idclient='.$row["idclient"].'" title="Supprimer ce client" onclick="return confirm(\'&Ecirc;tes vous sure de vouloir supprimer le client\');"><i class="foundicon-remove"></i></a></td>
 											</tr>'; 
 				}		
 
@@ -592,13 +592,13 @@ if (!empty($MessageAction))
 **************************************************/
 
 
-$affichage_recherche='Vous pouvez remplacer des carct�res inconnus par % pour effectuer la recherche';
+$affichage_recherche='Vous pouvez remplacer des carct&egrave;res inconnus par % pour effectuer la recherche';
 $affichage_recherche.='<form action="rechercheClient.php?actionClient=R" method="post">';
 $affichage_recherche.='<label for="email">Email : </label><input id="email" name="email" type="text">
 			<label for="nom">Nom : </label><input id="nom" name="nom" type="text">
-			<label for="port">Num�ro de portable: </label><input id="port" name="port" type="int">';
+			<label for="port">Num&eacute;ro de portable: </label><input id="port" name="port" type="int">';
 $affichage_recherche.='<input type="submit" class="button [tiny small large]" value="Rechercher"></form>';
-$affichage_recherche.='<a href="rechercheClient.php?actionClient=CR" class="button [tiny small large] right">Creation d\'un client</a>';
+$affichage_recherche.='<a href="rechercheClient.php?actionClient=CR" class="button [tiny small large] right">Cr&eacute;ation d\'un client</a>';
 
 
 
@@ -607,10 +607,10 @@ $affichage_recherche.='<a href="rechercheClient.php?actionClient=CR" class="butt
 <div id="modalApercuEmail" class="reveal-modal" data-reveal>
 	<div>
 		<?php
-		if (isset($email)){
+		if ( $_GET["actionClient"] == 'R' ){
 			require_once 'includes/ink/baseMailHTML.php';
 			echo //$messageCSS.
-			$messageBodyBefore.'<input type="text" autofocus id="sujetMail" placeholder="Sujet">
+			$messageBodyBefore.'<input type="text" id="sujetMail" placeholder="Sujet">
 			<tr>
 				<td>
 					<h1 id="titreMail"></h1>
