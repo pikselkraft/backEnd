@@ -74,7 +74,7 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 			$reqUpdate="update CLIENTS	
 					 SET nom='".$_POST["nom"]."', prenom='".$_POST["prenom"]."', entreprise='".$_POST["entreprise"]."', 
 					 adresse='".$_POST["adresse"]."', codepostal='".$_POST["codepostal"]."', ville='".$_POST["ville"]."', 
-					 pays='".$_POST["ville"]."', tel='".$_POST["tel"]."', port='".$_POST["port"]."', 
+					 pays='".$_POST["pays"]."', tel='".$_POST["tel"]."', port='".$_POST["port"]."', 
 					 email='".$_POST["email"]."',date_naissance='".$_POST["date_naissance"]."', 
 					 cheminot='".$_POST["cheminot"]."', code_cheminot='".$_POST["code_cheminot"]."', region='".$_POST["region"]."', 
 					 newsletter='".$_POST["newsletter"]."', 
@@ -84,11 +84,36 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 				
 			if($mysqli) {
 				$MessageAction="Les information du client ont été mise à jour";
-				
-				/**
-	
-					!!* EVM envoi mail + template!!
-				*/
+				if ($_POST["cheminot"] == 1){
+					$messageCheminot = "Cheminot : Oui
+						Code cheminot : ".$_POST["code_cheminot"]."
+						Region Alsace : ";
+					if ($_POST["region"] == 1)
+						$messageCheminot .= "Oui";
+					else
+						$messageCheminot .= "Non";
+				}
+				else 
+					$messageCheminot = "Cheminot : Non";
+				$messageMailModif = "Nous vous informons que votre compte a été modifié.Voici un rappel de vos informations :
+				N° Client : $idclient
+				Nom : ".$_POST["nom"]."
+				Prenom : ".$_POST["prenom"]."
+				Entreprise : ".$_POST["entreprise"]."
+				Adresse : ".$_POST["adresse"]."
+				Code postal : ".$_POST["codepostal"]."
+				Ville : ".$_POST["ville"]."
+				Pays : ".$_POST["pays"]."
+				Telephone : ".$_POST["tel"]."
+				Port : ".$_POST["port"]."
+				Date de naissance : ".$_POST["date_naissance"]."
+				$messageCheminot
+				Newsletter : ";
+				if ($_POST["newsletter"] == 1)
+					$messageMailModif .= "Oui";
+				else 
+					$messageMailModif .= "Non";
+				envoyerEmail($_POST["email"], "Vos inforamtions ont été modifiées", $messageMailModif);
 			}
 			else {
 				$MessageAction="Problème lors de la mise à jour";
@@ -118,13 +143,8 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 
 			if($mysqli) {
 				$MessageAction="Le client a été crée";
-				
-				/**
-	
-					!!* EVM envoi mail + template!!
-				*/
-				
-				envoiMail($email, "Votre nouveau mot de passe","voici votre mot de passe : ".$newPass,$copy); // envoi par email (recap client +mp)
+				envoyerEmail($email, "Votre compte a bien été créé", "Nous vous informons que votre compte a été créé avec succès.\nVotre mot de passe : ".$newPass);
+				//envoiMail($email, "Votre nouveau mot de passe","voici votre mot de passe : ".$newPass,$copy); // envoi par email (recap client +mp)
 			}
 			else {
 				$MessageAction="Problème lors de la création du client";
@@ -197,7 +217,7 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 						}
 						 
 					}
-					echo $reqClient;
+					//echo $reqClient;
 			 
 				$result_reqClient=$mysqli->query($reqClient);
 				if(!$mysqli)
@@ -242,23 +262,19 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 				$result_reqClient=$mysqli->query($reqClient);		 
 				break;
 			case "MDP": //generation d'un nouveau mot de passe
-				
-				/**
-	
-					!!* EVM envoi mail + template!!
-				*/
-				
-				
 				$newPass=envoiPwd($_GET["email"]);
 				$MessageAction='<div class="messageInfo">Le nouveau mot de passe est : '.$newPass.'</div>';
-				$reqClient="select idclient, nom, prenom, port, email	
-						from CLIENTS where email='".$_GET["email"]."'";
-						$result_reqClient=$mysqli->query($reqClient);
+				// $reqClient="select idclient, nom, prenom, port, email	
+				// 		from CLIENTS where email='".$_GET["email"]."'";
+				// 		$result_reqClient=$mysqli->query($reqClient);
+				envoyerEmail($_GET["email"], "Votre nouveau mot de passe","Voici votre nouveau mot de passe : ".$newPass);
 				break;
 			case "EM": //generation d'un nouveau mot de passe
 				if (envoiMail($_GET["email"],"mon objet","dfdf",true))
 				 { echo "envoi ok";}
-			
+				/**
+					innutilisé car fait en 
+				*/
 				break;
 				
 			case "MAJ": //génération du formulaire de modifications
@@ -551,11 +567,12 @@ $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur l
 											<td>'.$row["prenom"].'</td>
 											<td>'.$row["port"].'</td>
 											<td><a href="affichTous.php?idClient='.$row["idclient"].'"><i class="foundicon-calendar"></i></a></td>
-											<td><a href="rechercheClient.php?actionClient=MAJ&idclient='.$row["idclient"].'&email='.$row["email"].'" alt="Modifier les informations du client"><i class="foundicon-edit"></i></a></td>
-											<td><a href="rechercheClient.php?actionClient=EM&email='.$row["email"].'" alt="Envoie email"><i class="foundicon-mail"></i></a></td>
-											<td><a href="rechercheClient.php?actionClient=MDP&email='.$row["email"].'" alt="Nouveau Mot de passe" onclick="return confirm(\'Etes vous sure de vouloir reg�n�rer un mot de passe?\');"><i class="foundicon-lock"></i></a></td>
-											<td><a href="rechercheCommande.php?actionCommande=R&email='.$row["email"].'" alt="Voir les commandes du client"><i class="foundicon-cart"></i></a></td> 
-											<td><a href="rechercheClient.php?actionClient=R&editionClient=D&idclient='.$row["idclient"].'" alt="Supprimer le client" onclick="return confirm(\'Etes vous sure de vouloir supprimer le client\');"><i class="foundicon-remove"></i></a></td>
+											<td><a href="rechercheClient.php?actionClient=MAJ&idclient='.$row["idclient"].'&email='.$row["email"].'" title="Modifier les informations du client"><i class="foundicon-edit"></i></a></td>
+											<td><a onclick="apercuMail(\''.$row["email"].'\',\''.ucfirst($row["civilite"]).'. '.ucfirst($row["prenom"]).' '.ucfirst($row["nom"]).'\');" title="Envoyer un mail"><i class="foundicon-mail"></i></a></td>'
+											//<td><a href="rechercheClient.php?actionClient=EM&email='.$row["email"].'" title="Envoyer un email"><i class="foundicon-mail"></i></a></td>
+											.'<td><a href="rechercheClient.php?actionClient=MDP&email='.$row["email"].'" title="Generer un nouveau Mot de passe" onclick="return confirm(\'Etes vous sure de vouloir reg�n�rer un mot de passe?\');"><i class="foundicon-lock"></i></a></td>
+											<td><a href="rechercheCommande.php?actionCommande=R&email='.$row["email"].'" title="Voir les commandes du client"><i class="foundicon-cart"></i></a></td> 
+											<td><a href="rechercheClient.php?actionClient=R&editionClient=D&idclient='.$row["idclient"].'" title="Supprimer ce client" onclick="return confirm(\'Etes vous sure de vouloir supprimer le client\');"><i class="foundicon-remove"></i></a></td>
 											</tr>'; 
 				}		
 
@@ -586,27 +603,68 @@ $affichage_recherche.='<a href="rechercheClient.php?actionClient=CR" class="butt
 
 
 ?>
-	<div class="row">
-		<div class="large-12 columns">
-			<div class="panel">
-			<h2>Recherche</h2>
-				<?= $affichage_recherche; ?>
-				<?= $MessageAction; ?>
-				<?= $avertissementSuppression?>
-			
-			</div>
+<!-- Modal d'apercu du mail -->
+<div id="modalApercuEmail" class="reveal-modal" data-reveal>
+	<div>
+		<?php
+		if (isset($email)){
+			require_once 'includes/ink/baseMailHTML.php';
+			echo //$messageCSS.
+			$messageBodyBefore.'<input type="text" autofocus id="sujetMail" placeholder="Sujet">
+			<tr>
+				<td>
+					<h1 id="titreMail"></h1>
+					<form>
+						<input id="hiddenEmail" type="hidden" name="email" value="">
+						<textarea rows="10" id="contenumail" name="message">Votre texte ici.</textarea>
+					</form>
+					<p>Pour toute question vous pouvez contacter le g&icirc;te.</p>
+					<p>&Agrave; tr&egrave;s bient&ocirc;t pour d&eacute;couvrir notre magnifique r&eacute;gion</p>
+				</td>
+				<td class="expander"></td>
+			</tr>'.$messageBodyAfter.'
+			<button class="tiny" onclick="envoi()" >Envoyer</button>';
+		}
+		?>
+	</div>
+	<a class="close-reveal-modal">&#215;</a>
+</div>
+<!-- fin du Modal d'apercu du mail -->
+<div class="row">
+	<div class="large-12 columns">
+		<div class="panel">
+		<h2>Recherche</h2>
+			<?= $affichage_recherche; ?>
+			<?= $MessageAction; ?>
+			<?= $avertissementSuppression?>
+		
 		</div>
 	</div>
-	
-	<div class="row">
-		<div class="large-12 columns">
-			<div class="panel">
-				<h2>Affichage Clients</h2>
-				<?= $affichage_client_ligne;?>
-				<?= $affichage_info_client;?>
-			</div>
-		</div>		
-	</div>
+</div>
+
+<div class="row">
+	<div class="large-12 columns">
+		<div class="panel">
+			<h2>Affichage Clients</h2>
+			<?= $affichage_client_ligne;?>
+			<?= $affichage_info_client;?>
+		</div>
+	</div>		
+</div>
 <?php
 	require('includes/footer.php');
 ?>
+<script>
+function apercuMail(emailAdd, nomClient){
+	$("#titreMail").text("Bonjour "+nomClient+",");
+	$("#hiddenEmail").val(emailAdd);
+	$("#modalApercuEmail").foundation('reveal', 'open');
+}
+function envoi(){
+	$.post("includes/ink/mailFacture.php", { email: $("#hiddenEmail").val(), message: $("#contenumail").val(), sujet: $("#sujetMail").val() } );
+	$("#modalApercuEmail").foundation('reveal', 'close');
+	$("#contenumail").val("Votre texte ici.");
+}
+</script>
+
+

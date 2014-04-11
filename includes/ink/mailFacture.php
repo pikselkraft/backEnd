@@ -15,7 +15,7 @@ define("MAIL_SDK", "sdk@cesncf-stra.org");
 define("MAIL_OCT", "oct@cesncf-stra.org");
 
 if ( isset($_POST["email"]) && isset($_POST["message"]) )
-	envoiSansFacture($_POST["email"], $_POST["message"]);
+	envoiSansFacture($_POST["email"], $_POST["message"] ) ;
 
 function envoiFacture($email,$chaineFichier,$message="")
 {
@@ -71,7 +71,7 @@ function envoiFacture($email,$chaineFichier,$message="")
 	}
 	else{echo "Email invalide";}
 }
-function envoiSansFacture($email,$message="")
+function envoiSansFacture($email,$message,$sujet)
 {
 	require('/var/www/resa/dev/config.php'); 
 	require_once 'baseMailHTML.php';
@@ -89,7 +89,7 @@ function envoiSansFacture($email,$message="")
 						'<tr>
 							<td>
 							<h1>Bonjour '.$civilite.'&nbsp; '.$nom.' '.$prenom.',</h1>
-										<p class="lead">'.htmlspecialchars($message).'</p>
+										'.nl2br('<p class="lead">'.htmlspecialchars($message).'</p><br/><br/>').'
 										<p>Pour toute question vous pouvez contacter le g&icirc;te.</p>
 										<p>&Agrave; tr&egrave;s bient&ocirc;t pour d&eacute;couvrir notre magnifique r&eacute;gion</p>
 							</td>
@@ -101,7 +101,7 @@ function envoiSansFacture($email,$message="")
 				$mail->AddReplyTo(MAIL_METZVAL, 'G&icirc;te le metzval');
 				$mail->AddAddress($email, $nom.' '.$prenom);
 				$mail->SetFrom(MAIL_METZVAL, 'G&icirc;te le metzval');
-				$mail->Subject = 'Recapitulatif de votre commande';
+				$mail->Subject = htmlspecialchars($sujet);
 				//$mail->AltBody = 'To view the message, please use an HTML compatible email viewer!'; // optional - MsgHTML will create an alternate automatically
 				$mail->MsgHTML($message_html);
 				$mail->Send();
