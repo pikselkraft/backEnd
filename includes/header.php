@@ -12,7 +12,8 @@ require('includes/fonctions.php');
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	
 	<link rel="stylesheet" href="includes/css/foundation.css">
-<!--	<link rel="stylesheet" href="includes/css/datePicker.css">-->
+	<link rel="stylesheet" href="includes/css/datePicker.css">
+	<link rel="stylesheet" href="includes/css/responsive-tables.css">
 <!--	<link rel="stylesheet" href="includes/css/calendrier.css">-->
 	<link rel="stylesheet" href="includes/foundation_icons_general/stylesheets/general_foundicons.css">
 	
@@ -87,10 +88,8 @@ require('includes/fonctions.php');
 			  <li class="has-dropdown">
 				<a href="statistique.php">Statistiques</a>
 				<ul class="dropdown">
-				  <li><a href="#">Reservation</a></li>
-				  <li><a href="#">CA</a></li>
-				  <li><a href="#">CA</a></li>
-				  <li><a href="#">CA</a></li>
+ 					<li><a href="statGite.php">Occupation des g&icirc;tes</a></li>
+				 	<li><a href="statCa.php">R&eacute;sultats financiers</a></li>
 				</ul>
 			  </li>
 			  <li class="has-dropdown">
