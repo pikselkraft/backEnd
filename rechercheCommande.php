@@ -31,6 +31,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 	// Z : action par défaut via le lien du menu
 	// S : édition du statut de la commande + maj somme
 		// US update statut et sommes
+		// T insert transaction
 	// E : édition de la commande + maj
 		// UE update base + sommes
 	// M : mail de rappel
@@ -63,10 +64,50 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 			$email=$_POST["email"];
 		}
 
-					$editionCommande=$_GET["editionCommande"]; // action sur la commande (statut/edition/mail/delete)
+					$editionCommande = $_GET["editionCommande"]; // action sur la commande (statut/edition/mail/delete)
 				
 					if(!empty($_GET["editionCommande"])){
-					
+
+						$statutModif = $_POST['statutModif'];
+						/**
+						 * ajout de la transaction
+						 */
+						if(($editionCommande!=="T" AND $editionCommande!=="S") AND ($statutModif==1 OR $statutModif==2 OR $statutModif==3 OR $statutModif==4)) {
+
+							$affichage_commande_ligne ='<h5>Ajouter une transaction</h5><form action="rechercheCommande.php?actionCommande=R&editionCommande=T&idcommande='.$idcommande.'" method="POST">
+									<table>
+										<thead>
+											<th width="50">Type de la transaction</th>
+											<th width="50">Motif</th>
+											<th width="50">R&eacute;f&eacute;rence</th>
+											<th width="50">Validation</th>
+										</thead>
+										<tr>
+											<td>
+												<label>
+													<input name="type_transaction" type="text" size="5" value="" placeholder="ch&egrave;que ou autres" required>
+												</label>
+											</td>
+											<td>
+												<label for="motif">
+													<input name="motif" type="text" size="10" value="" placeholder="accompte/total etc.">													
+												</label>
+											</td>
+											<td>
+												<label>
+													<input name="reference" type="text" size="5"  value="" placeholder="r&eacute;f&eacute;rence ch&egrave;que etc.">													
+												</label>
+											</td>
+											<td>
+												<label>
+													<input type="submit" class="button tiny" value="Ajouter">
+												</label>
+											</td>
+										</tr>
+									</table>
+									</form>';
+							}
+
 						switch ($editionCommande) 
 						{
 							case "US": //Update après édition statut
@@ -78,8 +119,8 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 									/**
 										* modification des prix selon statut
 									*/
-									
-									switch($_POST['statutModif']) {
+
+									switch($statutModif) {
 										case 0: // annulee
 										
 											$modifPrix="UPDATE COMMANDE SET total_paye=0, accompte_paye=0 WHERE idcommande='".$idcommande."'";
@@ -98,12 +139,18 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 										
 											$modifPrix="UPDATE COMMANDE SET caution_paye='P', accompte_paye=1, total_paye=accompte WHERE idcommande='".$idcommande."'";				
 											$mysqli->query($modifPrix);
+
+											$modifPrix="UPDATE RESERVATION SET statut='R', accompte_paye=0 WHERE idcommande='".$idcommande."'";
+											$mysqli->query($modifPrix);
 										
 										break;
 										
 										case 3: // total paye
 										
 											$modifPrix="UPDATE COMMANDE SET caution_paye='P', accompte_paye=1, total_paye=total WHERE idcommande='".$idcommande."'";				
+											$mysqli->query($modifPrix);
+
+											$modifPrix="UPDATE COMMANDE SET total_paye=0, accompte_paye=0 WHERE idcommande='".$idcommande."'";
 											$mysqli->query($modifPrix);
 										
 										break;
@@ -112,12 +159,18 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 										
 											$modifPrix="UPDATE COMMANDE SET caution_paye='P' WHERE idcommande='".$idcommande."'";
 											$mysqli->query($modifPrix);
+
+											$modifPrix="UPDATE COMMANDE SET total_paye=0, accompte_paye=0 WHERE idcommande='".$idcommande."'";
+											$mysqli->query($modifPrix);
 										
 										break;
 										
 										case 5: // caution rendu
 										
 											$modifPrix="UPDATE COMMANDE SET caution_paye='R' WHERE idcommande='".$idcommande."'";
+											$mysqli->query($modifPrix);
+
+											$modifPrix="UPDATE COMMANDE SET total_paye=0, accompte_paye=0 WHERE idcommande='".$idcommande."'";
 											$mysqli->query($modifPrix);
 										
 										break;
@@ -131,6 +184,19 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 
 							break;
 							
+							case "T": //insertion transaction -> après changement statut
+
+									$type_transaction = $_POST['type_transaction'];
+									$txn_id           = 0;
+									$date_transaction = date("Y-m-d H:i:s");
+									$motif            = $_POST['motif'];
+									$reference        = $_POST['reference'];
+
+									$insertTransaction="INSERT INTO TRANSACTION (type_transaction,txn_id,idcommande,date_transaction,motif,reference) VALUES ('".$type_transaction."','".$txn_id ."','".$idcommande."','".$date_transaction ."','".$motif ."','".$reference."')";
+									$mysqli->query($insertTransaction);
+
+							break;
+
 							case "UE": //Update après édition commande
 									
 									/**
@@ -276,8 +342,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 					$MessageAction="R&eacute;sultat de la recherche : ";
 				}			
 				//Boucle qui parcourt les clients dans la base de donn�es
-					
-					
+
 				break;
 				
 			case "Z": //raffcihe les 20 derni�res commandes
@@ -423,7 +488,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 										<td '.$couleurCommande.'>
 											<label>Nom et pr&eacute;nom du client
 												<input name="infoClient" type="text" size="5"  readonly value="'.$row["nom"].' '.$row["prenom"].'">													
-												</label>
+											</label>
 										</td>
 										<td '.$couleurCommande.'>
 											<label>Statut de la facture
@@ -467,8 +532,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 							</form>';
 				}
 				else if($editionCommande=='S') { // changement de statut
-										
-										
+
 									$result=count($statut);
 									$a=0;
 
@@ -480,7 +544,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 										$majStatut.='<option value="'.(int)$a.'">'.$statut[(int)$a]["designation"].'</option>';
 										$a++;
 									}
-									$majStatut.='</select><input type="submit" value="Modifier"></td></tr></table>'
+									$majStatut.='</select><input type="submit" value="Modifier"></td></tr></table>';
 
 									$majStatut.='</form>';
 
@@ -513,9 +577,6 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 									<td '.$couleurCommande.'>'.$row["remise_taux"].' %</td>
 									<td '.$couleurCommande.'>'.$row["total"].' &euro;</td>
 									<td '.$couleurCommande.'>'.$row["total_paye"].' &euro;</td>';
-									testVar($_POST);
-
-
 				}
 				else {
 					$affichage_commande_ligne.= '<tr >
@@ -540,58 +601,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 										<td '.$couleurCommande.'><a href="rechercheClient.php?actionClient=R&idcommande='.$row["idcommande"].'" title="Voir le compte du client"><i class="foundicon-address-book"></i></a></td>
 									</tr>';
 			}		
-			
 			$affichage_commande_ligne.='</table>';
-
-			/**
-			 * EN DEV
-			 */
-
-
-			/*if ($editionCommande=='S') { // en cas de modification on peut ajout d'un id transaction (si valeur entrée)
-					
-				$affichage_commande_ligne.='<br>
-								<table>
-									<thead>
-										<tr width="50"><th>Num&eacute;ro de la transaction</th>
-										<th width="50">Type de la transaction</th>
-										<th width="50">Identifiant Paypal</th>
-										<th width="50">Date</th>
-										<th width="50">Motif</th>
-										<th width="50">R&eacute;f&eacute;rence</th>
-									</thead>
-									<tr>
-										<td>
-											<label>
-												<input name="idtransaction" type="text" size="5" readonly value="" placeholder="Gestion automatique">													</label>
-										</td>
-										<td>
-											<label>
-												<input name="type_transaction" type="text" size="5" value="" placeholder="ch&egrave;que ou autres">													</label>
-										</td>
-										<td>
-											<label>
-												<input name="txn_id" type="text" size="25" value="" placeholder="vide">													
-											</label>
-										</td>
-										<td>
-											<label>
-												<input name="date_transaction" type="text" size="5" value="" placeholder="jj/mm/aaaa">													
-											</label>
-										</td>
-										<td>
-											<label for="motif">
-												<input name="motif" type="text" size="5" value="" placeholder="accompte/total etc.">													
-											</label>
-										</td>
-										<td>
-											<label>
-												<input name="reference" type="text" size="5"  value="" placeholder="r&eacute;f&eacute;rence ch&egrave;que etc.">													
-											</label>
-										</td>
-									</tr>
-								</table>';
-			}*/
 		
 			if($editionCommande=='D') { // la commande n'existe plus car supp
 					$affichage_commande_ligne=$messageTableauSupp;
@@ -637,9 +647,8 @@ $resultTransaction=$mysqli->query($recupTransaction);
 
 while ($rowTransaction = $resultTransaction->fetch_assoc())
 {					
-	 // stockage des transaction de la commande
-	 $affichage_transaction_ligne = '<form action="rechercheCommande.php?actionCommande=R&editionCommande=UE&idcommande='.$rowTransaction["idtransaction"].'" method="POST">
-								<table>
+	 // affichage des transactions de la commande
+	 $affichage_transaction_ligne = '<table>
 									<thead>
 										<tr width="50"><th>Num&eacute;ro de la transaction</th>
 										<th width="50">Type de la transaction</th>
@@ -679,8 +688,7 @@ while ($rowTransaction = $resultTransaction->fetch_assoc())
 										</td>
 
 									</tr>
-								</table>
-							</form>';
+								</table>';
 }
 ?>
 	<div class="row">
@@ -705,11 +713,10 @@ while ($rowTransaction = $resultTransaction->fetch_assoc())
 	</div>
 
 	<div class="row">
-		<h3> R&eacute;sultat</h3>
-
-					<div class="small-12 small-centered columns">
-							<?= $affichage_commande_ligne; ?>
-					</div>
+		<h3> Affichage</h3>
+			<div class="small-12 small-centered columns">
+					<?= $affichage_commande_ligne; ?>
+			</div>
 	</div>
 
  	<div class="row">
