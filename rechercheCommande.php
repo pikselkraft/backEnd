@@ -1,16 +1,5 @@
 <?php
 
-/* NOTE 
-
-	!!****	
-	
-		* css tableau et form ?
-		* edition des resa
-		* ajout transaction lors de modif + log user
-	
-	****!!
-	
-*/
 require('includes/header.php');
 	
 $MessageAction=""; // permet d'afficher un message de confirmation ou d erreur lors d'une action sur la BD
@@ -100,14 +89,14 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 										
 										case 1: // Attente accompte
 										
-											$modifPrix="UPDATE COMMANDE SET total_paye=0,accompte_paye=0 WHERE idcommande='".$idcommande."'";
+											$modifPrix="UPDATE COMMANDE SET caution_paye='A', total_paye=0,accompte_paye=0 WHERE idcommande='".$idcommande."'";
 											$mysqli->query($modifPrix);
 										
 										break;
 										
 										case 2: // accompte paye
-										
-											$modifPrix="UPDATE COMMANDE SET accompte_paye=1, total_paye=accompte WHERE idcommande='".$idcommande."'";				
+
+											$modifPrix="UPDATE COMMANDE SET caution_paye='P', accompte_paye=1, total_paye=accompte WHERE idcommande='".$idcommande."'";				
 											$mysqli->query($modifPrix);
 											require_once 'includes/pdf/factures/mailPDF.php';
 											require_once 'includes/ink/mailFacture.php';
@@ -116,8 +105,8 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 										break;
 										
 										case 3: // total paye
-											
-											$modifPrix="UPDATE COMMANDE SET accompte_paye=1, total_paye=total WHERE idcommande='".$idcommande."'";				
+						
+											$modifPrix="UPDATE COMMANDE SET caution_paye='P', accompte_paye=1, total_paye=total WHERE idcommande='".$idcommande."'";				
 											$mysqli->query($modifPrix);
 											//require_once 'includes/ink/phpmailer/class.phpmailer.php';
 											require_once 'includes/pdf/factures/mailPDF.php';
@@ -244,6 +233,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 	CO.accompte_paye, CO.total, CO.total_paye, G.nom as nom_gite, G.idgite, CO.remise_taux
 	FROM COMMANDE CO, COMMANDERESERVER CM, CLIENTS C, RESERVATION R, GITE G
 	WHERE CM.idclient=C.idclient AND CM.idreservation =R.idreservation AND CO.idcommande=CM.idcommande AND G.idgite=R.idgite";
+
 			
 					 if ((isset($_POST["statut_facture"])) and (($_POST["statut_facture"])<10) )
 					 {
@@ -297,15 +287,16 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 			// 		FROM COMMANDE CO, COMMANDERESERVER CM, CLIENTS C
 			// 		WHERE CM.idclient=C.idclient and CO.idcommande=CM.idcommande and CO.idcommande > '((SELECT max(idcommande) FROM COMMANDE)-20)'";
 			// ancienne requête
-			$reqCommandeResa="SELECT distinct CO.idcommande,  CM.idclient, C.nom, C.prenom, C.email, CO.taxe, CO.caution, CO.caution_paye, 
+
+			$reqCommandeResa="SELECT distinct CO.idcommande,  CM.idclient, C.nom, C.prenom, CO.taxe, CO.caution, CO.caution_paye, 
 				CO.montant_option, CO.remise, CO.code_promo, CO.date_creation, CO.statut_facture, CO.accompte, CO.accompte_paye, 
 				CO.total, CO.total_paye, G.nom as nom_gite, G.idgite, R.date_debut, R.date_fin, CO.remise_taux
 				FROM COMMANDE CO, COMMANDERESERVER CM, CLIENTS C, GITE G, RESERVATION R
 				WHERE CM.idclient=C.idclient 
-				and CO.idcommande=CM.idcommande
-				and R.idreservation=CM.idreservation
-				and G.idgite=R.idgite
-				and CO.idcommande > '((SELECT max(idcommande) FROM COMMANDE)-20)'
+				AND CO.idcommande=CM.idcommande
+				AND R.idreservation=CM.idreservation
+				AND G.idgite=R.idgite
+				AND CO.idcommande > '((SELECT max(idcommande) FROM COMMANDE)-20)'
 				ORDER BY CO.date_creation, CO.statut_facture";
 			$result_reqCommandeResa=$mysqli->query($reqCommandeResa);
 			if(!$mysqli)
@@ -382,6 +373,10 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 				}
 				
 				$couleurCommande='style=" border:2px solid '.$couleurStatut.';"';
+				if ($row["accompte_paye"] == 0)
+					$accompte_paye_symbole = '<i data-tooltip class="foundicon-error has-tip" title="Acompte non payé" style="font-style: normal;"> '.$row["accompte"].' &euro;</i>';
+				else
+					$accompte_paye_symbole = '<i data-tooltip class="foundicon-checkmark has-tip" title="Acompte payé" style="font-style: normal;"> '.$row["accompte"].' &euro;</i>';
 
 				//calcul de la remise
 				if ((int)$row["remise_taux"] > 0){
@@ -402,7 +397,17 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 					
 						/** 
 							* stockages des sélecteurs pour les booleans  
-						*/					
+						*/
+
+						$result=count($statut);
+						$a=0;
+						
+						$majStatut='<select name ="statutModif"><option selected="'.$statut[(int)$row["statut_facture"]]["designation"].'" value="'.$statut[(int)$row["statut_facture"]]["designation"].'">'.$statut[(int)$row["statut_facture"]]["designation"].'</option>';
+						while ($a<$result)
+						{
+							$majStatut.='<option value="'.(int)$a.'">'.$statut[(int)$a]["designation"].'</option>';
+							$a++;
+						}
 							
 						$cautionSelect='<select name ="cautionPayeCommande"><option selected="'.$row["caution_paye"].'" value="'.$row["caution_paye"].'">'.$row["caution_paye"].'</option>';
 
@@ -649,7 +654,6 @@ while ($rowTransaction = $resultTransaction->fetch_assoc())
 							</form>';
 }
 
-
 ?>
 
 <!-- Modal du message d'annulation -->
@@ -720,5 +724,4 @@ function envoiAnnulation(fct, emailAdd){
 	$.get("includes/ink/mailAnnulation.php?fonction=envoyer"+fct+"&email="+emailAdd );
 	$('#submitModifStatut').submit();
 }
-
 </script>

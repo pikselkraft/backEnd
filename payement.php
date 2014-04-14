@@ -1,6 +1,7 @@
 <?php
 require('includes/header.php');
 
+
 /**
  * SESSION
  * GESTION SESSION ET PAGE PRECEDENTE
@@ -17,29 +18,29 @@ require('includes/header.php');
  * CREATION: 06/11/2013 
 */
 
-
 /**************************************************/
 /*******GESTION DES VARIABLES ******
 /************************************************/
 // variable session resaencours
-$resaEncours = $_SESSION['resaEncours']; 
-$monTab=$_SESSION['Mesresa'];
-$resaPrecedente = $resaEncours	- 1 ;	
+$resaEncours      = $_SESSION['resaEncours']; 
+$monTab           = $_SESSION['Mesresa'];
+$resaPrecedente   = $resaEncours	- 1 ;	
 $_SESSION['test'] = true;
 
 /* stockage dans des variables de post du "formulaire.php" */
 
-$login 		= $monTab[0]['login']; // uniquement le login pour la première resa
-$cheminot 	= $monTab[$resaEncours]['cheminot'];
-$date_debut = $monTab[$resaEncours]['date_debut'];
-$date_fin 	= $monTab[$resaEncours]['date_fin'];
-$idgite 	= $monTab[$resaEncours]['idgite'];
-$nomGite 	= $monTab[$resaEncours]['nom'];
-$tarif 		= $monTab[$resaEncours]['tarif'];
+$login               = $monTab[0]['login']; // uniquement le login pour la première resa
+$cheminot            = $monTab[$resaEncours]['cheminot'];
+$date_debut          = $monTab[$resaEncours]['date_debut'];
+$date_fin            = $monTab[$resaEncours]['date_fin'];
+$idgite              = $monTab[$resaEncours]['idgite'];
+$nomGite             = $monTab[$resaEncours]['nom'];
+$tarif               = $monTab[$resaEncours]['tarif'];
 $_SESSION['Mesresa'] = $monTab;	
+//testVar($monTab[$resaEncours]);
 
 /* capacite du gite -> test du nombre adultes et enfants conforment */
-$cap = $_SESSION['gite_tab']['capacite'];
+$cap     = $_SESSION['gite_tab']['capacite'];
 $nomGite = $_SESSION['gite_tab']['nom'];
 
 /* option en $_post */
@@ -50,40 +51,23 @@ $option = $_POST['option'];
 */
 if(!empty($_POST['J-30']) or !empty($_POST['J+30']) or !empty($_POST['code-promo'])) { /* stockage en session en cas d'ereur sur nb adulte/enfant ou modification resa*/ 
 	
-	$_SESSION['joursMoins30'] = $_POST['J-30'];
-	$_SESSION['joursPlus30'] = $_POST['J+30'];
+	$_SESSION['joursMoins30']    = $_POST['J-30'];
+	$_SESSION['joursPlus30']     = $_POST['J+30'];
 	$_SESSION['payementMoins30'] = $_POST['payementJ-30'];
-	$_SESSION['payementPlus30'] = $_POST['payementJ+30'];
-	
-	$_SESSION['code-promo'] = $_POST['code-promo'];
+	$_SESSION['payementPlus30']  = $_POST['payementJ+30'];
+	$_SESSION['code-promo']      = $_POST['code-promo'];
 }
 
 /**
 	* recuperation des variables de payement
 */
 
-$joursMoins30 = $_SESSION['joursMoins30'];
-$joursPlus30 = $_SESSION['joursPlus30'];
+$joursMoins30    = $_SESSION['joursMoins30'];
+$joursPlus30     = $_SESSION['joursPlus30'];
 $payementMoins30 = $_SESSION['payementMoins30'];
-$payementPlus30 = $_SESSION['payementPlus30'];
-$testCodePromo = $_SESSION['code-promo'];
+$payementPlus30  = $_SESSION['payementPlus30'];
+$testCodePromo   = $_SESSION['code-promo'];
 
-/********************************************
-	*	Reprise reservation (session, arr&ecirc;t sur page payement.php.php)
-*********************************************/
-if(isset($_GET['poursuite']))
-{
-	$repriseResa = $_GET['poursuite'];
-	if($repriseResa==2) // par cb
-	{
-		echo "<div class='msg'><p>Valider votre r&eacute;servation et r&eacute;gler votre accompte via Paypal</p></div>";
-		$payementCbComplet = true;
-	} else if ($repriseResa==3) // par cheque
-		{
-			echo "<div class='msg'><p>Envoy&eacute; le cheque pour valider votre r&eacute;servation</p></div>";
-			$payementChequeComplet = true;
-		}
-}
 
 /**************************************************/
 /*******GESTION CODE PROMOTION ******
@@ -110,14 +94,12 @@ if(isset($testCodePromo))
 				$sqlSuppCode = "UPDATE CODEPROMO
 								SET nb ='".$nbCode."'
 								WHERE code ='".$_POST['code-promo']."'"; // mise &agrave; jour nombre codepromo
-				echo $sqlSuppCode;
 				$resultSuppCode = $mysqli->query($sqlSuppCode);
 				
 				if($mysqli)
 				{
 					echo"<div class='msg'><p>Votre code de promotion a &eacute;t&eacute; appliqu&eacute;</p></div>";
 					$calculRemise = ($tarif * $valeurRemise) / 100;
-					testVar($calculRemise);
 					$_SESSION['code']++;			
 				}else {echo"<div class='msg-error'><p>Votre code promotion n'est plus valide</p></div>";}
 			}
@@ -137,7 +119,7 @@ if(isset($_POST['nb_adulte']) and isset($_POST['nb_enfant']))
 	$nb_enfantTotal    = $_POST['nb_enfantTotal'];
 	$cap               = $_SESSION['gite_tab']['capacite']; // capacit&eacute; du g&icirc;te
 	$veriefNbPersonnes = $nb_adulte + $nb_enfant + $nb_enfantTotal;
-	
+
 	if((!verifCapacite($nb_adulte,$nb_enfantTotal,$cap)) or ($nb_enfant>$nb_enfantTotal) or ($veriefNbPersonnes==0))
 	{
 		?>
@@ -192,23 +174,20 @@ else
 
 		while ($ressqlOption = $resultOption->fetch_assoc()) 
 			{
-				$optionId[$i] = $ressqlOption['idoption']; /* &agrave; tester avec insert choix option */
-				//testVar2($optionId[$i],"optionId","optionId");
-				$tarifOption  = $tarifOption + $ressqlOption['option_tarif']; /* parcours tarifs s&eacute;lectionn&eacute;s et addition */
+				$optionDenomination[$i] = $ressqlOption['denomination'];
+				$optionId[$i]           = $ressqlOption['idoption']; /* &agrave; tester avec insert choix option */
+				$tarifOption            = $tarifOption + $ressqlOption['option_tarif']; /* parcours tarifs s&eacute;lectionn&eacute;s et addition */
 			}
 			$monTab[$resaEncours][$optionId[$i]] = $optionId[$i];
-			//testVar2($monTab,"test monTab","monTab");
 	}
 	
 	$monTab[$resaEncours]['tarifOption'] = $tarifOption;
 	$_SESSION['Mesresa']                 = $monTab;	
-	//testVar2($optionId,"test idoption","idoption"); /* &agrave; tester avec insert choix option */
 } // fin else option
 
 /************************************************
 	* Redirection si multi resa et insertion donn&eacute;es monTab
 ************************************************/
-//testVar2($_POST['radios_0'],"radios_0","radios_0");
 if($_POST['radios_0']==1)
    {
 		// stockage dans des variables de post du "formulaire.php"
@@ -219,14 +198,13 @@ if($_POST['radios_0']==1)
 	
 		$_SESSION['Mesresa'] = $monTab;
 		$monTab              = $_SESSION['Mesresa'];
-	
-		$resaEncours = count($monTab);
+		$resaEncours         = count($monTab);
 
 		for ($i=0;$i<=$_SESSION['count'];$i++) // parcours des resa
 		{
      		$_SESSION['resaEncours'] = $i;
 		}
-		header('Location:multiResa.php?idgite='.$_POST['gite-select'].'&add=1');
+		header('Location:?page_id=20&idgite='.$_POST['gite-select'].'&add=1');
    		ob_end_flush(); // envoie des donn&eacute;es du flux
    		exit(); /* empeche insertion resa si multi reservation*/
    }
@@ -244,7 +222,6 @@ if((isset($_POST['nb_adulte'])) || (isset($monTab[$resaEncours]['nb_adulte'])))
 		/***********************************
 			* Calcul variables reservation courante
 		***********************************/
-		//testVar2($monTab[$i]['idgite'],"test loop monTab","test loop monTab");
 		$insertIdgite      = $monTab[$i]['idgite'];
 		$insertNb_adulte   = $monTab[$i]['nb_adulte'];
 		$insertNb_enfant   = $monTab[$i]['nb_enfant'];
@@ -255,35 +232,25 @@ if((isset($_POST['nb_adulte'])) || (isset($monTab[$resaEncours]['nb_adulte'])))
 		
 		/*insertion r&eacute;servation */
 		$sqlResa = "INSERT INTO RESERVATION (idgite,nb_adulte,nb_enfant,date_debut,date_fin,statut,date_creation) VALUES ('".$insertIdgite."','".$insertNb_adulte ."','".$insertNb_enfant."','".$insertDate_debut ."','".$insertDate_fin ."','".$insertType_statut."','".$date_creation."')";  // r&eacute;servation avec statut en attente
-		//testVar($sqlResa); 
 		$mysqli->query($sqlResa);
 		
 		$sqlRecup_Idresa = "SELECT idreservation FROM RESERVATION WHERE idgite='".$insertIdgite."' AND date_debut='".$insertDate_debut."' AND date_fin='".$insertDate_fin."'";  // r&eacute;servation avec statut en attente
 		
-		//testVar2($sqlRecup_Idresa,"select idresa","select idresa");
 		$resultRecup_Idresa = $mysqli->query($sqlRecup_Idresa);
 		
 		while ($ressqlRecup_Idresa = $resultRecup_Idresa->fetch_assoc()) 
 		{
 			$resaId[$i] = $ressqlRecup_Idresa['idreservation'];
-			//testVar2($resaId[$i],"test resaId","resaId");
 		}
 		
-		$facteurEnfant       = $monTab[$i]['nb_enfant'];
-		$facteurAdulte       = $monTab[$i]['nb_adulte'];
-		//testVar2($facteurAdulte,"facteurAdulte","facteurAdulte" );
-		//testVar2($facteurEnfant,"facteurEnfant","facteurEnfant" );
-		
-		$taxeAdulte          = calculTaxe ("adulte",$facteurAdulte,$resaId[$i],"I");
-		//testVar2($taxeAdulte,"taxeAdulte","taxeAdulte");
-		$taxeEnfant          = calculTaxe ("enfant",$facteurEnfant ,$resaId[$i],"I");
-		//testVar2($taxeEnfant,"taxeEnfant","taxeEnfant");
+		$facteurEnfant = $monTab[$i]['nb_enfant'];
+		$facteurAdulte = $monTab[$i]['nb_adulte'];
+		$taxeAdulte    = calculTaxe ("adulte",$facteurAdulte,$resaId[$i],"I");
+		$taxeEnfant    = calculTaxe ("enfant",$facteurEnfant ,$resaId[$i],"I");
 		
 		$taxe                = $taxe + ($taxeAdulte+$taxeEnfant);
-		//testVar2($taxe,"taxe","taxe");
 		$monTab[$i]['taxe']  = $taxe;
 		$_SESSION['Mesresa'] = $monTab;
-		//testVar2($taxe,"taxe","taxe");
 	}
 
 	if($mysqli) {
@@ -304,46 +271,32 @@ if((isset($_POST['nb_adulte'])) || (isset($monTab[$resaEncours]['nb_adulte'])))
 			{
 				$caution = $resqlCaution['montant_caution']; // valeur caution en fonction du gite
 			}
-			
+
 			$monTab[$i]['caution'] = $caution;
-			
 			$cautionTotal          = $cautionTotal + $caution;
-			
 			$option_resa           = $option_resa + $monTab[$i]['tarifOption'];
-			//testVar($option_resa);
-			
 			$tarif_resa            = $tarif_resa + $monTab[$i]['tarif'];
-			//testVar2($tarif_resa,"testtarif","testtarif");
 		}	
 									
-			$remise          = $calculRemise;  	// &agrave; stocker dans le calcul de la r&eacute;sa
-			$code_promo      = $_POST['code-promo']; // req
-			
-			$date_creation   = date("Y-m-d H:i:s");
-			$statut_facture  = 1;   // MODIFICATION APRÈS VALIDATION (INSERT)
+			$remise			= $calculRemise;  	// &agrave; stocker dans le calcul de la r&eacute;sa
+			$code_promo		= $_POST['code-promo']; // req
+
+			$date_creation	= date("Y-m-d H:i:s");
+			$statut_facture	= 1;   // MODIFICATION APRÈS VALIDATION (INSERT)
 			
 			$accompte_paye   = 0; // MODIFICATION APRÈS VALIDATION (INSERT)
-			//testVar2($taxe,'taxe','taxe');
-			//echo "<ul><li>".$tarif_resa."</li><li>".$taxe."</li><li>".$cautionTotal."</li><li> ".$option_resa."</li></pre>";
 			$calcul_accompte = ($tarif_resa + $option_resa) - $remise;
-			//testVar($calcul_accompte);
 			$accompte        = (30*$calcul_accompte)/100;
-			//testVar2($accompte,'accompte','accompte');
 			$total           = ($tarif_resa + $taxe + $cautionTotal + $option_resa) - $remise;
 			$totalPaypal     = ($tarif_resa + $option_resa) - $remise;
-			testVar2($totalPaypal,'totalPaypal','totalPaypal');
-			testVar2($tarif_resa,'tarif_resa','tarif_resa');
-			testVar2($option_resa,'option_resa','option_resa');
-			testVar2($total,'total','total');
 			$total_paye      = 0; // MODIFICATION APRÈS VALIDATION (INSERT)
 
 
-			$monTab[$resaEncours]['total'] = $total;
-			$monTab[$resaEncours]['montantPlus30J'] = $accompte; /* montant &agrave; payer */ 
+			$monTab[$resaEncours]['total']           = $total;
+			$monTab[$resaEncours]['montantPlus30J']  = $accompte; /* montant &agrave; payer */ 
 			$monTab[$resaEncours]['montantMoins30J'] = $total - $cautionTotal; /* montant &agrave; payer */ 
 
-			$sqlCo = "INSERT INTO COMMANDE  (taxe,caution,montant_option,remise,code_promo,date_creation,statut_facture,accompte,accompte_paye,total,total_paye) VALUES ('".$taxe."','".$cautionTotal."','".$option_resa."','".$remise."','".$code_promo."','".$date_creation."','".$statut_facture."','".$accompte."','".$accompte_paye."','".$total."','".$total_paye."')";  
-			//echo $sqlCo;
+			$sqlCo = "INSERT INTO COMMANDE (taxe,caution,caution_paye,montant_option,remise,code_promo,date_creation,statut_facture,accompte,accompte_paye,total,total_paye) VALUES ('".$taxe."','".$cautionTotal."','A','".$option_resa."','".$remise."','".$code_promo."','".$date_creation."','".$statut_facture."','".$accompte."','".$accompte_paye."','".$total."','".$total_paye."')";  
 			$mysqli->query($sqlCo); // INSERTION COMMANDE
 		 
 				if($mysqli)
@@ -361,7 +314,7 @@ if((isset($_POST['nb_adulte'])) || (isset($monTab[$resaEncours]['nb_adulte'])))
 						{
 							$idReservation = $resqlIdReservation['idreservation'];
 						}
-								
+												
 						$reqIdCommande = "SELECT idcommande FROM COMMANDE 
 										WHERE date_creation='".$date_creation."'";
 												
@@ -373,7 +326,7 @@ if((isset($_POST['nb_adulte'])) || (isset($monTab[$resaEncours]['nb_adulte'])))
 							
 						$reqIdClient =	"SELECT idclient FROM CLIENTS 
 										WHERE email='".$login."'";
-						//testVar($reqIdClient);					
+										
 						$sqlIdClient = $mysqli->query($reqIdClient);
 						while ($resqlIdClient = $sqlIdClient->fetch_assoc())
 						{
@@ -395,7 +348,7 @@ if((isset($_POST['nb_adulte'])) || (isset($monTab[$resaEncours]['nb_adulte'])))
 
 							if($mysqli) // si insertion commandereserver true
 							{
-								echo "<div class='msg-none'><p>Vous devez valider votre commande pour finaliser votre r&eacute;servation</p></div>";		
+								$message = "<div class='msg-none'><p>Vous devez valider votre commande pour finaliser votre r&eacute;servation</p></div>";		
 								/* insertion idoption et idreservation dans CHOIXOPTION */
 							}
 							else
@@ -439,14 +392,16 @@ if((isset($_POST['nb_adulte'])) || (isset($monTab[$resaEncours]['nb_adulte'])))
 		/**
 			*	affiche adresse gite (payement par cheque)
 		*/
-		
 ?>
-		<div class="fil-commande">
-			<p>etape 1: s&eacute;lection des dates >> etape 2: connexion >> etape 3: r&eacute;servation >> etape 4: validation</p>
-		</div>	
-		
-		<?= $message; ?>	
+
+<div class="row">
+	<div class="small-11 small-centered columns">	
+		<?= $message; ?>
+	</div>
+</div>	
 	
+<div class="row">
+	<div class="small-11 small-centered columns">
 		<div class="fiche-commande">
 			<h3>Votre Commande</h3>
 				<?php
@@ -464,7 +419,6 @@ if((isset($_POST['nb_adulte'])) || (isset($monTab[$resaEncours]['nb_adulte'])))
 					
 				?>
 				<table border="2" frame="hsides" rules="groups" summary="Tarif du g&icirc;te le Metzval">
-					<caption>Vos informations clients</caption>
 						<colgroup align="center"></colgroup>
 						<colgroup align="left"></colgroup>
 						<colgroup align="center" span="2"></colgroup>
@@ -481,20 +435,12 @@ if((isset($_POST['nb_adulte'])) || (isset($monTab[$resaEncours]['nb_adulte'])))
 							<td><?= $nomGite.' ('.$cap.' personnes)'; ?></td>
 						</tr>
 						<tr> 
-							<td>Date de d&eacute;part</td>
-							<td><?= dateFr($monTab[$i]['date_debut']); ?></td>
+							<td>Vos dates de r&eacute;servation</td>
+							<td><?= "Du ".dateFr($monTab[$i]['date_debut'])." au ".dateFr($monTab[$i]['date_fin']); ?></td>
 						</tr>
 						<tr>
-							<td>Date d'arriv&eacute;e</td>
-							<td><?= dateFr($monTab[$i]['date_fin']); ?></td>
-						</tr>
-						<tr>
-							<td>Le nombre d'adultes</td>
-							<td><?= $monTab[$i]['nb_adulte']." adulte(s)"; ?></td>
-						</tr>
-						<tr>
-							<td>Le nombre d'enfants</td>
-							<td><?= $monTab[$i]['nb_enfant']." enfant(s)"; ?></td>
+							<td>Le nombre d'adultes/enfants</td>
+							<td><?= $monTab[$i]['nb_adulte']." adulte(s) et ".$monTab[$i]['nb_enfant']." enfant(s)"; ?></td>
 						</tr>
 						<tr>
 							<td>Le nombre d'enfants de plus de 13 ans</td>
@@ -505,20 +451,36 @@ if((isset($_POST['nb_adulte'])) || (isset($monTab[$resaEncours]['nb_adulte'])))
 							<td><span class="txtbold">Le tarif de votre r&eacute;servation</span></td>
 							<td><span class="txtbold"><?= $monTab[$i]['tarif']." &euro;"; ?></span></td>
 						</tr>
-						<tr>
+
+						<!-- Gestion des options -->
+
+						<!-- <tr>
 							<td><span class="txtbold">Le montant de vos options</span></td>
 								<td><span class="txtbold"><?php 
-									if(empty($option)) {echo "<span class='txtbold'>vous n'avez pas s&eacute;lectionn&eacute; d'option</span>"; }
-									else { echo '<span class="txtbold">'.$monTab[$i]['tarifOption'].' &euro;</span>';} 
+									//if(empty($option)) {echo "<span class='txtbold'>vous n'avez pas s&eacute;lectionn&eacute; d'option</span>"; }
+									//else { echo '<span class="txtbold">'.$monTab[$i]['tarifOption'].' &euro;</span>';} 
 									?>
 								</span></td>
-						</tr>
+						</tr> -->
+						<?php
+						//if(empty($option)) {
+								// on affiche rien
+						//}
+						//else {
+							?>
+							<!-- <tr>
+								<td><span class="txtbold">Vos options</span></td>
+									<td><span class="txtbold"><?php //for ($i=0; $i < count($option) ; $i++) {  echo $optionDenomination[$i].' '; } ?></span></td>
+							</tr> -->
+							<?php
+							//}	// fin else
+						?>
 						<tr>
 							<td><span class="txtbold">Le montant des taxes</span></td>
 							<td><span class="txtbold"><?= $monTab[$i]['taxe']." &euro;"; ?></span></td>
 						</tr>
 						<tr>
-							<td><span class="txtbold">Le montant de la caution</span></td>
+							<td><span class="txtbold">Le montant de la caution (&agrave; régler sur place)</span></td>
 							<td><span class="txtbold"><?= $monTab[$i]['caution']." &euro;"; ?></span></td>
 						</tr>
 						<tr>
@@ -526,7 +488,7 @@ if((isset($_POST['nb_adulte'])) || (isset($monTab[$resaEncours]['nb_adulte'])))
 							<td><span class="txtbold"><?= $monTab[$i]['total']." &euro;"; ?></span></td>
 						</tr>
 						<?php
-						if(!$payementCbComplet || !$payementChequeComplet) {
+						if($payementCbComplet==false || $payementChequeComplet==false) {
 						?>
 						<tr>
 							<td><span class="txtbold">Montant de l'accompte</span></td>
@@ -536,10 +498,10 @@ if((isset($_POST['nb_adulte'])) || (isset($monTab[$resaEncours]['nb_adulte'])))
 						}
 						?>
 						<tr style="border-color:red;">
-							<td><span class="txtbold-red">Montant &agrave; r&eacute;gler</span></td>
+							<td><span class="txtbold-red">Montant &agrave; r&eacute;gler aujourd'hui</span></td>
 							<td>
 								<?php 
-									if($payementCbComplet || $payementChequeComplet)
+									if($payementCbComplet==true || $payementChequeComplet==true)
 									{echo '<span class="txtbold-red">'.$monTab[$resaEncours]['montantMoins30J'].' &euro; </span>';}
 									else
 									{echo '<span class="txtbold-red">'.$monTab[$resaEncours]['montantPlus30J']. ' &euro;</span>';}
@@ -547,39 +509,30 @@ if((isset($_POST['nb_adulte'])) || (isset($monTab[$resaEncours]['nb_adulte'])))
 							</td>
 						</tr>
 						<tr style="border-color:red;">
-							<td><span class="txtbold-red">Reste &agrave; r&eacute;gler</span></td>
+							<td><span class="txtbold-red">Reste &agrave; r&eacute;gler avant votre arriv&eacute;e</span></td>
 							<td>
 								<?php 
-									if($payementCbComplet || $payementChequeComplet)
+									if($payementCbComplet==true || $payementChequeComplet==true)
 									{
-										$reste = $caution;
-										echo '<span class="txtbold-red">'.$reste.' &euro; </span>';
+										$reste = "La caution lors de votre arriv&eacute;e.";
+										echo '<span class="txtbold-red">'.$reste.'</span>';
 									}
 									else
 									{
-										$reste = $total - $accompte;
-										echo '<span class="txtbold-red">'.$reste. ' &euro;</span>';
+										$reste = $total - $accompte - $cautionTotal;
+										echo '<span class="txtbold-red">'.$reste. ' &euro; et la caution sur place</span>';
 									}
 								?>
 							</td>
 						</tr>
 					</tbody>
 				</table>
-				<?php 
-					if($payementCbComplet || $payementChequeComplet)
-					{echo "<small>Vous allez payer la totalit&eacute; de la r&eacute;servation except&eacute; la caution.</small>";}
-					else
-					{echo "<small>Vous allez r&eacute;gler l'accompte (30% du tarif de la r&eacute;servation) avec les taxes de s&eacute;jour.</small>";}
-				?>
-				<br />
-				<small>La caution se r&egrave;gle sur place.</small>
 				<?php
 					}
 				} // fin if count montab = 1
 				else { /* affiche une commande de plusieurs resa et des resas */
 				?>
 					<table border="2" frame="hsides" rules="groups" summary="Tarif du g&icirc;te le Metzval">
-					<caption>Vos informations clients</caption>
 						<colgroup align="center"></colgroup>
 						<colgroup align="left"></colgroup>
 						<colgroup align="center" span="2"></colgroup>
@@ -595,20 +548,35 @@ if((isset($_POST['nb_adulte'])) || (isset($monTab[$resaEncours]['nb_adulte'])))
 							<td>Votre num&eacute;ro de commande</td>
 							<td><?= $idCommande; ?></td>
 						</tr>
-						<tr>
+						<!-- <tr>
 							<td><span class="txtbold">Le montant de vos options (total)</span></td>
 								<td><span class="txtbold"><?php 
-									if(empty($option)) {echo "<span class='txtbold'>vous n'avez pas s&eacute;lectionn&eacute; d'option</span>"; }
-									else { echo '<span class="txtbold">'.$option_resa.' &euro;</span>';} 
+									//if(empty($option)) {echo "<span class='txtbold'>vous n'avez pas s&eacute;lectionn&eacute; d'option</span>"; }
+									//else { echo '<span class="txtbold">'.$option_resa.' &euro;</span>';} 
 									?>
 								</span></td>
-						</tr>
+						</tr> -->
+
+						<?php
+						//if(empty($option)) {
+								// on affiche rien
+						//}
+						//else {
+							?>
+							<!-- <tr>
+								<td><span class="txtbold">Vos options</span></td>
+									<td><span class="txtbold"><?php //for ($i=0; $i < count($option) ; $i++) {  echo $optionDenomination[$i].' '; } ?></span></td>
+							</tr> -->
+							<?php
+							//}	// fin else
+						?>
+
 						<tr>
 							<td><span class="txtbold">Le montant des taxes (total)</span></td>
 							<td><span class="txtbold"><?= $taxe." &euro;"; ?></span></td>
 						</tr>
 						<tr>
-							<td><span class="txtbold">Le montant des cautions</span></td>
+							<td><span class="txtbold">Le montant des cautions (&agrave; régler sur place)</span></td>
 							<td><span class="txtbold"><?= $cautionTotal." &euro;"; ?></span></td>
 						</tr>
 						<tr>
@@ -616,7 +584,7 @@ if((isset($_POST['nb_adulte'])) || (isset($monTab[$resaEncours]['nb_adulte'])))
 							<td><span class="txtbold"><?= $total." &euro;"; ?></span></td>
 						</tr>
 						<?php
-						if(!$payementCbComplet || !$payementChequeComplet) {
+						if($payementCbComplet==false || $payementChequeComplet==false) {
 						?>
 						<tr>
 							<td><span class="txtbold">Montant de l'accompte</span></td>
@@ -626,10 +594,10 @@ if((isset($_POST['nb_adulte'])) || (isset($monTab[$resaEncours]['nb_adulte'])))
 						}
 						?>
 						<tr style="border-color:red;">
-							<td><span class="txtbold-red">Montant &agrave; r&eacute;gler</span></td>
+							<td><span class="txtbold-red">Montant &agrave; r&eacute;gler aujourd'hui</span></td>
 							<td>
 								<?php 
-									if($payementCbComplet || $payementChequeComplet)
+									if($payementCbComplet==true || $payementChequeComplet==true)
 									{
 										$totalApayer = $total - $cautionTotal;
 										echo '<span class="txtbold-red">'.$totalApayer.' &euro; </span>';
@@ -640,32 +608,25 @@ if((isset($_POST['nb_adulte'])) || (isset($monTab[$resaEncours]['nb_adulte'])))
 							</td>
 						</tr>
 						<tr style="border-color:red;">
-							<td><span class="txtbold-red">Reste &agrave; r&eacute;gler</span></td>
+							<td><span class="txtbold-red">Reste &agrave; r&eacute;gler avant votre arrivée</span></td>
 							<td>
 								<?php 
-									if($payementCbComplet || $payementChequeComplet)
+									if($payementCbComplet==true || $payementChequeComplet==true)
 									{
-										$reste = $cautionTotal;
+										$reste ="La caution lors de votre arriv&eacute;e.";
 										echo '<span class="txtbold-red">'.$reste.' &euro; </span>';
 									}
 									else
 									{
-										$reste = $total - $accompte;
-										echo '<span class="txtbold-red">' .$reste. ' &euro;</span>';
+										$reste = $total - $accompte - $cautionTotal;
+										echo '<span class="txtbold-red">'.$reste. ' &euro; et la caution sur place</span>';
 									}
 								?>
 							</td>
 						</tr>
 					</tbody>
 				</table>
-				<?php 
-					if($payementCbComplet || $payementChequeComplet)
-					{echo "<small>Vous allez payer la totalit&eacute; de la r&eacute;servation except&eacute; la caution.</small>";}
-					else
-					{echo "<small>Vous allez r&eacute;gler l'accompte (30% du tarif de la r&eacute;servation) avec les taxes de s&eacute;jour.</small>";}
-				?>
-				<br />
-				<small>La caution se r&egrave;gle sur place.</small>
+
 				<?php
 					/**
 						* requete afficahge resa
@@ -685,12 +646,12 @@ if((isset($_POST['nb_adulte'])) || (isset($monTab[$resaEncours]['nb_adulte'])))
 
 						while ($ressqlAffichGite = $sqlAffichGite->fetch_assoc()) 
 						{
-							$affichIdResa[$i] = $ressqlAffichGite['idreservation'];
-							$affichIdGite[$i] = $ressqlAffichGite['idgite'];
-							$affichNbAdulte[$i] = $ressqlAffichGite['nb_adulte'];
-							$affichNbEnfant[$i] = $ressqlAffichGite['nb_enfant'];
+							$affichIdResa[$i]    = $ressqlAffichGite['idreservation'];
+							$affichIdGite[$i]    = $ressqlAffichGite['idgite'];
+							$affichNbAdulte[$i]  = $ressqlAffichGite['nb_adulte'];
+							$affichNbEnfant[$i]  = $ressqlAffichGite['nb_enfant'];
 							$affichDateDebut[$i] = $ressqlAffichGite['date_debut'];
-							$affichDateFin[$i] = $ressqlAffichGite['date_fin'];
+							$affichDateFin[$i]   = $ressqlAffichGite['date_fin'];
 						}
 						
 						$reqNom="SELECT nom FROM GITE 
@@ -751,11 +712,12 @@ if((isset($_POST['nb_adulte'])) || (isset($monTab[$resaEncours]['nb_adulte'])))
 			{
 				if($payementCbComplet==false) {echo $taxe=0;} /* on ne paye pas de taxe pour l'accompte*/
 		?>
-				<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="POST" id="paypal-form">
+				<form action="https://www.paypal.com/cgi-bin/webscr" method="POST" id="paypal-form">
+				<!-- <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="POST" id="paypal-form"> -->
 					<fieldset>
 						<input name="amount" type="hidden" value="
 									<?php 
-												if($payementCbComplet)
+												if($payementCbComplet==true)
 												{echo $totalPaypal;}
 												else
 												{echo $accompte;}
@@ -763,9 +725,9 @@ if((isset($_POST['nb_adulte'])) || (isset($monTab[$resaEncours]['nb_adulte'])))
 						<input name="currency_code" type="hidden" value="EUR" />
 						<input name="shipping" type="hidden" value="0.00" />
 						<input name="tax" type="hidden" value="<?php echo $taxe ?>	" />
-						<input name="return" type="hidden" value="http://gite-lemetzval.fr/wp/?page_id=203" />
-						<input name="cancel_return" type="hidden" value="http://gite-lemetzval.fr/wp/?page_id=201" />
-						<input name="notify_url" type="hidden" value="http://gite-lemetzval.fr/wp/?page_id=213" />
+						<input name="return" type="hidden" value="http://gite-lemetzval.fr/?page_id=203" />
+						<input name="cancel_return" type="hidden" value="http://gite-lemetzval.fr/?page_id=201" />
+						<input name="notify_url" type="hidden" value="http://gite-lemetzval.fr/?page_id=213" />
 						<input name="cmd" type="hidden" value="_xclick" />
 						<input name="business" type="hidden" value="baseK@cesncf-stra.org" />
 						<input name="item_name" type="hidden" value="Reservation Gite" />
@@ -775,6 +737,7 @@ if((isset($_POST['nb_adulte'])) || (isset($monTab[$resaEncours]['nb_adulte'])))
 						<input name="custom" type="hidden" value="<?php echo $idClient ?>" />
 						<input name="invoice" type="hidden" value="<?php echo $idCommande ?>" />
 						<input type="submit" value="Valider votre r&eacute;servation" class="btn-paypal" />
+						<!-- <a href="?page_id=205&etat=E">Modifier votre r&eacute;servation</a> -->
 				</fieldset>
 			</form>
 		<?php
@@ -782,38 +745,43 @@ if((isset($_POST['nb_adulte'])) || (isset($monTab[$resaEncours]['nb_adulte'])))
 		?>
 		</div>
 	</div>
+</div>
+	<!-- </div> -->
 <?php
-		if(isset($payementChequeComplet))
+		if($payementChequeComplet==true)
 		{
 			?>
-			<div class="fiche-recap-final">
-				<h4>Vous pouvez envoyer votre ch&egrave;que au:</h4>
-				<div class="liste-adresse">
-					<ul>
-						<li>G&icirc;te le Metzval</li>
-						<li>Port: 06 25 14 37 06</li>
-						<li>7 Rue de la Gare</li>			
-						<li>68380 Metzeral</li>
-					</ul>
+			<div class="row">
+			<div class="small-11 small-centered columns">
+				<div class="fiche-recap-final">
+					<h4>Merci d'envoyer votre ch&egrave;que au:</h4>
+					<div class="liste-adresse">
+						<ul>
+							<li>G&icirc;te le Metzval</li>
+							<li>Port: 06 25 14 37 06</li>
+							<li>7 Rue de la Gare</li>			
+							<li>68380 Metzeral</li>
+						</ul>
+					</div>
+					<p>Un mail de confirmation vous a &eacute;t&eacute; envoy&eacute; (pensez &agrave; v&eacute;rifier vos spam).</p>
 				</div>
-				<p>Un mail de confirmation vous a &eacute;t&eacute; envoy&eacute; (pensez &agrave; v&eacute;rifier vos spam).</p>
-				<p>Votre r&eacute;servation sera effective au moment de la remsie du ch&egrave;que</p>
-				<br />
-				<small>Vous allez r&eacute;gler l'accompte (30% du tarif de la r&eacute;servation) avec les taxes de s&eacute;jour.</small>
-				<small>La caution se r&egrave;gle sur place.</small><br />
-				<small>En cas de modification de votre r&eacute;servation, contactez le g&icirc;te, merci.</small>
-				
-				<p><a href="http://www.gite-lemetzval.fr/wp/?page_id=167">Découvrez la région Alsace en parcourant nos articles</a></p>
 			</div>
-			<?php
-			
-			if($payementCbComplet || $payementChequeComplet) {$sommeRegler = $monTab[$resaEncours]['montantMoins30J'];}
-			else {$sommeRegler = $monTab[$resaEncours]['montantPlus30J'];}
-			
-			require('mailCheque.php');
-			envoiCheque($login,$idCommande,$sommeRegler,$date_debut,$date_fin,MAIL_METZVAL);
+			</div>
+				<?php
+				
+				if($payementCbComplet || $payementChequeComplet) {$sommeRegler = $monTab[$resaEncours]['montantMoins30J'];}
+				else {$sommeRegler = $monTab[$resaEncours]['montantPlus30J'];}
+				
+				require('includes/ink/mailCheque.php');
+				envoiCheque($login,$idCommande,$sommeRegler,$date_debut,$date_fin,MAIL_METZVAL);
 		}
 ?>
+
+<div class="row">
+	<div class="small-11 small-centered columns">
+		<a href="affichTous.php">Retourner sur l'accueil</a>
+	</div>
+</div>
 
 <?php
 	require('includes/footer.php');

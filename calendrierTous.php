@@ -226,10 +226,11 @@ $annee_en_cours = $annee_premier_mois ;
 // affichage s�lection mois, ann�e, couleur et champs de r�servations ********************************
 if ($AffichChoixDate)
 {
-	echo '<div id="calendrier">';
-	echo '<Table border = 0 >
+	echo '<div class="row">
+		<div class="small-11 small-centered columns">';
+	echo '<table>
 		  <tr>
-		  <td width = "50">';
+		  <td>';
 	   // si n�cessaire affichage du s�lecteur d'ann�e **************************************************
 	   if ( $selection_an ) {
 			echo '<a href="affichTous.php?an=',$annee_en_cours - 1, '" class = selection><font style="font-size:',$taille_police_sel_mois_annee,'px" color="',$couleur_sel_mois_annee,'" face="',$police,'" >&nbsp;<< </a></font>';
@@ -239,7 +240,7 @@ if ($AffichChoixDate)
 	echo '</td>
 		  </tr>
 		  <tr>
-		  <td width = "50">';
+		  <td>';
 	   // si n�cessaire affichage du s�lecteur de mois **********************************************
 	   if ( $selection_mois ) {
 			echo '<form name="sel_mois" method="get" action="affichTous.php" id="Form1">';
@@ -256,10 +257,11 @@ if ($AffichChoixDate)
 	echo '</td>
 		  </tr>
 		  </table> ';
-	echo '</div>';
+	echo '</div></div>';
 // s�lection affichage avec lien vers page de gestion des locataires logements *********************
 }
-echo '<div id="calendrier">';
+echo '<div class="row">
+		<div class="small-11 small-centered columns"><div id="calendrier">';
 /* Affichage des infos de base du Gite
 */
 $req="SELECT idgite,nom,capacite,url,montant_caution,titre,description FROM GITE WHERE idgite=".$idgite;
@@ -277,13 +279,13 @@ $req="SELECT idgite,nom,capacite,url,montant_caution,titre,description FROM GITE
 						
 //initailisation compteur de mois par ligne*********************************************************
 $compteur_mois_ligne = 1 ;
+ echo "<p>". $nom . " : ".$titre." Capacit� : ".$capacite." personnes</p>";
 
 echo '<table >';
 echo '<tr>';
 echo '<td>';
-echo '<div style="width:',$largeur_div,'px;">';
+echo '<div style="width:"',$largeur_div,'px;">';
 
- echo "<p>". $nom . " : ".$titre." Capacit� : ".$capacite." personnes</p>";
 //affichage des tableaux des mois desir�s***********************************************************
 for ( $compteur_mois = 1; $compteur_mois <= $nombre_mois_afficher; $compteur_mois++ )
  {
@@ -462,7 +464,7 @@ while ( !($fin_tableau) )
                         $fin_tableau = true ;
       }
 //fin de la table du mois
-echo '</table>';
+echo '</table></div></div>';
 
 //incrementation du mois et annee en cours********************************************************
 $mois_en_cours = $mois_en_cours + 1;

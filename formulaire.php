@@ -23,7 +23,7 @@
  	* récupération information calendrier Tous et Session
  */
 
-	$monTab = $_SESSION['Mesresa'];	
+$monTab = $_SESSION['Mesresa'];	
 
 $resaEncours= $_SESSION['resaEncours']; 
 if (empty($resaEncours)) {$resaEncours=0; $_SESSION['resaEncours']=0;   }
@@ -43,7 +43,6 @@ else {
 if($mysqli) //GLOBALE MYSQL CONNEXION DB
 {
 	$req="SELECT idgite,nom,capacite,url,montant_caution,titre,description FROM GITE WHERE idgite=".$idgite; //recuperation information g�te
-	echo $req;
 	$result = $mysqli->query($req);
 		
 	$result->data_seek(0);
@@ -63,15 +62,12 @@ if(isset($_POST['date_debut']) and isset($_POST['date_fin'])) {
 $monTab[$resaEncours]['idgite']     = $idgite;    /* stock les variables du post dans un tableau */
 $_SESSION['Mesresa']                = $monTab;		
 
-testVar($monTab);
-testVar($_SESSION['test']);
 /************************************************/
 /******* MULTI RESA *******************
 /**********************************************/
 $resaEncours    = $_SESSION['resaEncours'];
 $monTab         = $_SESSION['Mesresa'];
 $resaPrecedente = $resaEncours	- 1 ;
-//testVar($monTab);
 
 $etat=$_GET['etat'];
 
@@ -83,7 +79,6 @@ if(empty($_SESSION['Mesresa'])) // si pas de resa en cours
 	if(empty($_SESSION['login'])) // et pas de login
 	{
 		//header('Location:affichage_gite.php');
-		
 	}
 }
 else
@@ -118,8 +113,7 @@ else
 						if (!empty($_POST["email"]) and (!empty($_POST["email"])))
 						{
 							$reqClient.=" where email like '".$_POST["email"]."' and nom like '%".$_POST["nom"]."%'";
-						 
-							 
+						 	 
 						}
 						 else
 						{
@@ -230,126 +224,105 @@ if (!empty($MessageAction))
 *												 *	
 **************************************************/
 
-$affichage_recherche='Vous pouvez remplacer des carctères inconnus par % pour effectuer la recherche';
+$affichage_recherche='<h3>Recherche Client</h3><p>Vous pouvez remplacer des carct&egrave;res inconnus par % pour effectuer la recherche</p>';
 $affichage_recherche.='<form action="formulaire.php?actionClient=R" method="post">';
 $affichage_recherche.='<label for="email">Email : </label><input id="email" name="email" type="text">
 			<label for="nom">Nom : </label><input id="nom" name="nom" type="text">
-			<label for="port">Numéro de portable: </label><input id="port" name="port" type="int">';
+			<label for="port">Num&eacute;ro de portable: </label><input id="port" name="port" type="int">';
 $affichage_recherche.='<input type="submit" value="Rechercher"></form>';
-
-
 }
-?>
 
-<h2>Récapitulatif de votre Réservation</h2>
-		
-	<div class="row">
-		<div class="small-11 small-centered columns">		 <!-- recapitulatif date, gite et prix -->
-			<ul>
-				<li><?php echo "Vous avez sélectionné le gîte ".$monTab[$resaEncours]['idgite']; ?></li>
-				<li><?php echo "Date de début le ".$monTab[$resaEncours]['date_debut']; ?></li>
-				<li><?php echo "Date de fin le ".$monTab[$resaEncours]['date_fin']; ?></li>
-				<li><?php echo "Pour un tarif maximum de ".$monTab[$resaEncours]['tarif'];?></li>
-			</ul>
-		</div>
-	</div>
-		
-<h2>Recherche Client</h2>	
-		
-	<div class="row">
-		<div class="small-11 small-centered columns">			
-			<?php echo $affichage_recherche;
-			echo $MessageAction;
-			echo $affichage_client_ligne; ?>
-		</div>
-	</div>
-			
-	<div class="row">
-		<div class="small-11 small-centered columns">	
-			<form action="<?php $_SERVER['PHP_SELF']; ?>?etat=1&idgite='.$idgite.'" method="POST" id="register-form">
-				<fieldset>
-					<legend>Enregistrement</legend>
-					<li>
-						<label for=login>Votre Email</label>
-						<input id=login name=login type=email placeholder="exemple@domaine.com" required>
-					</li>
-					<li>
-						<label for=loginConfirm>Confirmation de votre Email</label>
-						<input id=loginConfirm name=loginConfirm type=email placeholder="exemple@domaine.com" required>
-					</li>
-					<li>
-						<label for=password>Mot de passe</label>
-						<input id=password name=password type=password pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$" required>
-					</li>	
-					<li>
-						<label for=passwordConfirm>Confirmation de mot de passe</label>
-						<input id=passwordConfirm name=passwordConfirm type=password  pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$" required>
-					</li>
-					<button type=submit>S'enregistrer</button>	
-				</fieldset>
-			</form>
-		</div>
-	</div>
+/**
+ * formulaire d'enregistrement client
+ */
 
-	<?php 
+$enregistrementClient = '<h3>Enregistrement Client</h3>	
+	<form action='. $_SERVER['PHP_SELF'].'?etat=1&idgite='.$idgite.' method="POST" id="register-form">
+		<fieldset>
+			<legend>Enregistrement</legend>
+			<li>
+				<label for=login>Votre Email</label>
+				<input id=login name=login type=email placeholder="exemple@domaine.com" required>
+			</li>
+			<li>
+				<label for=loginConfirm>Confirmation de votre Email</label>
+				<input id=loginConfirm name=loginConfirm type=email placeholder="exemple@domaine.com" required>
+			</li>
+			<li>
+				<label for=password>Mot de passe</label>
+				<input id=password name=password type=password pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$" required>
+			</li>	
+			<li>
+				<label for=passwordConfirm>Confirmation de mot de passe</label>
+				<input id=passwordConfirm name=passwordConfirm type=password  pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$" required>
+			</li>
+			<button type=submit>Enregistrer le client</button>	
+		</fieldset>
+	</form>';
+
+/**
+ * if login existe message d'erreur
+ * else affichage formulaire client / cache autres formulaires
+ */
+$formulaireClient = "";
 if($etat==1)
 {
-	$Clef = "Matteo1234567890";
+
 	if($_POST["login"] != "" && $_POST["password"] != "" && $_POST["loginConfirm"] !="")
 	{
 		$mail              = $_POST["login"];
-		$pass              = Cryptage($_POST["password"],$Clef) ;
-		$pass              = utf8_encode($pass); 
+		$pass              = md5($_POST["password"]) ;
 		$_SESSION['login'] = $mail;
 		$sqlVerifExistant  = "SELECT email,mp from CLIENTS WHERE email ='".$mail."'" ; //verification du mail unique
 		 
 		 $result=$mysqli->query($sqlVerifExistant);
 		 if ($row=$result->fetch_Assoc())
 		 {
-			echo "Adresse email déjà enregistré";
+			$messageErreur = '<div data-alert class="alert-box">
+							 Adresse email d&eacute;j&agrave; enregistr&eacute;
+							  <a href="#" class="close">&times;</a>
+							</div>';
 		 }
 		 else
 		 {
-	?>	
-	<div class="row">
-		<div class="small-11 small-centered columns">	
-			<h2>Formulaire clients</h2>
-			<form action="reservation_action.php" method="POST" class="enregistrement-form2">
+		 	$enregistrementClient="";
+
+			$formulaireClient = '<h3>Formulaire clients</h3>
+			<form action="reservation_action?etat=2.php" method="POST" class="enregistrement-form2">
 			<fieldset>
 				<legend>Votre identit&eacute;</legend>
-					<input id="login" name="login" type="hidden" value="<?php echo $mail;?>" required>
+					<input id="login" name="login" type="hidden" value="<?= $mail;?>" required>
 
-					<input id="password" name="password" type="hidden" value="<?php echo $pass;?>" required>
+					<input id="password" name="password" type="hidden" value="<?= $pass;?>" required>
 
 					<label for=nom>Nom :</label>
-					<input id=nom name=nom type=text placeholder="Votre nom" required >
+					<input id="nom" name="nom" type="text" placeholder="Votre nom" required >
 
 					<label for=prenom>Pr&eacute;nom :</label>
-					<input id=prenom name=prenom type=text placeholder="Vote pr&eacute;nom" required>
+					<input id="prenom" name="prenom" type="text" placeholder="Vote pr&eacute;nom" required>
 					
 					<span class="label-block">
 					<label for=civilite >Civilit&eacute; :</label>
 					<select name="civilite" id="civilite"> 
-						<option value='Madame'>Madame</option>;
-						<option value='Monsieur'>Monsieur</option>;	
+						<option value="Madame">Madame</option>
+						<option value="Monsieur">Monsieur</option>
 					</select>
 
-					<label for=naissance class="long-label">Date de naissance :</label>
-					<input id=naissance name=naissance type=date  placeholder="jj/mm/aaaa" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01]).(0[1-9]|1[012]).[0-9]{4}" id="datepicker" required>
+					<label for="naissance" class="long-label">Date de naissance :</label>
+					<input id="naissance" name="naissance" type="date"  placeholder="jj/mm/aaaa" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01]).(0[1-9]|1[012]).[0-9]{4}" id="datepicker" required>
 					</span>
 			</fieldset>
 			<fieldset>
 				<legend>Statut Cheminot</legend>
 					<label for=cheminot >&ecirc;tes-vous cheminot ?</label>
 
-					<label for="cheminotoui"><input type="radio" name="cheminot" id="cheminotoui" value="1" onClick="GereControle('cheminotoui', 'ce_cheminot', '0');GereControle('cheminotoui', 'region', '0');" required />&nbsp;&nbsp;Oui</label>
+					<label for="cheminotoui"><input type="radio" name="cheminot" id="cheminotoui" value="1" required />&nbsp;&nbsp;Oui</label>
 
-					<label for="cheminotnon"><input type="radio" name="cheminot" id="cheminotnon" value="0" onClick="GereControle('cheminotoui', 'ce_cheminot', '0');GereControle('cheminotoui', 'region', '0');" CHECKED required />&nbsp;&nbsp;Non</label>
+					<label for="cheminotnon"><input type="radio" name="cheminot" id="cheminotnon" value="0" CHECKED required />&nbsp;&nbsp;Non</label>
 
 					<label for="ce_cheminot" id="label-ce_cheminot" class="long-label">S&eacute;lectionnez le Ce de votre r&eacute;gion :</label>
-					<select name="ce_cheminot" id="ce_cheminot"> 
-					<?php
-
+					<select name="ce_cheminot" id="ce_cheminot">';
+					
 					/* requ&ecirc;te de la liste des CE france avec id et si il y a r&eacute;duction ou non (1 ou 0) */
 					$reqCe = "SELECT idce, nom_ce, reduction FROM CELISTE";
 					$sqlCe=$mysqli->query($reqCe);
@@ -357,11 +330,10 @@ if($etat==1)
 					while ($resqlCe=$sqlCe->fetch_Assoc()) 
 					{
 						/* reduction ou non en fonction de la table celiste */
-						echo '<option value='.$reduction=$resqlCe['reduction'].'>'.$nom_ce=$resqlCe['nom_ce'].'</option>';	
+						$formulaireClient .= '<option value='.$reduction=$resqlCe['reduction'].'>'.$nom_ce=$resqlCe['nom_ce'].'</option>';	
 						/* affichage de la liste de ce et value = boolean r&eacute;duction ou non -> $_post['ce_cheminot'] == 0 ou 1 */
 					}
-					?>
-					</select>
+					$formulaireClient .= '</select>
 				<span class="label-inline">	
 					<label for=region id="label-region">Entrez vote code cheminot:</label>
 					<input type="text"  id="region" name="region" placeholder="votre code de cheminot" >
@@ -399,14 +371,46 @@ if($etat==1)
 					<label for="newsoui" class="label-inline"><input type="radio" name="news" value="1" required />&nbsp;&nbsp;Oui</label>
 					<label for="newsnon" class="label-inline"><input type="radio" name="news" value="0" required />&nbsp;&nbsp;Non</label> 
 			</fieldset>
-				  <button type=submit>S'enregistrer</button>
-			</form>
-		</div>
-	</div>
-	<?php
-				} // fin else
+				  <button type=submit>Enregistrer le client</button>
+			</form>';
+		} // fin else
 	} // fin if test POST
 } // fin if etat == 1
 	?>
-<?php	
-require('includes/footer.php'); ?>
+
+		
+	<div class="row">
+		<div class="small-11 small-centered columns panel liste-none">		 <!-- recapitulatif date, gite et prix -->
+		<h3>R&eacute;capitulatif de votre R&eacute;servation</h3>
+			<ul class="list-none">
+				<li><?= "Vous avez s&eacute;lectionn&eacute; le g&icirc;te ".$monTab[$resaEncours]['idgite']; ?></li>
+				<li><?= "Date de d&eacute;but le ".$monTab[$resaEncours]['date_debut']; ?></li>
+				<li><?= "Date de fin le ".$monTab[$resaEncours]['date_fin']; ?></li>
+				<li><?= "Pour un tarif maximum de ".$monTab[$resaEncours]['tarif']." &euro;";?></li>
+			</ul>
+		</div>
+	</div>
+		
+		
+	<div class="row">
+		<div class="small-11 small-centered columns">			
+			<?= $messageErreur; ?>
+			<?= $affichage_recherche; ?>
+			<?= $MessageAction; ?>
+			<?= $affichage_client_ligne; ?>	
+		</div>
+	</div>
+			
+	<div class="row">
+		<div class="small-11 small-centered columns">
+			<?= $enregistrementClient; ?>
+		</div>
+	</div>
+
+	<div class="row list-none">
+		<div class="small-11 small-centered columns">	
+			<?= $formulaireClient; ?>	
+		</div>
+	</div>
+
+<?php require('includes/footer.php'); ?>

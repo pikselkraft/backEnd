@@ -592,6 +592,7 @@ if (!empty($MessageAction))
 **************************************************/
 
 
+<<<<<<< HEAD
 $affichage_recherche='Vous pouvez remplacer des carct&egrave;res inconnus par % pour effectuer la recherche';
 $affichage_recherche.='<form action="rechercheClient.php?actionClient=R" method="post">';
 $affichage_recherche.='<label for="email">Email : </label><input id="email" name="email" type="text">
@@ -599,10 +600,20 @@ $affichage_recherche.='<label for="email">Email : </label><input id="email" name
 			<label for="port">Num&eacute;ro de portable: </label><input id="port" name="port" type="int">';
 $affichage_recherche.='<input type="submit" class="button [tiny small large]" value="Rechercher"></form>';
 $affichage_recherche.='<a href="rechercheClient.php?actionClient=CR" class="button [tiny small large] right">Cr&eacute;ation d\'un client</a>';
+=======
+$affichage_recherche='<p>Vous pouvez remplacer des carct&egrave;res inconnus par % pour effectuer la recherche</p>';
+$affichage_recherche.='<form action="rechercheClient.php?actionClient=R" method="post">';
+$affichage_recherche.='<label for="email">Email : </label><input id="email" name="email" type="text">
+			<label for="nom">Nom : </label><input id="nom" name="nom" type="text">
+			<label for="port">Num�ro de portable: </label><input id="port" name="port" type="int">';
+$affichage_recherche.='<input type="submit" class="button tiny" value="Rechercher"></form>';
+$bouton_creation ='<a href="rechercheClient.php?actionClient=CR" class="button tiny">Cr&eacute;ation d\'un client</a>';
+>>>>>>> 1b1dc0d30f435543a713d0fb3963e6e1d43f9639
 
 
 
 ?>
+<<<<<<< HEAD
 <!-- Modal d'apercu du mail -->
 <div id="modalApercuEmail" class="reveal-modal" data-reveal>
 	<div>
@@ -642,6 +653,21 @@ $affichage_recherche.='<a href="rechercheClient.php?actionClient=CR" class="butt
 	</div>
 </div>
 
+=======
+<div class="row">
+	<div class="large-12 columns">
+		<div class="panel">
+			<h2>Message</h2>
+				<?= $affichage_recherche; ?>
+				<?= $bouton_creation; ?> 
+				<?= $MessageAction; ?>
+				<?= $avertissementSuppression?>
+			
+		</div>
+	</div>
+</div>
+	
+>>>>>>> 1b1dc0d30f435543a713d0fb3963e6e1d43f9639
 <div class="row">
 	<div class="large-12 columns">
 		<div class="panel">
