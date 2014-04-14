@@ -12,7 +12,7 @@ require('fonctions.php');
 	
 	<link rel="stylesheet" href="includes/css/foundation.css">
 <!--	<link rel="stylesheet" href="includes/css/datePicker.css">-->
-<!--	<link rel="stylesheet" href="includes/css/calendrier.css">-->
+<link rel="stylesheet" href="includes/css/calendrier.css">
 	<link rel="stylesheet" href="includes/foundation_icons_general/stylesheets/general_foundicons.css">
 	
 <!--	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">-->
