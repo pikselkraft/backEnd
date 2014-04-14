@@ -202,11 +202,8 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 									$mysqli->query($suppCommande);
 									
 									if($mysqli) { // message succès
-										$MessageEdition = "La commande a &eacute;t&eacute; supprim&eacute;e";
-										$messageTableauSupp = "La commande n'existe plus"; // remplace l'affichage du tableau de la commande 
-										
-
-										
+										$MessageEdition     = "La commande a &eacute;t&eacute; supprim&eacute;e";
+										$messageTableauSupp = "La commande n'existe plus"; // remplace l'affichage du tableau de la commande 	
 									} 
 									else {$MessageEdition = "Erreur lors de la suppression";}
 							
@@ -214,11 +211,11 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 
 							case "R": // remise
 									
-									$recupComm="SELECT remise_taux FROM COMMANDE WHERE  idcommande='".$idcommande."'";
-									$result_recupComm=$mysqli->query($recupComm);
-									$remise = $_GET["remise"];
-									$modifCommande="UPDATE COMMANDE SET remise_taux=".$remise." WHERE idcommande='".$idcommande."'";
-									$result_modifCommande=$mysqli->query($modifCommande);
+									$recupComm            = "SELECT remise_taux FROM COMMANDE WHERE  idcommande='".$idcommande."'";
+									$result_recupComm     = $mysqli->query($recupComm);
+									$remise               = $_GET["remise"];
+									$modifCommande        = "UPDATE COMMANDE SET remise_taux=".$remise." WHERE idcommande='".$idcommande."'";
+									$result_modifCommande = $mysqli->query($modifCommande);
 							break;
 						}
 					} 
@@ -234,7 +231,6 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 	FROM COMMANDE CO, COMMANDERESERVER CM, CLIENTS C, RESERVATION R, GITE G
 	WHERE CM.idclient=C.idclient AND CM.idreservation =R.idreservation AND CO.idcommande=CM.idcommande AND G.idgite=R.idgite";
 
-			
 					 if ((isset($_POST["statut_facture"])) and (($_POST["statut_facture"])<10) )
 					 {
 						$reqCommandeResa.=" and CO.statut_facture=".$_POST["statut_facture"];
@@ -263,7 +259,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 							}
 						}
 					}
-			$reqCommandeResa.=" order by CO.statut_facture ";
+						$reqCommandeResa.=" order by CO.statut_facture ";
 			
 				$result_reqCommandeResa=$mysqli->query($reqCommandeResa); /* execution req recherche commande*/
 				/**
@@ -271,14 +267,13 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 				*/
 				if(!$mysqli)
 				{
-					$MessageAction ="ERREUR : Pas de r&eacute;sultat pour cette recherche" ;  
+					$MessageAction = "ERREUR : Pas de r&eacute;sultat pour cette recherche" ;  
 				} 
 				else
 				{
-					$MessageAction="R&eacute;sultat de la recherche : ";
+					$MessageAction = "R&eacute;sultat de la recherche : ";
 				}			
 				//Boucle qui parcourt les clients dans la base de donn�es
-					
 					
 				break;
 				

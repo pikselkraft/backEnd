@@ -48,23 +48,23 @@ if($etat==2)
 				echo 'Votre nom est '.$_POST['nom'].' et votre prenom est '.$_POST['prenom'];
 				
 				// recuperation des donn�es
-				$mail= strtolower(htmlspecialchars($_POST['login']));
-				$pass =$_POST['password'];
-				$nom= htmlspecialchars($_POST['nom']);
-				$prenom= htmlspecialchars($_POST['prenom']);
-				$naissance= htmlspecialchars($_POST['naissance']);
-				$cheminot= htmlspecialchars($_POST['cheminot']);
-				$entreprise= htmlspecialchars($_POST['entreprise']);
-				$adresse= htmlspecialchars($_POST['adresse']);
-				$codepostal= htmlspecialchars($_POST['codepostal']);
-				$ville= htmlspecialchars($_POST['ville']);
-				$pays= htmlspecialchars($_POST['pays']);
-				$tel= htmlspecialchars($_POST['tel']);
-				$port= htmlspecialchars($_POST['port']);
-				$datecrea=date("Y-m-d H:i:s"); 
-				$news= htmlspecialchars($_POST['news']);
+				$mail           = strtolower(htmlspecialchars($_POST['login']));
+				$pass           =$_POST['password'];
+				$nom            = htmlspecialchars($_POST['nom']);
+				$prenom         = htmlspecialchars($_POST['prenom']);
+				$naissance      = htmlspecialchars($_POST['naissance']);
+				$cheminot       = htmlspecialchars($_POST['cheminot']);
+				$entreprise     = htmlspecialchars($_POST['entreprise']);
+				$adresse        = htmlspecialchars($_POST['adresse']);
+				$codepostal     = htmlspecialchars($_POST['codepostal']);
+				$ville          = htmlspecialchars($_POST['ville']);
+				$pays           = htmlspecialchars($_POST['pays']);
+				$tel            = htmlspecialchars($_POST['tel']);
+				$port           = htmlspecialchars($_POST['port']);
+				$datecrea       =date("Y-m-d H:i:s"); 
+				$news           = htmlspecialchars($_POST['news']);
 				$cheminotRegion = htmlspecialchars($_POST['nom']);   
-				$cheminotCode = htmlspecialchars($_POST['nom']); 
+				$cheminotCode   = htmlspecialchars($_POST['nom']); 
 				
 				//insertion dans la db
 		  		$sql = "INSERT INTO CLIENTS (email,mp,nom,prenom,date_naissance,cheminot,code_cheminot,region,entreprise,adresse,codepostal,ville,pays,tel,port,creation,newsletter) VALUES ('".$mail."','".$pass."','".$nom."','".$prenom."','".$naissance."','".$cheminot."','".$cheminotRegion."','".$cheminotCode."','".$entreprise."','".$adresse."','".$codepostal."','".$ville."','".$pays."','".$tel."','".$port."','".$datecrea."','".$news."')";
