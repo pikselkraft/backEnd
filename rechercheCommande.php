@@ -19,6 +19,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 }		
 // fin de la boucle pour les statuts
 
+
 /*************************************************************
 * Traitement des diff�rentes actions possible sur cette page *
 * avec le parame�tre actionCommande							 *
