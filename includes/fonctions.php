@@ -1,4 +1,3 @@
-
 <?php
 //fonction sie gîte le Metzval
 
@@ -30,18 +29,24 @@
 *********************************************
 	**	creation: 23/10/2013/
 
+/************************************************************/
+/* constante 
+/***********************************************************/
+define("MAIL_METZVAL", "contact@gite-lemetzval.fr");
+define("MAIL_SDK", "dsalmon@cesncf-stra.org");
+define("MAIL_OCT", "oct@cesncf-stra.org");
 
 /************************************************************/
 /* définir le fuseau horaire -> à mettre dans le header.php 
 /***********************************************************/
-date_default_timezone_set('Europe/London');
+date_default_timezone_set('Europe/Paris');
 
 $script_tz = date_default_timezone_get();
 
-if (strcmp($script_tz, ini_get('date.timezone')))
-{
-    //echo 'Le décalage horaire du script diffère du décalage horaire défini dans le fichier ini. <br />';
-} 
+//if (strcmp($script_tz, ini_get('date.timezone')))
+//{
+//    echo 'Le décalage horaire du script diffère du décalage horaire défini dans le fichier ini. <br />';
+//} 
 
 
 function testVar ($var) // fonction de debug simple
@@ -218,18 +223,10 @@ function calculTarif ($date_debut,$date_fin,$idgite,$statutCheminot)  // CALCUL 
 			  if(nbJours($date_debut, $date_fin)>=7) // calcul nombre jours de la résa si supérieur à 7 uniquement tarif BS
 			  {
 				 $nbBs++;
-				  	//var_dump($nbBs++);
-				  echo '</br>';
-				  echo "BS++ boucle if";
-				  echo '</br>';
 			  }	
 				else // si inféreieur à 7 calcul nombre jour HS
 				{
 					$nbHs++;
-					//var_dump($nbHs++);
-					echo '</br>';
-					echo "HS++ boucle if";
-					echo '</br>';
 				}
 		   }
 			else
@@ -238,8 +235,6 @@ function calculTarif ($date_debut,$date_fin,$idgite,$statutCheminot)  // CALCUL 
 			  	var_dump($nbBs);   
 		   }
 		 $date2= date('Y-m-d', strtotime($date2." +1 day")); // INCREMENTATION EN FORMAT CHAINE MAIS VARIABLE AU FORMAT DATE
-		 var_dump( $date2);
-		 var_dump($nbBs); 
 		
 	}
 	
@@ -269,8 +264,6 @@ function calculTarif ($date_debut,$date_fin,$idgite,$statutCheminot)  // CALCUL 
 		else
 		{
 			$totalTarif=$totalTarif + ($resqlTarif['prix']*$nbBs);	// prix BS
-			echo $resqlTarif['prix']."<br />";
-			echo $nbBs;
 		}
 	}
 	
@@ -651,7 +644,7 @@ function envoiPwd($email) // fonction qui génére un nouveau mot de passe
  		
 			$reqUpdate="Update CLIENTS SET mp= '".$pass."' where email='".$email."'";
 			$mysqli->query($reqUpdate);
-			envoiMail($email, "Votre nouveau mot de passe","voici votre mot de passe : ".$newPass,$copy);
+			//envoiMail($email, "Votre nouveau mot de passe","voici votre mot de passe : ".$newPass,$copy);
 			return $newPass;
 		 }
 			
@@ -796,6 +789,44 @@ $message_html.=$message.'
 	//==========
 }
 
+function envoyerEmail($email, $sujet, $message){
+	global $mysqli;
+
+	require_once('includes/ink/phpmailer/class.phpmailer.php');
+	require_once('includes/ink/baseMailHTML.php');
+
+	//infos client
+	$sqlVerifExistant 	= "SELECT civilite, nom, prenom from CLIENTS WHERE email ='".$email."'" ;
+	$result=$mysqli->query($sqlVerifExistant);
+	if ($row=$result->fetch_Assoc()) {	
+		$civilite = $row['civilite'];
+		$nom = $row['nom'];
+		$prenom = $row['prenom'];
+
+		$message_html=$messageHeader.$messageCSS.$messageBodyBefore.
+			'<tr>
+				<td>
+				<h1>Bonjour '.$civilite.'&nbsp; '.$nom.' '.$prenom.'</h1>
+							'.nl2br('<p class="lead">'.htmlspecialchars($message).'</p>').'
+							<p>Ci-joint votre facture au format pdf pour votre r&eacute;servation au g&icirc;te Le Metzval.</p>
+							<p>Pour toute question vous pouvez contacter le g&icirc;te.</p>
+							<p>&Agrave; tr&egrave;s bient&ocirc;t pour d&eacute;couvrir notre magnifique r&eacute;gion</p>
+				</td>
+				<td class="expander"></td>
+			</tr>'.$messageBodyAfter;
+
+		$mail = new PHPMailer(); //defaults to using php "mail()"; the true param means it will throw exceptions on errors, which we need to catch
+		$mail->AddReplyTo(MAIL_METZVAL, 'G&icirc;te le metzval');
+		$mail->AddAddress($email, $nom.' '.$prenom);
+		$mail->SetFrom(MAIL_METZVAL, 'G&icirc;te le metzval');
+		$mail->Subject = htmlspecialchars($sujet);
+		$mail->MsgHTML($message_html);
+		$mail->Send();
+	}else
+		echo "Erreur, l'email est invalide.";
+
+}
+
 
 /**************************************************************
 * déconnexion *				
@@ -842,6 +873,13 @@ return $bc;}
 **************************************************************/
 function dateFr($date) {
 	return date('d/m/Y',strtotime($date));
+}
+
+/**************************************************************
+* conversion date *				
+**************************************************************/
+function dateSql($date) {
+	return date('Y-m-d',strtotime($date));
 }
 
 

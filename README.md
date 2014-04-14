@@ -22,7 +22,7 @@
 > gestion client
 > mailing
 
-**v0.3 (gestion ???)**
+**v0.4 (gestion ???)**
 > gestion resa
 > mailing
 

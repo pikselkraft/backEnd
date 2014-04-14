@@ -4,20 +4,19 @@ $resaEncours= $_SESSION['resaEncours'];
 if (empty($resaEncours)) {$resaEncours=0; $_SESSION['resaEncours']=0;   }
 
 $monTab= $_SESSION['Mesresa'];
-
 if (isset($_GET["idgite"]))
 {
 	$idgite=$_GET["idgite"];
 }
 else
 {
-$idgite=$_POST["idgite"];
+	$idgite=$_POST["idgite"];
 }
 
 if($mysqli) //GLOBALE MYSQL CONNEXION DB
 {
 	$req="SELECT idgite,nom,capacite,url,montant_caution,titre,description FROM GITE WHERE idgite=".$idgite; //recuperation information g�te
-		echo $req;
+	echo $req;
 	$result = $mysqli->query($req);
 		
 	$result->data_seek(0);
@@ -33,4 +32,8 @@ $monTab[$resaEncours]['date_fin'] = $_POST["date_fin"];
 $_SESSION['Mesresa'] = $monTab;		
 
 header('Location:formulaire.php');
+?>
+
+<?php
+	require('includes/footer.php');
 ?>
