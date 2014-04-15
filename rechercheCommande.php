@@ -149,8 +149,18 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 											$modifPrix="UPDATE COMMANDE SET caution_paye='P', accompte_paye=1, total_paye=accompte WHERE idcommande='".$idcommande."'";				
 											$mysqli->query($modifPrix);
 
-											$modifPrix="UPDATE RESERVATION SET statut='R', accompte_paye=0 WHERE idcommande='".$idcommande."'";
-											$mysqli->query($modifPrix);
+											$reqResa=	"SELECT r.idreservation 
+														FROM RESERVATION r, COMMANDERESERVER cr 
+														WHERE idcommande='" . $idcommande . "'";
+												
+											$resultResa=$mysqli->query($reqResa);
+											while ($row = $resultResa->fetch_assoc())
+											{					
+													$idreservation = $row["idreservation"];		
+											}	
+
+											$modifResa="UPDATE RESERVATION SET statut='R' WHERE idreservation='" . $idreservation . "'";
+											$mysqli->query($modifResa);
 										
 										break;
 										
@@ -159,8 +169,18 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 											$modifPrix="UPDATE COMMANDE SET caution_paye='P', accompte_paye=1, total_paye=total WHERE idcommande='".$idcommande."'";				
 											$mysqli->query($modifPrix);
 
-											$modifPrix="UPDATE COMMANDE SET total_paye=0, accompte_paye=0 WHERE idcommande='".$idcommande."'";
-											$mysqli->query($modifPrix);
+											$reqResa=	"SELECT r.idreservation 
+														FROM RESERVATION r, COMMANDERESERVER cr 
+														WHERE idcommande='" . $idcommande . "'";
+												
+											$resultResa=$mysqli->query($reqResa);
+											while ($row = $resultResa->fetch_assoc())
+											{					
+													$idreservation = $row["idreservation"];		
+											}	
+
+											$modifResa="UPDATE RESERVATION SET statut='R' WHERE idreservation='".$idreservation."'";
+											$mysqli->query($modifResa);
 										
 										break;
 										
@@ -169,8 +189,18 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 											$modifPrix="UPDATE COMMANDE SET caution_paye='P' WHERE idcommande='".$idcommande."'";
 											$mysqli->query($modifPrix);
 
-											$modifPrix="UPDATE COMMANDE SET total_paye=0, accompte_paye=0 WHERE idcommande='".$idcommande."'";
-											$mysqli->query($modifPrix);
+											$reqResa=	"SELECT r.idreservation 
+														FROM RESERVATION r, COMMANDERESERVER cr 
+														WHERE idcommande='" . $idcommande . "'";
+												
+											$resultResa=$mysqli->query($reqResa);
+											while ($row = $resultResa->fetch_assoc())
+											{					
+													$idreservation = $row["idreservation"];		
+											}	
+
+											$modifResa="UPDATE RESERVATION SET statut='R' WHERE idreservation='".$idreservation."'";
+											$mysqli->query($modifResa);
 										
 										break;
 										
@@ -179,8 +209,18 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 											$modifPrix="UPDATE COMMANDE SET caution_paye='R' WHERE idcommande='".$idcommande."'";
 											$mysqli->query($modifPrix);
 
-											$modifPrix="UPDATE COMMANDE SET total_paye=0, accompte_paye=0 WHERE idcommande='".$idcommande."'";
-											$mysqli->query($modifPrix);
+											$reqResa=	"SELECT r.idreservation 
+														FROM RESERVATION r, COMMANDERESERVER cr 
+														WHERE idcommande='" . $idcommande . "'";
+												
+											$resultResa=$mysqli->query($reqResa);
+											while ($row = $resultResa->fetch_assoc())
+											{					
+													$idreservation = $row["idreservation"];		
+											}	
+
+											$modifResa="UPDATE RESERVATION SET statut='R' WHERE idreservation='".$idreservation."'";
+											$mysqli->query($modifResa);
 										
 										break;
 
