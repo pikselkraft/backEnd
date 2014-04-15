@@ -51,7 +51,11 @@ require('includes/fonctions.php');
 
 =======
 	<script src="scripts/js/foundation/foundation.alert.js"></script>
+<<<<<<< HEAD
 >>>>>>> 1b1dc0d30f435543a713d0fb3963e6e1d43f9639
+=======
+	<script src="scripts/js/foundation/foundation.reveal.js"></script>
+>>>>>>> 3d4bb240f828a46020440990ecefceb01b36f68e
 
 	<script src="scripts/scripts.js"></script><!--  appel des focntions spécifiques -->
 	<style>

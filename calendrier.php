@@ -10,9 +10,6 @@
 
 ?>
 
-<!-- 	<div class="row">
-		<div class="small-6 large-centered columns"> -->
-
 <?php
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
@@ -48,9 +45,9 @@
 //--------------------------------------------------------------------------------------------------
 
 //nom de la page ou se trouve le script*************************************************************
-$adresse_page         = "calendrier.php";
+$adresse_page        = "calendrier.php";
 //nom de la page a ouvrir lorsqu'on clic sur une date***********************************************
-$adresse_destination  = "calendrier.php";
+$adresse_destination = "calendrier.php";
 
 $avec_bdd            = false ;
 
@@ -82,7 +79,7 @@ $req="SELECT idgite,nom,capacite,url,montant_caution,titre,description FROM GITE
 					}
 					echo "<h1>". $nom . " : ".$titre."</h1>" ;				
 					echo "<ul>";
-						echo "<li>Capacit� : ".$capacite." personnes</li>";
+						echo "<li>Capacit&eacute; : ".$capacite." personnes</li>";
 						echo "<li>Caution : ".$montant_caution." �</li>";
 						//echo "<li>Surface : ".$surface." m�</li>";
 					echo "</ul>";
@@ -206,7 +203,7 @@ if ( $langue == 'esp' ) {
 //choix du mois*************************************************************************************
 $selection_mois_depart = 0;
 $offset_annee          = 0;
-$premier_mois       = date ("m") + $selection_mois_depart;
+$premier_mois          = date ("m") + $selection_mois_depart;
 if ($premier_mois >12) {
     $premier_mois = 1;
     $offset_annee = 1; }
@@ -624,17 +621,17 @@ echo '</table>';
 
 				<fieldset>
 
-					<input id=idgite name=idgite type=hidden value="<?php echo $idgite;?>" required>
+					<input id="idgite" name="idgite" type="hidden" value="<?php echo $idgite;?>" required>
 
-					<label for=nom>Date Arriv�e</label>
+					<label for=nom>Date Arriv&eacute;e</label>
 					<input type="date" name="date_debut">
 
-					<label for=nom>Date D�part</label>
+					<label for=nom>Date D&eacute;part</label>
 					<input type="date" name="date_fin"><input type="int" name="capacite" hidden>
 				</fieldset>
 
 				<fieldset>
-					<button type=submit>Reserver !</button> <!-- test dans le header et redirection-->
+					<button type=submit>R&eacute;server !</button> <!-- test dans le header et redirection-->
 				</fieldset>
 			</form>
 		</div>

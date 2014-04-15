@@ -270,16 +270,15 @@ $req="SELECT idgite,nom,capacite,url,montant_caution,titre,description FROM GITE
 
 					while ($row = $result->fetch_assoc())
 					{
-						$nom=$row['nom'];
-						$capacite=$row['capacite'];
-						$montant_caution=$row['montant_caution'];
-						$titre=$row['titre'];
-						//$surface=$row['surface'];
+						$nom             = $row['nom'];
+						$capacite        = $row['capacite'];
+						$montant_caution = $row['montant_caution'];
+						$titre           = $row['titre'];
 					}
 						
 //initailisation compteur de mois par ligne*********************************************************
 $compteur_mois_ligne = 1 ;
- echo "<p>". $nom . " : ".$titre." Capacit� : ".$capacite." personnes</p>";
+ echo "<p>". utf8_encode($nom) . " : ".utf8_encode($titre) ." Capacit&eacute; : " . utf8_encode($capacite) . " personnes</p>";
 
 echo '<table >';
 echo '<tr>';
@@ -354,20 +353,19 @@ while ( !($fin_tableau) )
                         if ( $date_aujourd_hui ==  $jour_aujourd_hui )
                             $couleur_disponibilite = $couleur_jour_aujourd_hui ;
                         }
-                    //test si jour est reserv�******************************************************
-                    $coul_police_jour = $couleur_police_jour ;
-                    $class_date_lien = '' ;
+					//test si jour est reserv�******************************************************
+					$coul_police_jour = $couleur_police_jour ;
+					$class_date_lien  = '' ;
 					/****************************/	
 					/*							*/
 					/* Recherche de r�servation */
 					/*        et affichage      */
 					/****************************/	
-					$dateAtester =strtotime($annee_en_cours.'-'.$mois_en_cours.'-'.$compteur_jour);
-					$dateAtester =date($dateAtester);
+					$dateAtester      = strtotime($annee_en_cours.'-'.$mois_en_cours.'-'.$compteur_jour);
+					$dateAtester      = date($dateAtester);
 				
-					$choixSaison= typeSaison ($dateAtester);
-					$retRes=estReserve($dateAtester,$idgite);
-						//echo $compteur_jour.estReserve($dateAtester,$idgite).$choixSaison;
+					$choixSaison = typeSaison ($dateAtester);
+					$retRes      = estReserve($dateAtester,$idgite);
 					if ($retRes[0]=='-R-' and $idgite !=1)
 					{
 						

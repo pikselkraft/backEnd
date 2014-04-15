@@ -86,7 +86,7 @@ $html = <<<EOD
 							<thead>
 								<tr>
 									<th>Informations</th>
-									<th>Vos donn&eacute;es</th>
+									<th>Montant</th>
 								</tr>
 							</thead>
 							<tbody>

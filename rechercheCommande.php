@@ -13,9 +13,7 @@ $reqStatutCommande="SELECT idstatut, designation
 $result_reqStatutCommande=$mysqli->query($reqStatutCommande);
 while ($row = $result_reqStatutCommande->fetch_assoc())
 {					
-		// $statut[(int)$row["idstatut"]]["designation"]=$row["designation"];
-		$statut[(int)$row["idstatut"]]["designation"]=$row["designation"];
-		
+		$statut[(int)$row["idstatut"]]["designation"]=$row["designation"];		
 }		
 // fin de la boucle pour les statuts
 
@@ -31,6 +29,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 	// Z : action par défaut via le lien du menu
 	// S : édition du statut de la commande + maj somme
 		// US update statut et sommes
+		// T insert transaction
 	// E : édition de la commande + maj
 		// UE update base + sommes
 	// M : mail de rappel
@@ -63,10 +62,61 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 			$email=$_POST["email"];
 		}
 
-					$editionCommande=$_GET["editionCommande"]; // action sur la commande (statut/edition/mail/delete)
+					$editionCommande = $_GET["editionCommande"]; // action sur la commande (statut/edition/mail/delete)
 				
 					if(!empty($_GET["editionCommande"])){
-					
+
+						$statutModif = $_POST['statutModif'];
+						/**
+						 * ajout de la transaction
+						 */
+						if(($editionCommande!=="T" AND $editionCommande!=="S") AND ($statutModif==1 OR $statutModif==2 OR $statutModif==3 OR $statutModif==4)) {
+
+							$affichage_commande_ligne ='<h5>Ajouter une transaction</h5><form action="rechercheCommande.php?actionCommande=R&editionCommande=T&idcommande='.$idcommande.'" method="POST">
+									<table>
+										<thead>
+											<th width="50">Type de la transaction</th>
+											<th width="50">Motif</th>
+											<th width="50">R&eacute;f&eacute;rence</th>
+											<th width="50">Validation</th>
+										</thead>
+										<tr>
+											<td>
+												<label>
+													<select name ="type_transaction">
+														<option value="cheque">cheque</option>
+														<option value="CB">CB</option>
+													</select>
+												</label>
+											</td>
+											<td>
+												<label>
+													<select name ="motif"><option selected="'.$statut[(int)$row["statut_facture"]]["designation"].'" value="'.$statut[(int)$row["statut_facture"]]["designation"].'">'.$statut[(int)$row["statut_facture"]]["designation"].'</option>';
+													$result=count($statut);
+													$a=0;
+													while ($a<$result)
+													{
+														$affichage_commande_ligne.='<option value="'.$statut[(int)$a]["designation"].'">'.$statut[(int)$a]["designation"].'</option>';
+														$a++;
+													}
+													$affichage_commande_ligne.='</select>
+												</label>
+											</td>
+											<td>
+												<label>
+													<input name="reference" type="text" size="5"  value="" placeholder="r&eacute;f&eacute;rence ch&egrave;que etc.">													
+												</label>
+											</td>
+											<td>
+												<label>
+													<input type="submit" class="button tiny" value="Ajouter">
+												</label>
+											</td>
+										</tr>
+									</table>
+									</form>';
+							}
+
 						switch ($editionCommande) 
 						{
 							case "US": //Update après édition statut
@@ -78,8 +128,8 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 									/**
 										* modification des prix selon statut
 									*/
-									
-									switch($_POST['statutModif']) {
+
+									switch($statutModif) {
 										case 0: // annulee
 											
 											$modifPrix="UPDATE COMMANDE SET total_paye=0, accompte_paye=0 WHERE idcommande='".$idcommande."'";
@@ -98,9 +148,15 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 
 											$modifPrix="UPDATE COMMANDE SET caution_paye='P', accompte_paye=1, total_paye=accompte WHERE idcommande='".$idcommande."'";				
 											$mysqli->query($modifPrix);
+<<<<<<< HEAD
 											require_once 'includes/pdf/factures/mailPDF.php';
 											require_once 'includes/ink/mailFacture.php';
 											envoiFacture($email,generationPdf($idcommande),"Votre accompte a bien &eacute;t&eacute; r&eacute;c&eacute;ptionn&eacute;.");
+=======
+
+											$modifPrix="UPDATE RESERVATION SET statut='R', accompte_paye=0 WHERE idcommande='".$idcommande."'";
+											$mysqli->query($modifPrix);
+>>>>>>> 3d4bb240f828a46020440990ecefceb01b36f68e
 										
 										break;
 										
@@ -108,16 +164,25 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 						
 											$modifPrix="UPDATE COMMANDE SET caution_paye='P', accompte_paye=1, total_paye=total WHERE idcommande='".$idcommande."'";				
 											$mysqli->query($modifPrix);
+<<<<<<< HEAD
 											//require_once 'includes/ink/phpmailer/class.phpmailer.php';
 											require_once 'includes/pdf/factures/mailPDF.php';
 											require_once 'includes/ink/mailFacture.php';
 											envoiFacture($email,generationPdf($idcommande));
+=======
+
+											$modifPrix="UPDATE COMMANDE SET total_paye=0, accompte_paye=0 WHERE idcommande='".$idcommande."'";
+											$mysqli->query($modifPrix);
+>>>>>>> 3d4bb240f828a46020440990ecefceb01b36f68e
 										
 										break;
 										
 										case 4: // caution payee
 										
 											$modifPrix="UPDATE COMMANDE SET caution_paye='P' WHERE idcommande='".$idcommande."'";
+											$mysqli->query($modifPrix);
+
+											$modifPrix="UPDATE COMMANDE SET total_paye=0, accompte_paye=0 WHERE idcommande='".$idcommande."'";
 											$mysqli->query($modifPrix);
 										
 										break;
@@ -126,6 +191,9 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 										
 											$modifPrix="UPDATE COMMANDE SET caution_paye='R' WHERE idcommande='".$idcommande."'";
 											$mysqli->query($modifPrix);
+
+											$modifPrix="UPDATE COMMANDE SET total_paye=0, accompte_paye=0 WHERE idcommande='".$idcommande."'";
+											$mysqli->query($modifPrix);
 										
 										break;
 
@@ -133,6 +201,19 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 								//mail fait pour l'annulation (en js et jquerry) et pour "total payé"
 							break;
 							
+							case "T": //insertion transaction -> après changement statut
+
+									$type_transaction = $_POST['type_transaction'];
+									$txn_id           = 0;
+									$date_transaction = date("Y-m-d H:i:s");
+									$motif            = $_POST['motif'];
+									$reference        = $_POST['reference'];
+
+									$insertTransaction="INSERT INTO TRANSACTION (type_transaction,txn_id,idcommande,date_transaction,motif,reference) VALUES ('".$type_transaction."','".$txn_id ."','".$idcommande."','".$date_transaction ."','".$motif ."','".$reference."')";
+									$mysqli->query($insertTransaction);
+
+							break;
+
 							case "UE": //Update après édition commande
 									
 									/**
@@ -190,7 +271,6 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 
 										$suppReservation="DELETE FROM RESERVATION WHERE idreservation='".$idresa[$i]."'";
 										$mysqli->query($suppReservation);
-
 
 										$i++; // incrementation en cas de multi resa
 									}
@@ -274,7 +354,11 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 					$MessageAction = "R&eacute;sultat de la recherche : ";
 				}			
 				//Boucle qui parcourt les clients dans la base de donn�es
+<<<<<<< HEAD
 					
+=======
+
+>>>>>>> 3d4bb240f828a46020440990ecefceb01b36f68e
 				break;
 				
 			case "Z": //raffcihe les 20 derni�res commandes
@@ -318,7 +402,11 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 				$affichage_commande_ligne.='<table><thead>
 								<th width="100px">Num&eacute;ro de la Commande</th>
 								<th width="50px">Nom et num&eacute;ro du g&icirc;te</th>
+<<<<<<< HEAD
 								<th width="50px">Periode de reservation</th>
+=======
+								<th width="50px">P&eacute;riode de reservation</th>
+>>>>>>> 3d4bb240f828a46020440990ecefceb01b36f68e
 								<th width="50px">Date de Commande</th>
 								<th width="50px">Nom</th>
 								<th width="50px">Statut</th>
@@ -424,8 +512,12 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 									<tr>
 										<td '.$couleurCommande.'>
 											<label>Num&eacute;ro de la commande
+<<<<<<< HEAD
 												<input name="idtaxe" type="text" size="5" readonly value="'.$row["idcommande"].'">
 											</label>
+=======
+												<input name="idtaxe" type="text" size="5" readonly value="'.$row["idcommande"].'">													</label>
+>>>>>>> 3d4bb240f828a46020440990ecefceb01b36f68e
 										</td>
 										<td '.$couleurCommande.'>
 											<label>Date
@@ -435,7 +527,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 										<td '.$couleurCommande.'>
 											<label>Nom et pr&eacute;nom du client
 												<input name="infoClient" type="text" size="5"  readonly value="'.$row["nom"].' '.$row["prenom"].'">													
-												</label>
+											</label>
 										</td>
 										<td '.$couleurCommande.'>
 											<label>Statut de la facture
@@ -487,8 +579,12 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 							</form>';
 				}
 				else if($editionCommande=='S') { // changement de statut
+<<<<<<< HEAD
 									
 										
+=======
+
+>>>>>>> 3d4bb240f828a46020440990ecefceb01b36f68e
 									$result=count($statut);
 									$a=0;
 
@@ -500,7 +596,13 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 										$majStatut.='<option value="'.(int)$a.'">'.$statut[(int)$a]["designation"].'</option>';
 										$a++;
 									}
+<<<<<<< HEAD
 									$majStatut.='</select><input type="button" onclick="verifAnnulation(\''.$row["email"].'\')" value="Modifier"></td></tr></table></form>';
+=======
+									$majStatut.='</select><input type="submit" value="Modifier"></td></tr></table>';
+
+									$majStatut.='</form>';
+>>>>>>> 3d4bb240f828a46020440990ecefceb01b36f68e
 
 					$affichage_commande_ligne.= '<tr >
 									<td '.$couleurCommande.'>'.$row["idcommande"].'</td>
@@ -517,7 +619,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 
 											
 				}
-				else if ($editionCommande=='UE' || $editionCommande=='US') { // 	affichage après update
+				else if ($editionCommande=='UE' || $editionCommande=='US') { // 	affichage après update du statut
 
 					$affichage_commande_ligne.= '<tr >
 									<td '.$couleurCommande.'>'.$row["idcommande"].'</td>
@@ -531,10 +633,8 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 									<td '.$couleurCommande.'>'.$row["remise_taux"].'</td>
 									<td '.$couleurCommande.'>'.$row["total"].' &euro;</td>
 									<td '.$couleurCommande.'>'.$row["total_paye"].' &euro;</td>';
-
 				}
 				else {
-					
 					$affichage_commande_ligne.= '<tr >
 									<td '.$couleurCommande.'><a href="rechercheResa.php?idcommande='.$row["idcommande"].'&actionResa=V">'.$row["idcommande"].'</a></td>
 									<td '.$couleurCommande.'>'.$row["nom_gite"].'('.$row["idgite"].')</td>
@@ -547,16 +647,16 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 									<td '.$couleurCommande.'>'.$row["remise_taux"].'</td>
 									<td '.$couleurCommande.'>'.$row["total"].' &euro;</td>
 									<td '.$couleurCommande.'>'.$row["total_paye"].' &euro;</td>';
-				}										
-			$affichage_commande_ligne.= '<td '.$couleurCommande.'><a href="rechercheCommande.php?actionCommande=R&editionCommande=S&idcommande='.$row["idcommande"].'" title="Editer le statut"><i class="foundicon-edit"></i></a></td>
+				}	
+				// bouton action du statut								
+			$affichage_commande_ligne.='<td '.$couleurCommande.'><a href="rechercheCommande.php?actionCommande=R&editionCommande=S&idcommande='.$row["idcommande"].'" title="Editer le statut"><i class="foundicon-edit"></i></a></td>
 										<td '.$couleurCommande.'><a href="rechercheCommande.php?actionCommande=R&editionCommande=E&idcommande='.$row["idcommande"].'" title="Modification de la commande" ><i class="foundicon-add-doc"></i></a></td>
-										<td '.$couleurCommande.'><a  title="Editer les remises" onclick="remise_taux('.((double)$row["total"]-$row["taxe"]).','.$row["idcommande"].')" ><i class="foundicon-heart"></i></a></td>
-										<td '.$couleurCommande.'><a href="rechercheCommande.php?actionCommande=R&editionCommande=M&idcommande='.$row["idcommande"].'" title="Rappel mail de la commande" ><i class="foundicon-mail"></i></a></td>
+										<td '.$couleurCommande.'><a title="Editer les remises" onclick="remise_taux('.((double)$row["total"]-$row["taxe"]).','.$row["idcommande"].')" ><i class="foundicon-heart"></i></a></td>
+										<td '.$couleurCommande.'><a href="" data-reveal-id="firstModal" title="Rappel mail de la commande" ><i class="foundicon-mail"></i></a></td>
 										<td '.$couleurCommande.'><a href="rechercheCommande.php?actionCommande=R&editionCommande=D&idcommande='.$row["idcommande"].'" title="Annuler la commande" onclick="return confirm(\'Etes vous sure de la suppression de cette commande?\');"><i class="foundicon-remove"></i></a></td>
 										<td '.$couleurCommande.'><a href="rechercheClient.php?actionClient=R&idcommande='.$row["idcommande"].'" title="Voir le compte du client"><i class="foundicon-address-book"></i></a></td>
-										</tr>';
+									</tr>';
 			}		
-			
 			$affichage_commande_ligne.='</table>';
 		
 			if($editionCommande=='D') { // la commande n'existe plus car supp
@@ -566,7 +666,11 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 					$affichage_commande_ligne=$affichage_edition_ligne;
 			}
 			else if ($editionCommande=='UE'){
+<<<<<<< HEAD
 					$messageAvertissement= '<span class="label [radius round]">Ces donn&eacute;es doivent être saisis avec pr&eacute;cisions et être coh&eacute;rentes</span>';
+=======
+					$messageAvertissement= '<span class="label [radius round]">Ces donn&eacute;es doivent &ecirc;tre saisis avec pr&eacute;cisions et être coh&eacute;rentes</span>';
+>>>>>>> 3d4bb240f828a46020440990ecefceb01b36f68e
 			}	
 		}
 	}
@@ -580,7 +684,7 @@ if (!empty($MessageAction))
 
 $result=count($statut);
 
-$affichage_recherche.='<form action="rechercheCommande.php?actionCommande=R" method="post">';
+$affichage_recherche.='<form action="rechercheCommande.php?actionCommande=R" method="POST">';
 $affichage_recherche.='<label for="email">Email : </label><input id="email" name="email" type="text">
 			<label for="nom">Nom : </label><input id="nom" name="nom" type="text">
 			<label for="port">Num&eacute;ro de commande: </label><input id="idcommande" name="idcommande" type="int">
@@ -595,7 +699,7 @@ while ($a<$result)
 $affichage_recherche.='</select><input type="submit" value="Rechercher"></form>';
 
 /**
- * RECHERCHE DES TRANSACTIONS
+ * recherche des transactions en fonction d'une commadne
  */
 
 $recupTransaction="SELECT idtransaction, type_transaction, txn_id, date_transaction, motif, reference FROM TRANSACTION WHERE  idcommande='".$idcommande."'";
@@ -603,52 +707,53 @@ $resultTransaction=$mysqli->query($recupTransaction);
 
 while ($rowTransaction = $resultTransaction->fetch_assoc())
 {					
-	 // stockage des transaction des la commande
-	 $affichage_transaction_ligne = '<form action="rechercheCommande.php?actionCommande=R&editionCommande=UE&idcommande='.$rowTransaction["idtransaction"].'" method="POST">
-								<table>
+	 // affichage des transactions de la commande
+	 $affichage_transaction_ligne = '<table>
 									<thead>
-										<tr width="50px"><th>Num&eacute;ro de la transaction</th>
+										<tr width="50"><th>Num&eacute;ro de la transaction</th>
+										<th width="50">Type de la transaction</th>
 										<th width="50">Identifiant Paypal</th>
 										<th width="50">Date</th>
 										<th width="50">Motif</th>
 										<th width="50">R&eacute;f&eacute;rence</th>
-										<th width="150" colspan="5">Action</th></tr>
 									</thead>
 									<tr>
-										<td '.$couleurCommande.'>
+										<td>
+											<label>
+												<input name="idtransaction" type="text" size="5" readonly value="'.$rowTransaction["idtransaction"].'">													</label>
+										</td>
+										<td>
 											<label>
 												<input name="type_transaction" type="text" size="5" readonly value="'.$rowTransaction["type_transaction"].'">													</label>
 										</td>
-										<td '.$couleurCommande.'>
+										<td>
 											<label>
-												<input name="txn_id" type="date" size="25"  readonly value="'.$rowTransaction["txn_id"].'">													
+												<input name="txn_id" type="text" size="25"  readonly value="'.$rowTransaction["txn_id"].'">													
 											</label>
 										</td>
-										<td '.$couleurCommande.'>
+										<td>
 											<label>
 												<input name="date_transaction" type="text" size="5"  readonly value="'.dateFr($rowTransaction["date_transaction"]).'">													
 												</label>
 										</td>
-										<td '.$couleurCommande.'>
+										<td>
 											<label>
-												<input name="motif" type="text" size="5"  readonly value="'.dateFr($rowTransaction["motif"]).'">													
+												<input name="motif" type="text" size="5"  value="'.$rowTransaction["motif"].'">													
 											</label>
 										</td>
-										<td '.$couleurCommande.'>
+										<td>
 											<label>
 												<input name="reference" type="text" size="5"  value="'.$rowTransaction["reference"].'">													
 											</label>
 										</td>
-										<td '.$couleurCommande.'><a href="rechercheCommande.php?actionCommande=R&editionCommande=S&idcommande='.$row["idcommande"].'" title="Editer le statut"><i class="foundicon-edit"></i></a></td>
-										<td '.$couleurCommande.'><a href="rechercheCommande.php?actionCommande=R&editionCommande=E&idcommande='.$row["idcommande"].'" title="Modification de la commande" ><i class="foundicon-add-doc"></i></a></td>
-										<td '.$couleurCommande.'><a href="rechercheCommande.php?actionCommande=R&editionCommande=M&idcommande='.$row["idcommande"].'" title="Rappel mail de la commande" ><i class="foundicon-mail"></i></a></td>
-										<td '.$couleurCommande.'><a href="rechercheCommande.php?actionCommande=R&editionCommande=D&idcommande='.$row["idcommande"].'" title="Annuler la commande" onclick="return confirm(\'Etes vous sure de la suppression de cette commande?\');"><i class="foundicon-remove"></i></a></td>
-										<td '.$couleurCommande.'><a href="rechercheClient.php?actionClient=R&idcommande='.$row["idcommande"].'" title="Voir le compte du client"><i class="foundicon-address-book"></i></a></td>
-									</tr>
-								</table>
-							</form>';
-}
 
+									</tr>
+								</table>';
+}
+<<<<<<< HEAD
+
+=======
+>>>>>>> 3d4bb240f828a46020440990ecefceb01b36f68e
 ?>
 
 <!-- Modal du message d'annulation -->
@@ -668,10 +773,10 @@ while ($rowTransaction = $resultTransaction->fetch_assoc())
 				<?= $MessageAction; ?>
 				<?= $MessageEdition; ?>
 				<?= $messageAvertissement; ?>
-			
 			</div>
 		</div>
 	</div>
+
 	
 	<div class="row">
 		<div class="large-12 columns">
@@ -681,26 +786,45 @@ while ($rowTransaction = $resultTransaction->fetch_assoc())
 			</div>
 		</div>		
 	</div>
-	<!-- <div class="row"> -->
-<!-- 		<div class="large-12 columns">
- -->				<h3> R&eacute;sultat</h3>
-				<?= $affichage_commande_ligne; ?>
-		<!-- </div> -->		
-<!-- 	</div> -->
+
 	<div class="row">
+		<h3> Affichage</h3>
+			<div class="small-12 small-centered columns">
+					<?= $affichage_commande_ligne; ?>
+			</div>
+	</div>
+
+ 	<div class="row">
 		<div class="large-12 columns">
-				<h3> Transaction</h3>
+				<h3>Historique Transaction</h3>
 				<?= $affichage_transaction_ligne; ?>
 		</div>		
 	</div>
 
+	<div class="reveal-modal-bg" style="display: none">test</div>
+	<a href="#" data-reveal-id="myModal" data-reveal>Click Me For A Modal</a>
 
-<?php
-	require('includes/footer.php');
-?>
 <script>
-function remise_taux(somme_ht,id){
+$(document).foundation({
+  reveal : {
+    animation_speed: 500
+  },
+  tooltip : {
+    disable_for_touch: true
+  },
+  topbar : {
+    custom_back_text: false,
+    is_hover: false,
+    mobile_show_parent_link: true
+  }
+});
+
+$('a.reveal-link').trigger('click');
+$('a.close-reveal-modal').trigger('click');
+
+function remise_taux(somme_ht,id) {
 	var saisie = prompt("Le total hors taxes s'élève à "+somme_ht+"€, quelle remise (en %) voulez-vous appliquer à cette commande ?");
+<<<<<<< HEAD
 	if (saisie!=null)
 		document.location = 'rechercheCommande.php?actionCommande=Z&editionCommande=R&idcommande='+id+'&remise='+saisie;
 }
@@ -720,3 +844,12 @@ function envoiAnnulation(fct, emailAdd){
 	$('#submitModifStatut').submit();
 }
 </script>
+=======
+	document.location = 'rechercheCommande.php?actionCommande=Z&editionCommande=R&idcommande='+id+'&remise='+saisie;
+}	
+</script>
+
+<?php
+	require('includes/footer.php');
+?>
+>>>>>>> 3d4bb240f828a46020440990ecefceb01b36f68e
