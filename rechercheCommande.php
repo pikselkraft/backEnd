@@ -131,7 +131,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 
 									switch($statutModif) {
 										case 0: // annulee
-										
+											
 											$modifPrix="UPDATE COMMANDE SET total_paye=0, accompte_paye=0 WHERE idcommande='".$idcommande."'";
 											$mysqli->query($modifPrix);
 										
@@ -145,7 +145,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 										break;
 										
 										case 2: // accompte paye
-										
+
 											$modifPrix="UPDATE COMMANDE SET caution_paye='P', accompte_paye=1, total_paye=accompte WHERE idcommande='".$idcommande."'";				
 											$mysqli->query($modifPrix);
 
@@ -159,13 +159,17 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 													$idreservation = $row["idreservation"];		
 											}	
 
-											$modifResa="UPDATE RESERVATION SET statut='R' WHERE idreservation='" . $idreservation . "'";
+											$modifResa="UPDATE RESERVATION SET statut='R' WHERE idreservation='".$idreservation."'";
 											$mysqli->query($modifResa);
+
+											require_once 'includes/pdf/factures/mailPDF.php';
+											require_once 'includes/ink/mailFacture.php';
+											envoiFacture($email,generationPdf($idcommande),"Votre accompte a bien &eacute;t&eacute; r&eacute;c&eacute;ptionn&eacute;.");
 										
 										break;
 										
 										case 3: // total paye
-										
+						
 											$modifPrix="UPDATE COMMANDE SET caution_paye='P', accompte_paye=1, total_paye=total WHERE idcommande='".$idcommande."'";				
 											$mysqli->query($modifPrix);
 
@@ -181,10 +185,15 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 
 											$modifResa="UPDATE RESERVATION SET statut='R' WHERE idreservation='".$idreservation."'";
 											$mysqli->query($modifResa);
+
+											//require_once 'includes/ink/phpmailer/class.phpmailer.php';
+											require_once 'includes/pdf/factures/mailPDF.php';
+											require_once 'includes/ink/mailFacture.php';
+											envoiFacture($email,generationPdf($idcommande));
 										
 										break;
 										
-										case 4: // caution paye
+										case 4: // caution payee
 										
 											$modifPrix="UPDATE COMMANDE SET caution_paye='P' WHERE idcommande='".$idcommande."'";
 											$mysqli->query($modifPrix);
@@ -204,7 +213,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 										
 										break;
 										
-										case 5: // caution rendu
+										case 5: // caution rendue
 										
 											$modifPrix="UPDATE COMMANDE SET caution_paye='R' WHERE idcommande='".$idcommande."'";
 											$mysqli->query($modifPrix);
@@ -225,12 +234,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 										break;
 
 									}
-									
-								/**
-	
-									!!* EVM envoi mail + template!!
-								*/		
-
+								//mail fait pour l'annulation (en js et jquerry) et pour "total payé"
 							break;
 							
 							case "T": //insertion transaction -> après changement statut
@@ -252,15 +256,14 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 										* édition des prix et statuts
 									*/
 									
-									$modifCommande="UPDATE COMMANDE SET caution= '".$_POST['cautionCommande']."',caution_paye= '".$_POST['cautionPayeCommande']."', accompte= '".$_POST['accompteCommande']."', accompte_paye= '".$_POST['accomptePayeCommande']."', total= '".$_POST['totalCommande']."', total_paye= '".$_POST['totalPayeCommande']."', statut_facture= '".$_POST['statutModif']."' WHERE idcommande='".$idcommande."'";
+									$modifCommande="UPDATE COMMANDE SET caution_paye= '".$_POST['cautionPayeCommande']."', accompte= '".$_POST['accompteCommande']."', total= '".$_POST['totalCommande']."', total_paye= '".$_POST['totalPayeCommande']."', remise_taux=".$_POST["remise_taux"]." WHERE idcommande='".$idcommande."'";
 
 									$mysqli->query($modifCommande);
-											
-									/**
-	
-										!!* EVM envoi mail + template!!
-									*/	
-											
+
+									require_once 'includes/pdf/factures/mailPDF.php';
+									require_once 'includes/ink/mailFacture.php';
+									envoiFacture($email,generationPdf($idcommande),"Quelques modifications ont &eacute;t&eacute;s apport&eacute;es &agrave; votre commande.");
+
 							break;
 							
 							case "M": // mail client pour rappel
@@ -315,13 +318,8 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 									$mysqli->query($suppCommande);
 									
 									if($mysqli) { // message succès
-										$MessageEdition = "La commande a &eacute;t&eacute; supprim&eacute;e";
-										$messageTableauSupp = "La commande n'existe plus"; // remplace l'affichage du tableau de la commande 
-										
-										/**
-	
-											!!* EVM envoi mail + template!!
-										*/	
+										$MessageEdition     = "La commande a &eacute;t&eacute; supprim&eacute;e";
+										$messageTableauSupp = "La commande n'existe plus"; // remplace l'affichage du tableau de la commande 	
 									} 
 									else {$MessageEdition = "Erreur lors de la suppression";}
 							
@@ -329,11 +327,11 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 
 							case "R": // remise
 									
-									$recupComm="SELECT remise_taux FROM COMMANDE WHERE  idcommande='".$idcommande."'";
-									$result_recupComm=$mysqli->query($recupComm);
-									$remise = $_GET["remise"];
-									$modifCommande="UPDATE COMMANDE SET remise_taux=".$remise." WHERE idcommande='".$idcommande."'";
-									$result_modifCommande=$mysqli->query($modifCommande);
+									$recupComm            = "SELECT remise_taux FROM COMMANDE WHERE  idcommande='".$idcommande."'";
+									$result_recupComm     = $mysqli->query($recupComm);
+									$remise               = $_GET["remise"];
+									$modifCommande        = "UPDATE COMMANDE SET remise_taux=".$remise." WHERE idcommande='".$idcommande."'";
+									$result_modifCommande = $mysqli->query($modifCommande);
 							break;
 						}
 					} 
@@ -343,10 +341,12 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 
 			case "R": //rechercher de commandes
 			
-			$reqCommandeResa="SELECT distinct CO.idcommande,  CM.idclient, C.nom, C.prenom, CO.taxe, CO.caution, CO.caution_paye, CO.montant_option, CO.remise, CO.code_promo, CO.date_creation, CO.statut_facture, CO.accompte, CO.accompte_paye, CO.total,CO.total_paye  
-					FROM COMMANDE CO, COMMANDERESERVER CM, CLIENTS C
-					WHERE CM.idclient=C.idclient and CO.idcommande=CM.idcommande";
-			
+			$reqCommandeResa = "SELECT distinct CO.idcommande,  CM.idclient, C.nom, C.prenom, C.email, CO.taxe, CO.caution, 
+	CO.caution_paye, CO.montant_option, CO.remise, CO.code_promo, CO.date_creation, CO.statut_facture, CO.accompte, 
+	CO.accompte_paye, CO.total, CO.total_paye, G.nom as nom_gite, G.idgite, CO.remise_taux
+	FROM COMMANDE CO, COMMANDERESERVER CM, CLIENTS C, RESERVATION R, GITE G
+	WHERE CM.idclient=C.idclient AND CM.idreservation =R.idreservation AND CO.idcommande=CM.idcommande AND G.idgite=R.idgite";
+
 					 if ((isset($_POST["statut_facture"])) and (($_POST["statut_facture"])<10) )
 					 {
 						$reqCommandeResa.=" and CO.statut_facture=".$_POST["statut_facture"];
@@ -375,7 +375,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 							}
 						}
 					}
-			$reqCommandeResa.=" order by CO.statut_facture ";
+						$reqCommandeResa.=" order by CO.statut_facture ";
 			
 				$result_reqCommandeResa=$mysqli->query($reqCommandeResa); /* execution req recherche commande*/
 				/**
@@ -383,21 +383,21 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 				*/
 				if(!$mysqli)
 				{
-					$MessageAction ="ERREUR : Pas de r&eacute;sultat pour cette recherche" ;  
+					$MessageAction = "ERREUR : Pas de r&eacute;sultat pour cette recherche" ;  
 				} 
 				else
 				{
-					$MessageAction="R&eacute;sultat de la recherche : ";
+					$MessageAction = "R&eacute;sultat de la recherche : ";
 				}			
 				//Boucle qui parcourt les clients dans la base de donn�es
-
-				break;
+			break;
 				
 			case "Z": //raffcihe les 20 derni�res commandes
 			// $reqCommandeResa="SELECT distinct CO.idcommande,  CM.idclient, C.nom, CO.taxe, CO.caution, CO.caution_paye, CO.montant_option, CO.remise, CO.code_promo, CO.date_creation, CO.statut_facture, CO.accompte, CO.accompte_paye, CO.total,CO.total_paye  
 			// 		FROM COMMANDE CO, COMMANDERESERVER CM, CLIENTS C
 			// 		WHERE CM.idclient=C.idclient and CO.idcommande=CM.idcommande and CO.idcommande > '((SELECT max(idcommande) FROM COMMANDE)-20)'";
 			// ancienne requête
+
 			$reqCommandeResa="SELECT distinct CO.idcommande,  CM.idclient, C.nom, C.prenom, CO.taxe, CO.caution, CO.caution_paye, 
 				CO.montant_option, CO.remise, CO.code_promo, CO.date_creation, CO.statut_facture, CO.accompte, CO.accompte_paye, 
 				CO.total, CO.total_paye, G.nom as nom_gite, G.idgite, R.date_debut, R.date_fin, CO.remise_taux
@@ -449,7 +449,6 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 
 			while ($row = $result_reqCommandeResa->fetch_assoc())
 			{
-
 				if ($editionCommande=='UE' || $editionCommande=='US') { // mise à jour couleur pour update
 					
 					switch ((int)$_POST['statutModif'])
@@ -489,6 +488,21 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 				else
 					$accompte_paye_symbole = '<i data-tooltip class="foundicon-checkmark has-tip" title="Acompte payé" style="font-style: normal;"> '.$row["accompte"].' &euro;</i>';
 
+				//calcul de la remise
+				if ((int)$row["remise_taux"] > 0){
+					$taux_remise = $row["remise_taux"];
+					$totalSansRemise = $row["total"];
+					$row["total"] = $row["total"] * (1-($row["remise_taux"]/100)); 
+					$row["remise_taux"] = $row["remise_taux"]." % (".$totalSansRemise*($row["remise_taux"]/100)."&euro;)";
+				}
+
+				//affichage avec logo acompte paye ou non
+				if ($row["accompte_paye"] == 0)
+					$accompte_paye_symbole = '<i data-tooltip class="foundicon-error has-tip" title="Acompte non payé" style="font-style: normal;"> '.$row["accompte"].' &euro;</i>';
+				else
+					$accompte_paye_symbole = '<i data-tooltip class="foundicon-checkmark has-tip" title="Acompte payé" style="font-style: normal;"> '.$row["accompte"].' &euro;</i>';
+
+
 				if($editionCommande=='E') { // changement des informations de la commande (utilisation d'input)
 					
 						/** 
@@ -511,22 +525,22 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 										<option value="P">P (paye)</option>
 										<option value="R">R (rendu)</option>';
 										
-						$accompteSelect='<select name ="accomptePayeCommande"><option selected="'.$row["accompte_paye"].'" value="'.$row["accompte_paye"].'">Pay&eacute; ou non</option>';
-
-						$accompteSelect.='<option value="1">oui</option>
-										<option value="0">non</option>';
-
+						if ($row["accompte_paye"] == 0)
+							$accompteSelect='<input name="accomptePayeCommande" type="text" size="10" readonly value="non">';
+						else 
+							$accompteSelect='<input name="accomptePayeCommande" type="text" size="10" readonly value="oui">';
 						/**
 							* formulaire de modification
 						*/
 						
 						$affichage_edition_ligne='
-							<form action="rechercheCommande.php?actionCommande=R&editionCommande=UE&idcommande='.$row["idcommande"].'" method="POST">
+							<form action="rechercheCommande.php?actionCommande=R&editionCommande=UE&idcommande='.$row["idcommande"].'&email='.$row["email"].'" method="POST">
 								<table>
 									<tr>
 										<td '.$couleurCommande.'>
 											<label>Num&eacute;ro de la commande
-												<input name="idtaxe" type="text" size="5" readonly value="'.$row["idcommande"].'">													</label>
+												<input name="idtaxe" type="text" size="5" readonly value="'.$row["idcommande"].'">
+											</label>
 										</td>
 										<td '.$couleurCommande.'>
 											<label>Date
@@ -540,12 +554,12 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 										</td>
 										<td '.$couleurCommande.'>
 											<label>Statut de la facture
-												'.$majStatut.'												
+												<input name="cautionPayeCommande" readonly type="text" size="30" value="'.$statut[(int)$row["statut_facture"]]["designation"].'">											
 											</label>
 										</td>
 										<td '.$couleurCommande.'>
 											<label>Caution
-												<input name="cautionCommande" type="text" size="5"  value="'.$row["caution"].'">													
+												<input name="cautionCommande" type="text" size="5"  readonly value="'.$row["caution"].'">													
 											</label>
 										</td>
 										<td '.$couleurCommande.'>
@@ -555,7 +569,8 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 										</td>
 										<td '.$couleurCommande.'>
 											<label>Accompte
-												<input name="accompteCommande" type="number" size="5"  value="'.$row["accompte"].'">												</label>
+												<input name="accompteCommande" type="number" size="5"  value="'.$row["accompte"].'">
+											</label>
 										</td>
 										<td '.$couleurCommande.'>
 											<label>Accompte pay&eacute;
@@ -563,12 +578,19 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 											</label>
 										</td>
 										<td '.$couleurCommande.'>
-											<label>Total (montant du total)
-												<input name="totalCommande" type="number" size="5"  value="'.$row["total"].'">														</label>
+											<label>Remise (en %)
+												<input name="remise_taux" type="number" size="5"  value="'.$taux_remise.'">
+											</label>
 										</td>
 										<td '.$couleurCommande.'>
-											<label>Total pay&eacute; (somme payée)
-												<input name="totalPayeCommande" type="number" size="5"  value="'.$row["total_paye"].'">													</label>
+											<label>Total (montant du total)
+												<input name="totalCommande" type="number" size="5"  value="'.$row["total"].'">
+											</label>
+										</td>
+										<td '.$couleurCommande.'>
+											<label>Total pay&eacute; (somme pay&eacute;e)
+												<input name="totalPayeCommande" type="number" size="5"  value="'.$row["total_paye"].'">
+											</label>
 										</td>
 										<td '.$couleurCommande.'>
 											<label>Enregistrer les modifications
@@ -585,8 +607,8 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 									$a=0;
 
 									/* formulaire de modification du statut*/
-									$majStatut='<form action="rechercheCommande.php?actionCommande=R&editionCommande=US&idcommande='.$row["idcommande"].'" method="POST"><table><tr><td>';
-									$majStatut.='<select name ="statutModif"><option selected="'.$statut[(int)$row["statut_facture"]]["designation"].'" value="'.$statut[(int)$row["statut_facture"]]["designation"].'">'.$statut[(int)$row["statut_facture"]]["designation"].'</option>';
+									$majStatut='<form id="submitModifStatut" action="rechercheCommande.php?actionCommande=R&editionCommande=US&idcommande='.$row["idcommande"].'&email='.$row["email"].'" method="POST"><table><tr><td>';
+									$majStatut.='<select id="statutModifJs" name ="statutModif"><option selected="'.$statut[(int)$row["statut_facture"]]["designation"].'" value="'.$statut[(int)$row["statut_facture"]]["designation"].'">'.$statut[(int)$row["statut_facture"]]["designation"].'</option>';
 									while ($a<$result)
 									{
 										$majStatut.='<option value="'.(int)$a.'">'.$statut[(int)$a]["designation"].'</option>';
@@ -605,11 +627,10 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 									<td '.$couleurCommande.'>'.$majStatut.'</td>
 									<td data-tooltip class="has-tip" title="A:attente/P:Pay&eacute;/R:Rendu" '.$couleurCommande.'>('.$row["caution_paye"].') '.$row["caution"].' &euro;</td>									
 									<td '.$couleurCommande.'>'.$accompte_paye_symbole.'</td>
-									<td '.$couleurCommande.'>'.$row["remise_taux"].' %</td>
+									<td '.$couleurCommande.'>'.$row["remise_taux"].'</td>
 									<td '.$couleurCommande.'>'.$row["total"].' &euro;</td>
 									<td '.$couleurCommande.'>'.$row["total_paye"].' &euro;</td>';
 
-											
 				}
 				else if ($editionCommande=='UE' || $editionCommande=='US') { // 	affichage après update du statut
 
@@ -622,7 +643,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 									<td '.$couleurCommande.'>'.$statut[(int)$row["statut_facture"]]["designation"].'</td>
 									<td data-tooltip class="has-tip" title="A:attente/P:Pay&eacute;/R:Rendu" '.$couleurCommande.'>('.$row["caution_paye"].') '.$row["caution"].' &euro;</td>
 									<td '.$couleurCommande.'>'.$accompte_paye_symbole.'</td>
-									<td '.$couleurCommande.'>'.$row["remise_taux"].' %</td>
+									<td '.$couleurCommande.'>'.$row["remise_taux"].'</td>
 									<td '.$couleurCommande.'>'.$row["total"].' &euro;</td>
 									<td '.$couleurCommande.'>'.$row["total_paye"].' &euro;</td>';
 				}
@@ -636,7 +657,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 									<td '.$couleurCommande.'>'.$statut[(int)$row["statut_facture"]]["designation"].'</td>
 									<td data-tooltip class="has-tip" title="A:attente/P:Pay&eacute;/R:Rendu" '.$couleurCommande.'>('.$row["caution_paye"].') '.$row["caution"].' &euro;</td>
 									<td '.$couleurCommande.'>'.$accompte_paye_symbole.'</td>
-									<td '.$couleurCommande.'>'.$row["remise_taux"].' %</td>
+									<td '.$couleurCommande.'>'.$row["remise_taux"].'</td>
 									<td '.$couleurCommande.'>'.$row["total"].' &euro;</td>
 									<td '.$couleurCommande.'>'.$row["total_paye"].' &euro;</td>';
 				}	
@@ -658,6 +679,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 					$affichage_commande_ligne=$affichage_edition_ligne;
 			}
 			else if ($editionCommande=='UE'){
+
 					$messageAvertissement= '<span class="label [radius round]">Ces donn&eacute;es doivent &ecirc;tre saisis avec pr&eacute;cisions et être coh&eacute;rentes</span>';
 			}	
 		}
@@ -738,8 +760,18 @@ while ($rowTransaction = $resultTransaction->fetch_assoc())
 									</tr>
 								</table>';
 }
-?>
 
+?>
+<!-- Modal du message d'annulation -->
+<div id="modalEmailAnnuation" class="reveal-modal" data-reveal>
+	<h2>Email d'annulation</h2>
+	<div id="messageMail"></div>
+	<p class="lead"></p>
+	<a class="close-reveal-modal">&#215;</a>
+</div>
+<!-- fin Modal -->
+
+</div>
 	<div class="row">
 		<div class="large-12 columns">
 			<div class="panel">
@@ -779,27 +811,27 @@ while ($rowTransaction = $resultTransaction->fetch_assoc())
 	<a href="#" data-reveal-id="myModal" data-reveal>Click Me For A Modal</a>
 
 <script>
-$(document).foundation({
-  reveal : {
-    animation_speed: 500
-  },
-  tooltip : {
-    disable_for_touch: true
-  },
-  topbar : {
-    custom_back_text: false,
-    is_hover: false,
-    mobile_show_parent_link: true
-  }
-});
-
-$('a.reveal-link').trigger('click');
-$('a.close-reveal-modal').trigger('click');
-
-function remise_taux(somme_ht,id) {
+function remise_taux(somme_ht,id){
 	var saisie = prompt("Le total hors taxes s'élève à "+somme_ht+"€, quelle remise (en %) voulez-vous appliquer à cette commande ?");
-	document.location = 'rechercheCommande.php?actionCommande=Z&editionCommande=R&idcommande='+id+'&remise='+saisie;
-}	
+	if (saisie!=null)
+		document.location = 'rechercheCommande.php?actionCommande=Z&editionCommande=R&idcommande='+id+'&remise='+saisie;
+}
+
+//fonction qui affiche le template de mail pour le modifier lors de l'annulation d'une commande
+function verifAnnulation(emailAdd){
+	var select = document.getElementById("statutModifJs");
+	if (select.value == 0 ){
+		$('#modalEmailAnnuation').foundation('reveal', 'open', 'includes/ink/mailAnnulation.php?fonction=apercu&email='+emailAdd);
+	}else{
+		//si pas annulation, on submit le form normalement
+		$('#submitModifStatut').submit();
+	}
+}
+function envoiAnnulation(fct, emailAdd){
+	$.get("includes/ink/mailAnnulation.php?fonction=envoyer"+fct+"&email="+emailAdd );
+	$('#submitModifStatut').submit();
+}
+
 </script>
 
 <?php

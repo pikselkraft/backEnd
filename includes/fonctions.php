@@ -644,7 +644,7 @@ function envoiPwd($email) // fonction qui génére un nouveau mot de passe
  		
 			$reqUpdate="Update CLIENTS SET mp= '".$pass."' where email='".$email."'";
 			$mysqli->query($reqUpdate);
-			envoiMail($email, "Votre nouveau mot de passe","voici votre mot de passe : ".$newPass,$copy);
+			//envoiMail($email, "Votre nouveau mot de passe","voici votre mot de passe : ".$newPass,$copy);
 			return $newPass;
 		 }
 			
@@ -787,6 +787,44 @@ $message_html.=$message.'
 	//=====Envoi de l'e-mail.
 	mail($destinataire,$sujet,$message,$header);
 	//==========
+}
+
+function envoyerEmail($email, $sujet, $message){
+	global $mysqli;
+
+	require_once('includes/ink/phpmailer/class.phpmailer.php');
+	require_once('includes/ink/baseMailHTML.php');
+
+	//infos client
+	$sqlVerifExistant 	= "SELECT civilite, nom, prenom from CLIENTS WHERE email ='".$email."'" ;
+	$result=$mysqli->query($sqlVerifExistant);
+	if ($row=$result->fetch_Assoc()) {	
+		$civilite = $row['civilite'];
+		$nom = $row['nom'];
+		$prenom = $row['prenom'];
+
+		$message_html=$messageHeader.$messageCSS.$messageBodyBefore.
+			'<tr>
+				<td>
+				<h1>Bonjour '.$civilite.'&nbsp; '.$nom.' '.$prenom.'</h1>
+							'.nl2br('<p class="lead">'.htmlspecialchars($message).'</p>').'
+							<p>Ci-joint votre facture au format pdf pour votre r&eacute;servation au g&icirc;te Le Metzval.</p>
+							<p>Pour toute question vous pouvez contacter le g&icirc;te.</p>
+							<p>&Agrave; tr&egrave;s bient&ocirc;t pour d&eacute;couvrir notre magnifique r&eacute;gion</p>
+				</td>
+				<td class="expander"></td>
+			</tr>'.$messageBodyAfter;
+
+		$mail = new PHPMailer(); //defaults to using php "mail()"; the true param means it will throw exceptions on errors, which we need to catch
+		$mail->AddReplyTo(MAIL_METZVAL, 'G&icirc;te le metzval');
+		$mail->AddAddress($email, $nom.' '.$prenom);
+		$mail->SetFrom(MAIL_METZVAL, 'G&icirc;te le metzval');
+		$mail->Subject = htmlspecialchars($sujet);
+		$mail->MsgHTML($message_html);
+		$mail->Send();
+	}else
+		echo "Erreur, l'email est invalide.";
+
 }
 
 
