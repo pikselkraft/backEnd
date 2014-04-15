@@ -13,9 +13,7 @@ $reqStatutCommande="SELECT idstatut, designation
 $result_reqStatutCommande=$mysqli->query($reqStatutCommande);
 while ($row = $result_reqStatutCommande->fetch_assoc())
 {					
-		// $statut[(int)$row["idstatut"]]["designation"]=$row["designation"];
-		$statut[(int)$row["idstatut"]]["designation"]=$row["designation"];
-		
+		$statut[(int)$row["idstatut"]]["designation"]=$row["designation"];		
 }		
 // fin de la boucle pour les statuts
 
@@ -85,12 +83,23 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 										<tr>
 											<td>
 												<label>
-													<input name="type_transaction" type="text" size="5" value="" placeholder="ch&egrave;que ou autres" required>
+													<select name ="type_transaction">
+														<option value="cheque">cheque</option>
+														<option value="CB">CB</option>
+													</select>
 												</label>
 											</td>
 											<td>
-												<label for="motif">
-													<input name="motif" type="text" size="10" value="" placeholder="accompte/total etc.">													
+												<label>
+													<select name ="motif"><option selected="'.$statut[(int)$row["statut_facture"]]["designation"].'" value="'.$statut[(int)$row["statut_facture"]]["designation"].'">'.$statut[(int)$row["statut_facture"]]["designation"].'</option>';
+													$result=count($statut);
+													$a=0;
+													while ($a<$result)
+													{
+														$affichage_commande_ligne.='<option value="'.$statut[(int)$a]["designation"].'">'.$statut[(int)$a]["designation"].'</option>';
+														$a++;
+													}
+													$affichage_commande_ligne.='</select>
 												</label>
 											</td>
 											<td>
@@ -255,7 +264,6 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 
 										$suppReservation="DELETE FROM RESERVATION WHERE idreservation='".$idresa[$i]."'";
 										$mysqli->query($suppReservation);
-
 
 										$i++; // incrementation en cas de multi resa
 									}
@@ -593,10 +601,10 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 									<td '.$couleurCommande.'>'.$row["total_paye"].' &euro;</td>';
 				}	
 				// bouton action du statut								
-			$affichage_commande_ligne.= '<td '.$couleurCommande.'><a href="rechercheCommande.php?actionCommande=R&editionCommande=S&idcommande='.$row["idcommande"].'" title="Editer le statut"><i class="foundicon-edit"></i></a></td>
+			$affichage_commande_ligne.='<td '.$couleurCommande.'><a href="rechercheCommande.php?actionCommande=R&editionCommande=S&idcommande='.$row["idcommande"].'" title="Editer le statut"><i class="foundicon-edit"></i></a></td>
 										<td '.$couleurCommande.'><a href="rechercheCommande.php?actionCommande=R&editionCommande=E&idcommande='.$row["idcommande"].'" title="Modification de la commande" ><i class="foundicon-add-doc"></i></a></td>
-										<td '.$couleurCommande.'><a  title="Editer les remises" onclick="remise_taux('.((double)$row["total"]-$row["taxe"]).','.$row["idcommande"].')" ><i class="foundicon-heart"></i></a></td>
-										<td '.$couleurCommande.'><a href="rechercheCommande.php?actionCommande=R&editionCommande=M&idcommande='.$row["idcommande"].'" title="Rappel mail de la commande" ><i class="foundicon-mail"></i></a></td>
+										<td '.$couleurCommande.'><a title="Editer les remises" onclick="remise_taux('.((double)$row["total"]-$row["taxe"]).','.$row["idcommande"].')" ><i class="foundicon-heart"></i></a></td>
+										<td '.$couleurCommande.'><a href="" data-reveal-id="firstModal" title="Rappel mail de la commande" ><i class="foundicon-mail"></i></a></td>
 										<td '.$couleurCommande.'><a href="rechercheCommande.php?actionCommande=R&editionCommande=D&idcommande='.$row["idcommande"].'" title="Annuler la commande" onclick="return confirm(\'Etes vous sure de la suppression de cette commande?\');"><i class="foundicon-remove"></i></a></td>
 										<td '.$couleurCommande.'><a href="rechercheClient.php?actionClient=R&idcommande='.$row["idcommande"].'" title="Voir le compte du client"><i class="foundicon-address-book"></i></a></td>
 									</tr>';
@@ -691,6 +699,7 @@ while ($rowTransaction = $resultTransaction->fetch_assoc())
 								</table>';
 }
 ?>
+
 	<div class="row">
 		<div class="large-12 columns">
 			<div class="panel">
@@ -698,10 +707,10 @@ while ($rowTransaction = $resultTransaction->fetch_assoc())
 				<?= $MessageAction; ?>
 				<?= $MessageEdition; ?>
 				<?= $messageAvertissement; ?>
-			
 			</div>
 		</div>
 	</div>
+
 	
 	<div class="row">
 		<div class="large-12 columns">
@@ -726,13 +735,33 @@ while ($rowTransaction = $resultTransaction->fetch_assoc())
 		</div>		
 	</div>
 
+	<div class="reveal-modal-bg" style="display: none">test</div>
+	<a href="#" data-reveal-id="myModal" data-reveal>Click Me For A Modal</a>
 
-<?php
-	require('includes/footer.php');
-?>
 <script>
+$(document).foundation({
+  reveal : {
+    animation_speed: 500
+  },
+  tooltip : {
+    disable_for_touch: true
+  },
+  topbar : {
+    custom_back_text: false,
+    is_hover: false,
+    mobile_show_parent_link: true
+  }
+});
+
+$('a.reveal-link').trigger('click');
+$('a.close-reveal-modal').trigger('click');
+
 function remise_taux(somme_ht,id) {
 	var saisie = prompt("Le total hors taxes s'élève à "+somme_ht+"€, quelle remise (en %) voulez-vous appliquer à cette commande ?");
 	document.location = 'rechercheCommande.php?actionCommande=Z&editionCommande=R&idcommande='+id+'&remise='+saisie;
 }	
 </script>
+
+<?php
+	require('includes/footer.php');
+?>

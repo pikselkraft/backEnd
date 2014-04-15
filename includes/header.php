@@ -33,6 +33,7 @@ require('includes/fonctions.php');
 	<script src="scripts/js/foundation/foundation.topbar.js"></script>
 	<script src="scripts/js/foundation/foundation.tab.js"></script>
 	<script src="scripts/js/foundation/foundation.alert.js"></script>
+	<script src="scripts/js/foundation/foundation.reveal.js"></script>
 
 	<script src="scripts/scripts.js"></script><!--  appel des focntions spécifiques -->
 	<style>

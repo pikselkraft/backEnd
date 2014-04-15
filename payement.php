@@ -127,14 +127,14 @@ if(isset($_POST['nb_adulte']) and isset($_POST['nb_enfant']))
 			<div class="verief-nombre-form">
 				<div class="fiche-contact">	
 					<form action="<?php $_SERVER['REQUEST_URI']; ?>" method="POST">
-								<label for=nb_adulte>Nombre d'adultes :</label>
-								<input id=nb_adulte name=nb_adulte type=number min=0 max="<?php echo $cap;?>" required>
+								<label for="nb_adulte">Nombre d'adultes :</label>
+								<input id="nb_adulte" name="nb_adulte" type="number" min=0 max="<?php echo $cap;?>" required>
 							
-								<label for=nb_enfantTotal>Nombre d'enfants:</label>
-								<input id=nb_enfantTotal name=nb_enfantTotal type=number min=0 max="<?php echo $cap;?>" required>
+								<label for="nb_enfantTotal">Nombre d'enfants:</label>
+								<input id="nb_enfantTotal" name="nb_enfantTotal" type="number" min=0 max="<?php echo $cap;?>" required>
 				
-								<label for=nb_enfant>Dont nombre d'enfants de plus 13 ans :</label>
-								<input id=nb_enfant name=nb_enfant type=number  min=0 max="<?php echo $cap;?>" required>
+								<label for="nb_enfant">Dont nombre d'enfants de plus 13 ans :</label>
+								<input id="nb_enfant" name="nb_enfant" type="number"  min=0 max="<?php echo $cap;?>" required>
 								<input type="submit" id="reservation" name="reservation" value="Changer vos informations" >
 					</form>
 				</div>
@@ -278,11 +278,11 @@ if((isset($_POST['nb_adulte'])) || (isset($monTab[$resaEncours]['nb_adulte'])))
 			$tarif_resa            = $tarif_resa + $monTab[$i]['tarif'];
 		}	
 									
-			$remise			= $calculRemise;  	// &agrave; stocker dans le calcul de la r&eacute;sa
-			$code_promo		= $_POST['code-promo']; // req
-
-			$date_creation	= date("Y-m-d H:i:s");
-			$statut_facture	= 1;   // MODIFICATION APRÈS VALIDATION (INSERT)
+			$remise          = $calculRemise;  	// &agrave; stocker dans le calcul de la r&eacute;sa
+			$code_promo      = $_POST['code-promo']; // req
+			
+			$date_creation   = date("Y-m-d H:i:s");
+			$statut_facture  = 1;   // MODIFICATION APRÈS VALIDATION (INSERT)
 			
 			$accompte_paye   = 0; // MODIFICATION APRÈS VALIDATION (INSERT)
 			$calcul_accompte = ($tarif_resa + $option_resa) - $remise;
@@ -296,7 +296,7 @@ if((isset($_POST['nb_adulte'])) || (isset($monTab[$resaEncours]['nb_adulte'])))
 			$monTab[$resaEncours]['montantPlus30J']  = $accompte; /* montant &agrave; payer */ 
 			$monTab[$resaEncours]['montantMoins30J'] = $total - $cautionTotal; /* montant &agrave; payer */ 
 
-			$sqlCo = "INSERT INTO COMMANDE (taxe,caution,caution_paye,montant_option,remise,code_promo,date_creation,statut_facture,accompte,accompte_paye,total,total_paye) VALUES ('".$taxe."','".$cautionTotal."','A','".$option_resa."','".$remise."','".$code_promo."','".$date_creation."','".$statut_facture."','".$accompte."','".$accompte_paye."','".$total."','".$total_paye."')";  
+			$sqlCo = "INSERT INTO COMMANDE (tarif_reservation,taxe,caution,caution_paye,montant_option,remise,code_promo,date_creation,statut_facture,accompte,accompte_paye,total,total_paye) VALUES ('".$tarif_resa."','".$taxe."','".$cautionTotal."','A','".$option_resa."','".$remise."','".$code_promo."','".$date_creation."','".$statut_facture."','".$accompte."','".$accompte_paye."','".$total."','".$total_paye."')";  
 			$mysqli->query($sqlCo); // INSERTION COMMANDE
 		 
 				if($mysqli)

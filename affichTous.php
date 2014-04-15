@@ -147,7 +147,6 @@ function correction_debut_semaine ($jour,$cle) {
 			$gt++;
 			$AffichChoixDate=false;
 		 }
-							 
 		?>
 </body>
 
