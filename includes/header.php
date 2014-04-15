@@ -12,22 +12,12 @@ require('includes/fonctions.php');
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	
 	<link rel="stylesheet" href="includes/css/foundation.css">
-<<<<<<< HEAD
-
 
 	<link rel="stylesheet" href="includes/css/datePicker.css">
 	<link rel="stylesheet" href="includes/css/responsive-tables.css">
-<link rel="stylesheet" href="includes/css/calendrier.css">
+	<link rel="stylesheet" href="includes/css/calendrier.css">
 
-
-	<link rel="stylesheet" href="includes/css/responsive-tables.css">
-
-
-=======
 	<link rel="stylesheet" href="includes/css/datePicker.css">
-	<link rel="stylesheet" href="includes/css/responsive-tables.css">
-<!-- 	<link rel="stylesheet" href="includes/css/calendrier.css"> -->
->>>>>>> 1b1dc0d30f435543a713d0fb3963e6e1d43f9639
 	<link rel="stylesheet" href="includes/foundation_icons_general/stylesheets/general_foundicons.css">
 	
 <!--	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">-->
@@ -45,18 +35,9 @@ require('includes/fonctions.php');
 	<script src="scripts/js/foundation/foundation.js"></script>
 	<script src="scripts/js/foundation/foundation.topbar.js"></script>
 	<script src="scripts/js/foundation/foundation.tab.js"></script>
-<<<<<<< HEAD
 	<script src="scripts/js/foundation/foundation.tooltip.js"></script>
 	<script src="scripts/js/foundation/foundation.reveal.js"></script>
-
-=======
 	<script src="scripts/js/foundation/foundation.alert.js"></script>
-<<<<<<< HEAD
->>>>>>> 1b1dc0d30f435543a713d0fb3963e6e1d43f9639
-=======
-	<script src="scripts/js/foundation/foundation.reveal.js"></script>
->>>>>>> 3d4bb240f828a46020440990ecefceb01b36f68e
-
 	<script src="scripts/scripts.js"></script><!--  appel des focntions spécifiques -->
 	<style>
 
@@ -102,16 +83,12 @@ require('includes/fonctions.php');
 				width: 140px;
 				float: left;
 			}
-<<<<<<< HEAD
 			.button-mail {
 				background-color: red;
 				border: 2px solid blue;
 				color: red;
 
 			}
-=======
-
->>>>>>> 1b1dc0d30f435543a713d0fb3963e6e1d43f9639
 	</style>
 
 </head>
@@ -134,14 +111,8 @@ require('includes/fonctions.php');
 			  <li class="has-dropdown">
 				<a href="statistique.php">Statistiques</a>
 				<ul class="dropdown">
-<<<<<<< HEAD
  					<li><a href="statGite.php">Occupation des g&icirc;tes</a></li>
 				 	<li><a href="statCa.php">R&eacute;sultats financiers</a></li>
-=======
-				  <li><a href="statGite.php">Occupation des g&icirc;tes</a></li>
-				  <li><a href="statCa.php">R&eacute;sultats financiers</a></li>
-
->>>>>>> 1b1dc0d30f435543a713d0fb3963e6e1d43f9639
 				</ul>
 			  </li>
 			  <li class="has-dropdown">
