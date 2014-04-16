@@ -277,7 +277,6 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 									}
 									
 									/**
-	
 										!!* EVM envoi mail + template!!
 									*/	
 								
@@ -341,7 +340,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 
 			case "R": //rechercher de commandes
 			
-			$reqCommandeResa = "SELECT distinct CO.idcommande,  CM.idclient, C.nom, C.prenom, C.email, CO.taxe, CO.caution, 
+			$reqCommandeResa = "SELECT distinct CO.idcommande, CM.idclient, C.nom, C.civilite, C.prenom, C.email, CO.taxe, CO.caution, 
 	CO.caution_paye, CO.montant_option, CO.remise, CO.code_promo, CO.date_creation, CO.statut_facture, CO.accompte, 
 	CO.accompte_paye, CO.total, CO.total_paye, G.nom as nom_gite, G.idgite, CO.remise_taux
 	FROM COMMANDE CO, COMMANDERESERVER CM, CLIENTS C, RESERVATION R, GITE G
@@ -398,7 +397,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 			// 		WHERE CM.idclient=C.idclient and CO.idcommande=CM.idcommande and CO.idcommande > '((SELECT max(idcommande) FROM COMMANDE)-20)'";
 			// ancienne requête
 
-			$reqCommandeResa="SELECT distinct CO.idcommande,  CM.idclient, C.nom, C.prenom, CO.taxe, CO.caution, CO.caution_paye, 
+			$reqCommandeResa="SELECT distinct CO.idcommande,  CM.idclient, C.nom, C.prenom, C.civilite, CO.taxe, CO.caution, CO.caution_paye, 
 				CO.montant_option, CO.remise, CO.code_promo, CO.date_creation, CO.statut_facture, CO.accompte, CO.accompte_paye, 
 				CO.total, CO.total_paye, G.nom as nom_gite, G.idgite, R.date_debut, R.date_fin, CO.remise_taux
 				FROM COMMANDE CO, COMMANDERESERVER CM, CLIENTS C, GITE G, RESERVATION R
@@ -408,6 +407,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 				AND G.idgite=R.idgite
 				AND CO.idcommande > '((SELECT max(idcommande) FROM COMMANDE)-20)'
 				ORDER BY CO.date_creation, CO.statut_facture";
+
 			$result_reqCommandeResa=$mysqli->query($reqCommandeResa);
 			if(!$mysqli)
 			{
@@ -449,6 +449,16 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 
 			while ($row = $result_reqCommandeResa->fetch_assoc())
 			{
+				/**
+				 * recuperation info client pour mail paypal
+				 */
+
+				$emailPaypal    = $row["email"];
+				$nomPaypal      = $row["nom"];
+				$prenomPaypal   = $row["prenom"];
+				$civilitePaypal = $row["civilite"];
+				testVar($civilitePaypal);
+
 				if ($editionCommande=='UE' || $editionCommande=='US') { // mise à jour couleur pour update
 					
 					switch ((int)$_POST['statutModif'])
@@ -614,7 +624,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 										$majStatut.='<option value="'.(int)$a.'">'.$statut[(int)$a]["designation"].'</option>';
 										$a++;
 									}
-									$majStatut.='</select><input type="submit" value="Modifier"></td></tr></table>';
+									$majStatut.='</select><input type="button" onclick="verifAnnulation(\''.$row["email"].'\')" value="Modifier"></td></tr></table></form>';
 
 									$majStatut.='</form>';
 
@@ -661,14 +671,27 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 									<td '.$couleurCommande.'>'.$row["total"].' &euro;</td>
 									<td '.$couleurCommande.'>'.$row["total_paye"].' &euro;</td>';
 				}	
-				// bouton action du statut								
-			$affichage_commande_ligne.='<td '.$couleurCommande.'><a href="rechercheCommande.php?actionCommande=R&editionCommande=S&idcommande='.$row["idcommande"].'" title="Editer le statut"><i class="foundicon-edit"></i></a></td>
+				// bouton action du statut
+				// recuperation de l'idclient en jquery vie le href
+				if ($actionCommande=="Z") {
+
+					$affichage_commande_ligne.='<td '.$couleurCommande.'><a href="rechercheCommande.php?actionCommande=R&editionCommande=S&idcommande='.$row["idcommande"].'" title="Editer le statut"><i class="foundicon-edit"></i></a></td>
 										<td '.$couleurCommande.'><a href="rechercheCommande.php?actionCommande=R&editionCommande=E&idcommande='.$row["idcommande"].'" title="Modification de la commande" ><i class="foundicon-add-doc"></i></a></td>
 										<td '.$couleurCommande.'><a title="Editer les remises" onclick="remise_taux('.((double)$row["total"]-$row["taxe"]).','.$row["idcommande"].')" ><i class="foundicon-heart"></i></a></td>
-										<td '.$couleurCommande.'><a href="" data-reveal-id="firstModal" title="Rappel mail de la commande" ><i class="foundicon-mail"></i></a></td>
 										<td '.$couleurCommande.'><a href="rechercheCommande.php?actionCommande=R&editionCommande=D&idcommande='.$row["idcommande"].'" title="Annuler la commande" onclick="return confirm(\'Etes vous sure de la suppression de cette commande?\');"><i class="foundicon-remove"></i></a></td>
 										<td '.$couleurCommande.'><a href="rechercheClient.php?actionClient=R&idcommande='.$row["idcommande"].'" title="Voir le compte du client"><i class="foundicon-address-book"></i></a></td>
 									</tr>';
+				} else {
+
+					$affichage_commande_ligne.='<td '.$couleurCommande.'><a href="rechercheCommande.php?actionCommande=R&editionCommande=S&idcommande='.$row["idcommande"].'" title="Editer le statut"><i class="foundicon-edit"></i></a></td>
+												<td '.$couleurCommande.'><a href="rechercheCommande.php?actionCommande=R&editionCommande=E&idcommande='.$row["idcommande"].'" title="Modification de la commande" ><i class="foundicon-add-doc"></i></a></td>
+												<td '.$couleurCommande.'><a title="Editer les remises" onclick="remise_taux('.((double)$row["total"]-$row["taxe"]).','.$row["idcommande"].')" ><i class="foundicon-heart"></i></a></td>
+												<td '.$couleurCommande.'><a href='.$row["idclient"].' title="Mail de rappel" data-reveal-id="paypalModal" id="recupId"><i class="foundicon-mail"></i></a></td>
+												<td '.$couleurCommande.'><a href="rechercheCommande.php?actionCommande=R&editionCommande=D&idcommande='.$row["idcommande"].'" title="Annuler la commande" onclick="return confirm(\'Etes vous sure de la suppression de cette commande?\');"><i class="foundicon-remove"></i></a></td>
+												<td '.$couleurCommande.'><a href="rechercheClient.php?actionClient=R&idcommande='.$row["idcommande"].'" title="Voir le compte du client"><i class="foundicon-address-book"></i></a></td>
+											</tr>';
+
+				}	
 			}		
 			$affichage_commande_ligne.='</table>';
 		
@@ -680,7 +703,7 @@ while ($row = $result_reqStatutCommande->fetch_assoc())
 			}
 			else if ($editionCommande=='UE'){
 
-					$messageAvertissement= '<span class="label [radius round]">Ces donn&eacute;es doivent &ecirc;tre saisis avec pr&eacute;cisions et être coh&eacute;rentes</span>';
+					$messageAvertissement= '<span class="label [radius round]">Ces donn&eacute;es doivent &ecirc;tre saisis avec pr&eacute;cisions et &ecirc;tre coh&eacute;rentes</span>';
 			}	
 		}
 	}
@@ -762,6 +785,7 @@ while ($rowTransaction = $resultTransaction->fetch_assoc())
 }
 
 ?>
+
 <!-- Modal du message d'annulation -->
 <div id="modalEmailAnnuation" class="reveal-modal" data-reveal>
 	<h2>Email d'annulation</h2>
@@ -771,11 +795,27 @@ while ($rowTransaction = $resultTransaction->fetch_assoc())
 </div>
 <!-- fin Modal -->
 
+<!-- Modal du mail paypal avec recuperation des infos client -->
+	<div id="paypalModal" class="reveal-modal" data-reveal>
+		<h2>Texte Paypal</h2>
+		<div id="messageMail">
+				<p class="lead">Copier le texte et l'email du client et compl&eacute;ter le rappel sur le site de paypal.</p>
+				<p>Le mail du client: <?= $emailPaypal; ?></p>
+				<p>Les informations du client: <?php echo "" . $civilitePaypal . ".".$nomPaypal . " " . $prenomPaypal . ""; ?></p>
+				<p>Veuillez trouv&eacute; ci-joint le rappel de r&egrave;glement de votre r&eacute;servation au g&icirc;te Le Metzval.</p>
+				<p>Pour plus d'information, vous pouvez contacter le g&icirc;te au 06 25 14 37 06.</p>
+				<p>Cordialement,</p>
+				<p>Le g&icirc;te le Metzval</p>
+		</div>
+		<a href="https://www.paypal.com/fr/cgi-bin/webscr?cmd=_flow&SESSION=W0tI6EV4DPckBFt_AlevBiQcY-3Eh9AlbM4bn9LLIFNf2zzPMtLG9rhQoRK&dispatch=5885d80a13c0db1f8e263663d3faee8d8cdcf517b037b4502f6cc98f1ee6e5fb" target="_blank">Site Paypal</a>
+		<a class="close-reveal-modal">&#215;</a>
+	</div>
+<!-- fin Modal -->
+
 </div>
 	<div class="row">
 		<div class="large-12 columns">
 			<div class="panel">
-			
 				<?= $MessageAction; ?>
 				<?= $MessageEdition; ?>
 				<?= $messageAvertissement; ?>
@@ -807,33 +847,44 @@ while ($rowTransaction = $resultTransaction->fetch_assoc())
 		</div>		
 	</div>
 
-	<div class="reveal-modal-bg" style="display: none">test</div>
-	<a href="#" data-reveal-id="myModal" data-reveal>Click Me For A Modal</a>
 
-<script>
-function remise_taux(somme_ht,id){
-	var saisie = prompt("Le total hors taxes s'élève à "+somme_ht+"€, quelle remise (en %) voulez-vous appliquer à cette commande ?");
-	if (saisie!=null)
-		document.location = 'rechercheCommande.php?actionCommande=Z&editionCommande=R&idcommande='+id+'&remise='+saisie;
-}
+<script type="text/javascript">
 
-//fonction qui affiche le template de mail pour le modifier lors de l'annulation d'une commande
-function verifAnnulation(emailAdd){
-	var select = document.getElementById("statutModifJs");
-	if (select.value == 0 ){
-		$('#modalEmailAnnuation').foundation('reveal', 'open', 'includes/ink/mailAnnulation.php?fonction=apercu&email='+emailAdd);
-	}else{
-		//si pas annulation, on submit le form normalement
+	function paypalOpen(){
+		var saisie = prompt("Le total hors taxes s'élève à "+somme_ht+"€, quelle remise (en %) voulez-vous appliquer à cette commande ?");
+		if (saisie!=null)
+			document.location = 'rechercheCommande.php?actionCommande=Z&editionCommande=R&idcommande='+id+'&remise='+saisie;
+	}
+
+	$("#paypalModal").on("click", function(e) {
+			$('#paypalModal').foundation('reveal', 'open');
+			$('#paypalModal').foundation('reveal', 'close');
+	    });
+
+	function remise_taux(somme_ht,id){
+		var saisie = prompt("Le total hors taxes s'élève à "+somme_ht+"€, quelle remise (en %) voulez-vous appliquer à cette commande ?");
+		if (saisie!=null)
+			document.location = 'rechercheCommande.php?actionCommande=Z&editionCommande=R&idcommande='+id+'&remise='+saisie;
+	}
+
+	//fonction qui affiche le template de mail pour le modifier lors de l'annulation d'une commande
+	function verifAnnulation(emailAdd){
+		var select = document.getElementById("statutModifJs");
+		if (select.value == 0 ){
+			$('#modalEmailAnnuation').foundation('reveal', 'open', 'includes/ink/mailAnnulation.php?fonction=apercu&email='+emailAdd);
+		}else{
+			//si pas annulation, on submit le form normalement
+			$('#submitModifStatut').submit();
+		}
+	}
+	function envoiAnnulation(fct, emailAdd){
+		$.get("includes/ink/mailAnnulation.php?fonction=envoyer"+fct+"&email="+emailAdd );
 		$('#submitModifStatut').submit();
 	}
-}
-function envoiAnnulation(fct, emailAdd){
-	$.get("includes/ink/mailAnnulation.php?fonction=envoyer"+fct+"&email="+emailAdd );
-	$('#submitModifStatut').submit();
-}
 
 </script>
 
+	
 <?php
 	require('includes/footer.php');
 ?>

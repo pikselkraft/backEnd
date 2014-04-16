@@ -138,11 +138,11 @@ else
 				$result_reqClient=$mysqli->query($reqClient);
 				if(!$mysqli)
 				{
-					$MessageAction ="ERREUR : Pas de résultat pour cette recherche" ;  
+					$MessageAction ="ERREUR : Pas de r&eacute;sultat pour cette recherche" ;  
 				} 
 				else
 				{
-					$MessageAction="Resultat de la recherche : ";
+					$MessageAction="R&eacute;sultat de la recherche : ";
 				}
 							
 				//Boucle qui parcourt les clients dans la base de données

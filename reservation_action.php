@@ -29,6 +29,8 @@ if(isset($_POST['login'])) { /* recuperation du login*/
 	$monTab[0]['login'] = $login;
 }
 
+$_SESSION['Mesresa'] = $monTab; // on ajoute le login à la session
+
 /* stockage des variables du post du formulaire.php */
 $date_debut = $monTab[$resaEncours]['date_debut'];
 $date_fin 	= $monTab[$resaEncours]['date_fin'];

@@ -131,12 +131,12 @@
 			messages: {
 				password: {
 					required: "Mot de passe obligatoire",
-					minlength: "Saisir un mot de passe de 5 caractères minimum"
+					minlength: "Saisir un mot de passe de 5 caract&egrave;res minimum"
 				},
 				passwordConfirm: {
 					required: "Mot de passe obligatoire",
-					minlength: "Saisir un mot de passe de 5 caractères minimum",
-					equalTo: "Les mots de passe sont différents"
+					minlength: "Saisir un mot de passe de 5 caract&egrave;res minimum",
+					equalTo: "Les mots de passe sont diff&eacute;rents"
 				},
 				login: {
 					   required: "Adresse mail obligatoire",
@@ -243,7 +243,7 @@
 		});
 
 		function verif_action(){
-			return confirm("Etes vous s�r ?");
+			return confirm("Etes vous s&ucirc;r ?");
 		}
 		
 	</script>

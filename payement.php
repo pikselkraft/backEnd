@@ -28,7 +28,6 @@ $resaPrecedente   = $resaEncours	- 1 ;
 $_SESSION['test'] = true;
 
 /* stockage dans des variables de post du "formulaire.php" */
-
 $login               = $monTab[0]['login']; // uniquement le login pour la première resa
 $cheminot            = $monTab[$resaEncours]['cheminot'];
 $date_debut          = $monTab[$resaEncours]['date_debut'];
@@ -37,7 +36,6 @@ $idgite              = $monTab[$resaEncours]['idgite'];
 $nomGite             = $monTab[$resaEncours]['nom'];
 $tarif               = $monTab[$resaEncours]['tarif'];
 $_SESSION['Mesresa'] = $monTab;	
-//testVar($monTab[$resaEncours]);
 
 /* capacite du gite -> test du nombre adultes et enfants conforment */
 $cap     = $_SESSION['gite_tab']['capacite'];
@@ -75,7 +73,7 @@ $testCodePromo   = $_SESSION['code-promo'];
 if(isset($testCodePromo))
 {
 	if($_SESSION['code']==1)
-	{echo "<div class='msg-error'><p>un seul code promotion par commande est accept&eacute;</p></div>";}
+	{echo "<div class='msg-error'><p>Un seul code promotion par commande est accept&eacute;</p></div>";}
 	else
 	{	
 		$_SESSION['code'] = 0;
@@ -98,16 +96,16 @@ if(isset($testCodePromo))
 				
 				if($mysqli)
 				{
-					echo"<div class='msg'><p>Votre code de promotion a &eacute;t&eacute; appliqu&eacute;</p></div>";
+					echo"<div class='msg'><p>Votre code de promotion a &eacute;t&eacute; appliqu&eacute;.</p></div>";
 					$calculRemise = ($tarif * $valeurRemise) / 100;
 					$_SESSION['code']++;			
-				}else {echo"<div class='msg-error'><p>Votre code promotion n'est plus valide</p></div>";}
+				}else {echo"<div class='msg-error'><p>Votre code promotion n'est plus valide.</p></div>";}
 			}
 			else 
 			{echo "<div class='msg-error'><p>Ce code promotion n'est plus valide.</p></div>";}	
 		} // fin while req codepromo
 	} // fin if test session code
-} else {echo"<div class='msg-none'><p>il n'y pas de code promotion &agrave; v&eacute;rifier</p></div>";}
+} else {echo"<div class='msg-none'><p>Il n'y pas de code promotion &agrave; v&eacute;rifier.</p></div>";}
 
 /**************************************
 	*	GESTION NB Adulte et Enfant 
@@ -323,7 +321,6 @@ if((isset($_POST['nb_adulte'])) || (isset($monTab[$resaEncours]['nb_adulte'])))
 						{
 							$idCommande = $resqlIdCommande['idcommande'];
 						}
-							
 						$reqIdClient =	"SELECT idclient FROM CLIENTS 
 										WHERE email='".$login."'";
 										
@@ -332,7 +329,7 @@ if((isset($_POST['nb_adulte'])) || (isset($monTab[$resaEncours]['nb_adulte'])))
 						{
 							$idClient = $resqlIdClient['idclient'];
 						}
-		
+	
 						for ($i=0;$i<=$resaEncours;$i++)
 						{
 							/* requ&ecirc;te sql insertion commandereserver */

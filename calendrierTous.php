@@ -226,8 +226,8 @@ $annee_en_cours = $annee_premier_mois ;
 // affichage s�lection mois, ann�e, couleur et champs de r�servations ********************************
 if ($AffichChoixDate)
 {
-	echo '<div class="row">
-		<div class="small-11 small-centered columns">';
+	// echo '<div class="row">
+	// 	<div class="small-11 small-centered columns">';
 	echo '<table>
 		  <tr>
 		  <td>';
@@ -257,11 +257,11 @@ if ($AffichChoixDate)
 	echo '</td>
 		  </tr>
 		  </table> ';
-	echo '</div></div>';
+	//echo '</div></div>';
 // s�lection affichage avec lien vers page de gestion des locataires logements *********************
 }
-echo '<div class="row">
-		<div class="small-11 small-centered columns"><div id="calendrier">';
+// echo '<div class="row">
+// 		<div class="small-11 small-centered columns"><div id="calendrier">';
 /* Affichage des infos de base du Gite
 */
 $req="SELECT idgite,nom,capacite,url,montant_caution,titre,description FROM GITE WHERE idgite=".$idgite;
@@ -489,14 +489,14 @@ echo '</table>';
 			
 			<fieldset>
 				
-				<label for=nom>Date Arriv�e</label>	<input type="date" name="date_debut">
+				<label for=nom>Date Arriv&eacute;e</label>	<input type="date" name="date_debut">
 				
-				<label for=nom>Date D�part</label><input type="date" name="date_fin">
+				<label for=nom>Date D&eacute;part</label><input type="date" name="date_fin">
 				<input type="int" name="capacite" hidden>
 			</fieldse>
 			
 			<fieldset>
-				<button type=submit>Reserver !</button> <!-- test dans le header et redirection-->
+				<button type=submit>R&eacute;server !</button> <!-- test dans le header et redirection-->
 		  	</fieldset>
 		</form>
 		</div>

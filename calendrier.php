@@ -411,7 +411,7 @@ $compteur_mois_ligne = 1 ;
 echo '<table >';
 echo '<tr>';
 echo '<td>';
-echo '<div style="width:',$largeur_div,'px;">';
+echo '<div>';
 
 //affichage des tableaux des mois desir�s***********************************************************
 for ( $compteur_mois = 1; $compteur_mois <= $nombre_mois_afficher; $compteur_mois++ )
