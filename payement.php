@@ -771,6 +771,9 @@ if((isset($_POST['nb_adulte'])) || (isset($monTab[$resaEncours]['nb_adulte'])))
 				
 				require('includes/ink/mailCheque.php');
 				envoiCheque($login,$idCommande,$sommeRegler,$date_debut,$date_fin,MAIL_METZVAL);
+				require_once 'includes/pdf/factures/mailPDF.php';
+				require_once 'includes/ink/mailFacture.php';
+				envoiFacture($login,generationPdf($idCommande),"Voici la facture de votre derni&egrave;re commande.");
 		}
 ?>
 

@@ -219,25 +219,25 @@ function calculTarif ($date_debut,$date_fin,$idgite,$statutCheminot)  // CALCUL 
 	while ($date2<$dateFintest)  // comparaison date format date
 	{
 		if(typeSaison(strtotime($date2)))  // conversion en chaîne
-		   {
-			  if(nbJours($date_debut, $date_fin)>=7) // calcul nombre jours de la résa si supérieur à 7 uniquement tarif BS
-			  {
-				 $nbBs++;
-			  }	
-				else // si inféreieur à 7 calcul nombre jour HS
-				{
-					$nbHs++;
-				}
-		   }
-			else
-		   {
-				$nbBs++; 
-			  	//var_dump($nbBs);   
-		   }
-		 $date2= date('Y-m-d', strtotime($date2." +1 day")); // INCREMENTATION EN FORMAT CHAINE MAIS VARIABLE AU FORMAT DATE
+		{
+			if(nbJours($date_debut, $date_fin)>=7) // calcul nombre jours de la résa si supérieur à 7 uniquement tarif BS
+			{
+				$nbBs++;
+			}	
+			else // si inféreieur à 7 calcul nombre jour HS
+			{
+				$nbHs++;
+			}
+		}
+		else
+		{
+			$nbBs++; 
+			//var_dump($nbBs);   
+		}
+		$date2= date('Y-m-d', strtotime($date2." +1 day")); // INCREMENTATION EN FORMAT CHAINE MAIS VARIABLE AU FORMAT DATE
 		
 	}
-	
+
 	$reqTarif = "SELECT t.prix, p.idgite, p.idtarif, t.saison, t.statut_client 
 					FROM POSSEDETARIF p, TARIF t
 					WHERE p.idtarif = t.idtarif
@@ -259,11 +259,11 @@ function calculTarif ($date_debut,$date_fin,$idgite,$statutCheminot)  // CALCUL 
 
 		if($resqlTarif['saison'])    /****** VERIFICATION BASSE SAISON SI + DE 7 JOURS */
 		{
-			$totalTarif=$totalTarif + ($resqlTarif['prix']*$nbHs);	// prix HS
+			$totalTarif += ($resqlTarif['prix']*$nbHs);	// prix HS
 		}
 		else
 		{
-			$totalTarif=$totalTarif + ($resqlTarif['prix']*$nbBs);	// prix BS
+			$totalTarif = ($resqlTarif['prix']*$nbBs);	// prix BS
 		}
 	}
 	

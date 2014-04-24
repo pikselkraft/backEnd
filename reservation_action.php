@@ -273,8 +273,11 @@ if(isset($_POST["login"]) and isset($_POST["password"]) and isset($_POST['nom'])
 						
 						<label for="payementJ-30" id="payementJ-30">Votre moyen de payement :</label><input type="hidden" name="J-30" value="J-30">  <!--	permet test dans payement.php-->
 						<div class="centent-paye-center">
-							<input type="radio" name="payementJ-30" id="payementJ-30" value="1" class="paye-input-payement" required /><label for="payementcbJ-30" id="payementcbJ-30"><span class="txtbold">Carte bancaire</span>&nbsp;&nbsp;&nbsp;<img src="https://www.paypalobjects.com/webstatic/mktg/logo-center/logo_paypal_moyens_paiement_fr.jpg" border="0" alt="PayPal Acceptance Mark" width="25%" height="25%"></label>&nbsp;&nbsp;&nbsp;
-							<input type="radio" name="payementJ-30" id="payementJ-30" value="0" class="paye-input-payement" /><label for="payementchequeJ-30" id="payementchequeJ-30"><span class="txtbold">Ch&egrave;que</span>&nbsp;&nbsp;&nbsp;<img src="../../wp-content/uploads/2013/12/cheque-icon.png" alt="cheque-icon" width="6%" height="6%"></label>
+							<input type="radio" name="payementJ-30" id="payementJ-30" value="1" class="paye-input-payement" required />
+							<label for="payementcbJ-30" id="payementcbJ-30"><span class="txtbold">Carte bancaire</span>&nbsp;&nbsp;&nbsp;<img src="https://www.paypalobjects.com/webstatic/mktg/logo-center/logo_paypal_moyens_paiement_fr.jpg" border="0" alt="PayPal Acceptance Mark" width="25%" height="25%"></label>&nbsp;&nbsp;&nbsp;
+							<input type="radio" name="payementJ-30" id="payementJ-30" value="0" class="paye-input-payement" />
+							<label for="payementchequeJ-30" id="payementchequeJ-30"><span class="txtbold">Ch&egrave;que</span>&nbsp;&nbsp;&nbsp;<img src="includes/img/cheque-icon.png" alt="cheque-icon" width="6%" height="6%"></label>
+
 						</div>
 					<?php
 					}
@@ -288,7 +291,7 @@ if(isset($_POST["login"]) and isset($_POST["password"]) and isset($_POST['nom'])
 							<input type="radio" name="payementJ+30" id="payementJ+30" value="1" class="paye-input-payement" required /><label for="payementcbJ+30" id="payementcbJ+30"><span class="txtbold">Carte bancaire</span>&nbsp;&nbsp;&nbsp;
 							<img src="https://www.paypalobjects.com/webstatic/mktg/logo-center/logo_paypal_moyens_paiement_fr.jpg" border="0" alt="PayPal Acceptance Mark" width="25%" height="25%"></label>&nbsp;&nbsp;&nbsp;
 							<input type="radio" name="payementJ+30" id="payementJ+30" value="0" class="paye-input-payement" /><label for="payementchequeJ+30" id="payementchequeJ+30"><span class="txtbold">Ch&egrave;que</span>&nbsp;&nbsp;&nbsp;
-							<img src="images/cheque-icon.png" alt="cheque-icon" width="6%" height="6%"></label>
+							<img src="includes/img/cheque-icon.png" alt="cheque-icon" width="25%" height="25%"></label>
 						</div>
 				
 					<?php

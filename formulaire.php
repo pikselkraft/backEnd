@@ -56,8 +56,9 @@ if(isset($_POST['date_debut']) and isset($_POST['date_fin'])) {
 
 	$monTab[$resaEncours]['date_debut'] = $_POST["date_debut"];
 	$monTab[$resaEncours]['date_fin']   = $_POST["date_fin"];
-	
+	$monTab[$resaEncours]['tarif'] = calculTarif($monTab[$resaEncours]['date_debut'],$monTab[$resaEncours]['date_fin'],$idgite);	
 }
+
 
 $monTab[$resaEncours]['idgite']     = $idgite;    /* stock les variables du post dans un tableau */
 $_SESSION['Mesresa']                = $monTab;		
@@ -106,7 +107,7 @@ else
 		switch ($actionClient) 
 		{
 			case "R": //rechercher de clients
-				$reqClient="select idclient, nom, prenom, port, email	
+				$reqClient="select idclient, nom, prenom, port, tel, email	
 						from CLIENTS"
 						 ;
 						 
@@ -129,7 +130,7 @@ else
 								}
 								else
 								{
-									if (!empty($_POST["port"]))  $reqClient.=" where port like '".$_POST["port"]."'";
+									if (!empty($_POST["port"]))  $reqClient.=" WHERE port like '".$_POST["port"]."' OR tel like '".$_POST["port"]."'";
 								}
 							}
 						}
@@ -150,28 +151,35 @@ else
 				break;
 						
 			case "TE": //tri par email
-				$reqClient="select idclient, nom, prenom, port, email	
+				$reqClient="select idclient, nom, prenom, port, tel, email	
 						from CLIENTS order by email";
 											 
 				$result_reqClient=$mysqli->query($reqClient);
 				break;
 			case "TN": //tri par nom
-				$reqClient="select idclient, nom, prenom, port, email	
+				$reqClient="select idclient, nom, prenom, port, tel, email	
 						from CLIENTS order by nom"
 						 ;
 											 
 				$result_reqClient=$mysqli->query($reqClient);		 
 				break;
 			case "TP": //tri par prenom
-				$reqClient="select idclient, nom, prenom, port, email	
+				$reqClient="select idclient, nom, prenom, port, tel, email	
 						from CLIENTS order by prenom"
 						 ;
 											 
 				$result_reqClient=$mysqli->query($reqClient);		 
 				break;
 			case "TT": //tri par portable
-				$reqClient="select idclient, nom, prenom, port, email	
+				$reqClient="select idclient, nom, prenom, port, tel, email	
 						from CLIENTS order by port"
+						 ;
+											 
+				$result_reqClient=$mysqli->query($reqClient);		 
+				break;
+			case "TTF": //tri par tel fixe
+				$reqClient="select idclient, nom, prenom, port, tel, email	
+						from CLIENTS order by tel"
 						 ;
 											 
 				$result_reqClient=$mysqli->query($reqClient);		 
@@ -179,7 +187,7 @@ else
 			case "MDP": //generation d'un nouveau mot de passe
 				$newPass=envoiPwd($_GET["email"]);
 				$MessageAction='<div class="messageInfo">Le nouveau mot de passe est : '.$newPass.'</div>';
-				$reqClient="select idclient, nom, prenom, port, email	
+				$reqClient="select idclient, nom, prenom, port, tel, email	
 						from CLIENTS where email='".$_GET["email"]."'";
 						$result_reqClient=$mysqli->query($reqClient);
 				break;
@@ -194,42 +202,64 @@ else
 		{
 		
 		// Creation du tableau pour afficher les clients
-				$affichage_client_ligne='<table border="2"  rules="groups" id="tableauClient" class="rechClient" width="600"><thead>
-								<tr><td ><a href="rechercheClient?actionClient=TE">Email</a></td><td><a href="rechercheClient?actionClient=TN">Nom</a></td><td><a href="rechercheClient?actionClient=TP">Prénom</a></td><td><a href="rechercheClient?actionClient=TT">Portable</A></td><th colspan="4">Action</th></tr>
-								</thead>';
+				$affichage_client_ligne='<table border="2"  rules="groups" id="tableauClient" class="rechClient" width="600">
+				<thead>
+					<tr>
+						<th><a href="rechercheClient?actionClient=TE">Email</a></th>
+						<th><a href="rechercheClient?actionClient=TN">Nom</a></th>
+						<th><a href="rechercheClient?actionClient=TP">Prénom</a></th>
+						<th><a href="rechercheClient?actionClient=TT">Portable</A></th>
+						<th><a href="rechercheClient?actionClient=TTF">Telephone</A></th>
+						<th colspan="4">Action</th>
+					</tr>
+				</thead>';
 			//boucle qui parcourt le résultats des requetes demandées dans la BD
 			while ($row = $result_reqClient->fetch_assoc())
 			{
 				$affichage_client_ligne.= '<tr>
-										<td><a href="mailto:'.$row["email"].'">'.$row["email"].'</td>
-										<td>'.$row["nom"].'</td>
-										<td>'.$row["prenom"].'</td>
-										<td>'.$row["port"].'</td>
-										<td><a href="affichTous.php?idClient='.$row["idclient"].'"><img src="images/cal.gif" title="Agenda"></a></td>
-										<td><form action="reservation_action.php?etat=2" method="POST"  id="connect-form"><input id=login name=login type=email value="'.$row["email"].'" hidden><button type=submit>S&eacute;lectionner</button></form></td>
-										</tr>';
+					<td><a href="mailto:'.$row["email"].'">'.$row["email"].'</td>
+					<td>'.utf8_encode($row["nom"]).'</td>
+					<td>'.utf8_encode($row["prenom"]).'</td>
+					<td>'.$row["port"].'</td>
+					<td>'.$row["tel"].'</td>
+					<td><a href="affichTous.php?idClient='.$row["idclient"].'"><img src="images/cal.gif" title="Agenda"></a></td>
+					<td></td>
+					<td>
+						<form action="reservation_action.php?etat=2" method="POST"  id="connect-form">
+							<input id="login" style="width: 150px;" name="login" type="text" value="'.$row["email"].'">
+						
+					</td>
+					<td>
+							<input class="button tiny" type="submit" value="S&eacute;lectionner">
+						</form>
+					</td>
+				</tr>';
 			}		
 			
 		$affichage_client_ligne.='</table>';	
 		}
 	}
 
-if (!empty($MessageAction))
-{
-	$MessageAction='<div class="messageInfo">'.$MessageAction.'</div>';
-}
-/*************************************************
-*												 *
-*	affichages des clients stockées dans la base *
-*												 *	
-**************************************************/
+	if (!empty($MessageAction))
+	{
+		$MessageAction='<div class="messageInfo">'.$MessageAction.'</div>';
+	}
+	/*************************************************
+	*												 *
+	*	affichages des clients stockées dans la base *
+	*												 *	
+	**************************************************/
 
-$affichage_recherche='<h3>Recherche Client</h3><p>Vous pouvez remplacer des carct&egrave;res inconnus par % pour effectuer la recherche</p>';
-$affichage_recherche.='<form action="formulaire.php?actionClient=R" method="post">';
-$affichage_recherche.='<label for="email">Email : </label><input id="email" name="email" type="text">
-			<label for="nom">Nom : </label><input id="nom" name="nom" type="text">
-			<label for="port">Num&eacute;ro de portable: </label><input id="port" name="port" type="int">';
-$affichage_recherche.='<input type="submit" value="Rechercher"></form>';
+	$affichage_recherche='<h3>Recherche Client</h3><p>Vous pouvez remplacer des carct&egrave;res inconnus par % pour effectuer la recherche</p>
+		<form action="formulaire.php?actionClient=R" method="post">
+			<label for="email">Email : </label>
+			<input id="email" name="email" type="text">
+			<label for="nom">Nom : </label>
+			<input id="nom" name="nom" type="text">
+			<label for="port">Num&eacute;ro de t&eacute;l&eacute;phone (fixe ou portabe): </label>
+			<input id="port" name="port" type="text">
+			<input type="submit" class="button" value="Rechercher">
+		</form>';
 }
 
 /**
@@ -288,7 +318,7 @@ if($etat==1)
 		 	$enregistrementClient="";
 
 			$formulaireClient = '<h3>Formulaire clients</h3>
-			<form action="reservation_action?etat=2.php" method="POST" class="enregistrement-form2">
+			<form action="reservation_action.php?etat=2" method="POST" class="enregistrement-form2">
 			<fieldset>
 				<legend>Votre identit&eacute;</legend>
 					<input id="login" name="login" type="hidden" value="<?= $mail;?>" required>
@@ -351,7 +381,7 @@ if($etat==1)
 				</span>
 				<span class="label-block">
 					<label for=codepostal>Code postal :</label>
-					<input id=codepostal name=codepostal type=text placeholder="67530"  pattern="[0-9]*" required>
+					<input id=codepostal name=codepostal type=text placeholder="Votre code postal"  pattern="[0-9]*" required>
 
 					<label for=ville>Ville :</label>
 					<input id=ville name=ville type=text placeholder="Votre ville" pattern="[a-zA-Z ]*" required>
@@ -384,8 +414,8 @@ if($etat==1)
 		<h3>R&eacute;capitulatif de votre R&eacute;servation</h3>
 			<ul class="list-none">
 				<li><?= "Vous avez s&eacute;lectionn&eacute; le g&icirc;te ".$monTab[$resaEncours]['idgite']; ?></li>
-				<li><?= "Date de d&eacute;but le ".$monTab[$resaEncours]['date_debut']; ?></li>
-				<li><?= "Date de fin le ".$monTab[$resaEncours]['date_fin']; ?></li>
+				<li><?= "Date de d&eacute;but le ".dateFr($monTab[$resaEncours]['date_debut'])?></li>
+				<li><?= "Date de fin le ".dateFr($monTab[$resaEncours]['date_fin'])?></li>
 				<li><?= "Pour un tarif maximum de ".$monTab[$resaEncours]['tarif']." &euro;";?></li>
 			</ul>
 		</div>
