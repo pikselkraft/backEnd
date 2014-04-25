@@ -2,14 +2,23 @@
 session_start();
 ob_start();
 require('/var/www/resa/dev/config.php'); 
-require('includes/fonctions.php'); 
+require('includes/fonctions.php');
+
+/* gestion connexion à l'espace membre*/
+if ($_SESSION['LoggedIn']!==1) {
+	echo "<h1>Erreur</h1>";
+	echo "<p>Le compte n'a pas &eacute;t&eacute; trouv&eacute;. S'il-vous pla&icirc;t <a href=\"index.php\">cliquez-ici pour vous connecter</a>.</p>";
+	exit();
+}
+
+
 ?> 
 <html dir="ltr" lang="fr-FR">
 
 <head>
 
 	<meta charset="utf-8">
-	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	
 	<link rel="stylesheet" href="includes/css/foundation.css">
 
@@ -102,27 +111,28 @@ require('includes/fonctions.php');
 			<li class="name">
 			  <h1><a href="affichTous.php">Calendrier</a></h1>
 			</li>
-			<li class="toggle-topbar menu-icon"><a href="#">menu</a></li>
+			<li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
 		  </ul>
 
 		  <section class="top-bar-section">
 			<!-- Right Nav Section -->
 			<ul class="right">
-			  <li class="has-dropdown">
-				<a href="statistique.php">Statistiques</a>
-				<ul class="dropdown">
- 					<li><a href="statGite.php">Occupation des g&icirc;tes</a></li>
-				 	<li><a href="statCa.php">R&eacute;sultats financiers</a></li>
-				</ul>
-			  </li>
-			  <li class="has-dropdown">
-				<a href="#">Marketing</a>
-				<ul class="dropdown">
-				  <li><a href="facturation.php">Facturation</a></li>
-				  <li><a href="mailing.php">Mailing</a></li>
-				  <li><a href="reseauxSociaux.php">R&eacute;seaux Sociaux</a></li>
-				</ul>
-			  </li>
+				<li class="has-dropdown">
+					<a href="statistique.php">Statistiques</a>
+						<ul class="dropdown">
+							<li><a href="statGite.php">Occupation des g&icirc;tes</a></li>
+							<li><a href="statCa.php">R&eacute;sultats financiers</a></li>
+						</ul>
+				</li>
+				<li class="has-dropdown">
+					<a href="#">Marketing</a>
+						<ul class="dropdown">
+							<li><a href="facturation.php">Facturation</a></li>
+							<li><a href="mailing.php">Mailing</a></li>
+							<li><a href="reseauxSociaux.php">R&eacute;seaux Sociaux</a></li>
+						</ul>
+				</li>
+				<li><a href="deco.php">Deconnexion</a></li>
 			</ul>
 
 			<!-- Left Nav Section -->

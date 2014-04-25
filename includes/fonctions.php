@@ -340,17 +340,14 @@ function verifReservation ($dateDeb,$dateFin,$idgite) // VERIFICATION DES RESERV
 				
 					if (($dateDeb>$datedebResa and $dateDeb>$dateFinResa) or ($dateDeb<$datedebResa and $dateFin<$datedebResa))
 					{
-							testVar("test if 1");
 							if(($dateDeb<$datedebResa) and ($dateFin>$dateFinResa))
 							{
 								$ResaPossible=false;
 							}
 							else 
 							{
-								testVar("test if 2 true");
 								$ResaPossible=true;
 							}
-							
 					}
 					else
 					{
@@ -418,7 +415,6 @@ function verifSemaineForce($dateDeb,$dateFin,$idgite)
 
 	$ResaSemaineForce=false;
 	$sqlSemaine = "SELECT idsemaine, date_debut, date_fin FROM SEMAINEFORCE";
-	// test dev sur 2ans 	
 	
 	$resultSemaine=$mysqli->query($sqlSemaine);
 		
