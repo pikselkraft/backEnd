@@ -53,12 +53,12 @@ $avec_bdd            = false ;
 
 if(isset($_GET["idgite"]))
 {
-	$idgite= $_GET["idgite"];
-	$_SESSION["idgite"]=$idgite ;
+  $idgite             = $_GET["idgite"];
+  $_SESSION["idgite"] = $idgite ;
 }
 else
 {
-	$idgite=$_SESSION["idgite"];
+	$idgite = $_SESSION["idgite"];
 }
 
 /* Affichage des infos de base du Gite
@@ -71,18 +71,23 @@ $req="SELECT idgite,nom,capacite,url,montant_caution,titre,description FROM GITE
 
 					while ($row = $result->fetch_assoc())
 					{
-						$nom=$row['nom'];
-						$capacite=$row['capacite'];
-						$montant_caution=$row['montant_caution'];
-						$titre=$row['titre'];
+            $nom             =$row['nom'];
+            $capacite        =$row['capacite'];
+            $montant_caution =$row['montant_caution'];
+            $titre           =$row['titre'];
 						//$surface=$row['surface'];
 					}
+          echo '<div class="row panel">
+                <div class="small-12 large-centered columns">';
+
 					echo "<h1>". $nom . " : ".$titre."</h1>" ;				
 					echo "<ul>";
 						echo "<li>Capacit&eacute; : ".$capacite." personnes</li>";
 						echo "<li>Caution : ".$montant_caution." �</li>";
 						//echo "<li>Surface : ".$surface." m�</li>";
 					echo "</ul>";
+
+          echo '</div></div>';
 					
 					
 //echo "IDGITE : ". $idgite;
@@ -362,10 +367,7 @@ function correction_debut_semaine ($jour,$cle) {
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
 
-
-
 $largeur_div = $largeur_tableau * $nombre_mois_afficher_ligne ;
-
 
 
 //selection du mois et ann�e en cours***************************************************************
@@ -373,6 +375,8 @@ $mois_en_cours  = (int)$premier_mois ;
 $annee_en_cours = $annee_premier_mois ;
 
 // affichage s�lection mois, ann�e, couleur et champs de r�servations ********************************
+echo '<div class="row">
+                <div class="small-12 large-centered columns">';
 echo '<Table border = 0 >
       <tr>
       <td width = "140">';
@@ -611,6 +615,7 @@ echo '</div>';
 echo '</td>';
 echo '</tr>';
 echo '</table>';
+echo '</div></div>';
 ?>		
 		<!-- </div>
 	</div>
